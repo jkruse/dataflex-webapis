@@ -1,0 +1,120 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebGroup.pkg
+Use cWebMenuGroup.pkg 
+Use cWebMenuItem.pkg
+Use cWebButton.pkg
+
+Use cVibrationAPI.pkg
+Use cWebLabel.pkg
+
+Object oVibrationDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Vibration Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oVibrationAPI is a cVibrationAPI
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebLabel is a cWebLabel
+            Set piColumnSpan to 12
+        End_Object
+
+        Object oWebGroup1 is a cWebGroup
+            Set piColumnCount to 12   
+            WebSetResponsive piColumnCount rmMobile to 3
+            Set pbShowCaption to False
+
+            Object oWebButton1 is a cWebButton
+                Set piColumnSpan to 3
+                Set psCaption to "Vibrate 200 ms"
+            
+                Procedure OnClick
+                    Integer[] pattern
+                    Move 200 to pattern[0]
+                    Send Vibrate of oVibrationAPI pattern
+                End_Procedure
+            End_Object
+
+            Object oWebButton2 is a cWebButton
+                Set piColumnSpan to 3
+                Set psCaption to "Vibrate 1 s"
+                Set piColumnIndex to 3
+            
+                Procedure OnClick
+                    Integer[] pattern
+                    Move 1000 to pattern[0]
+                    Send Vibrate of oVibrationAPI pattern
+                End_Procedure
+            End_Object
+
+            Object oWebButton3 is a cWebButton
+                Set piColumnSpan to 3
+                Set psCaption to "Vibrate SOS"
+                Set piColumnIndex to 6
+            
+                Procedure OnClick
+                    Integer[] pattern
+                    Move 100 to pattern[0]
+                    Move 30 to pattern[1]
+                    Move 100 to pattern[2]
+                    Move 30 to pattern[3]
+                    Move 100 to pattern[4]
+                    Move 30 to pattern[5]
+                    Move 200 to pattern[6]
+                    Move 30 to pattern[7]
+                    Move 200 to pattern[8]
+                    Move 30 to pattern[9]
+                    Move 200 to pattern[10]
+                    Move 30 to pattern[11]
+                    Move 100 to pattern[12]
+                    Move 30 to pattern[13]
+                    Move 100 to pattern[14]
+                    Move 30 to pattern[15]
+                    Move 100 to pattern[16]
+                    Send Vibrate of oVibrationAPI pattern
+                End_Procedure
+            End_Object
+
+            Object oWebButton4 is a cWebButton
+                Set piColumnSpan to 3
+                Set psCaption to "Stop vibration"
+                Set piColumnIndex to 9
+            
+                Procedure OnClick
+                    Integer[] pattern
+                    Send Vibrate of oVibrationAPI pattern
+                End_Procedure
+            End_Object
+        End_Object
+    End_Object 
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+        
+        WebGet pbIsSupported of oVibrationAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Vibration API is supported (but if this device does not have vibration hardware, it will do nothing)"
+            WebSet psTextColor of oWebLabel to "green"
+            WebSet pbEnabled of oWebGroup1 to True
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Vibration API is NOT supported (try on Chrome, Edge, Firefox or Opera Android)"
+            WebSet psTextColor of oWebLabel to "red"
+            WebSet pbEnabled of oWebGroup1 to False
+        End
+    End_Procedure
+End_Object

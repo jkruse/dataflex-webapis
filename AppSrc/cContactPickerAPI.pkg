@@ -1,0 +1,48 @@
+﻿Use cWebObject.pkg
+
+Struct tContactPickerSelectData
+    String[] aProperties
+    Boolean bMultiple
+End_Struct
+
+Class cContactPickerAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client DesignTime=False }
+        Property String psSupportedProperties ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnSelect True
+        { WebProperty=Client }
+        Property String psClientOnSelect ""
+        
+        Set psJSClass to "WebAPIs.ContactPicker"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnSelect
+    End_Procedure
+    
+    Procedure Select tContactPickerSelectData stData
+        String[] aParams
+        Handle hoJson
+        
+        Get Create (RefClass(cJsonObject)) to hoJson
+        Send DataTypeToJson of hoJson stData
+        
+        Send ClientActionEx "select" aParams hoJson
+        
+        Send Destroy of hoJson
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnSelect String sJsonData
+    End_Procedure
+
+End_Class

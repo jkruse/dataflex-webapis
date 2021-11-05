@@ -1,0 +1,152 @@
+﻿Use AllWebAppClasses.pkg
+Use cConnection.pkg
+Use cWebMenuItem.pkg
+
+Object oApplication is a cApplication
+    Set psCompany to "Kruse-Net"
+    Set psProduct to "DataFlex Custom Components for Web APIs"
+    Object oConnection is a cConnection
+        Use LoginEncryption.pkg
+    End_Object
+End_Object
+
+Object oWebApp is a cWebApp
+    Set psTheme to "Df_Material"
+    Set peAlignView to alignCenter
+    
+    // It is important to set this so that all views will default
+    // to drill down style views.
+    Set peApplicationStyle to wvsDrillDown   
+    Set peApplicationStateMode to asmHistoryAndUrls 
+    Set psEncryptPassword to "<xJ5Wg#cKKtF)q}kz6Cjqu3wCX>E9x#FBzrj>G&*"
+    Set pbLogWebSession to False
+    Set peLoginMode to lmLoginNone
+
+    Object oViewStack is a cWebViewStack
+    End_Object
+    
+    Procedure HideHeader
+        WebSet pbRender of oHeaderPanel to False
+    End_Procedure
+
+    Procedure ShowHeader
+        WebSet pbRender of oHeaderPanel to True 
+    End_Procedure
+
+    Object oHeaderPanel is a cWebPanel
+        Set peRegion to prTop
+        Set psCSSClass to "HeaderPanel"
+        
+        Object oMenuPanel is a cWebPanel
+            Set peRegion to prLeft
+            Set piWidth to 50
+            
+            Object oMenuButton is a cWebMenuButton
+                Set piMenuHeight to 500
+
+                Object oDashboard_itm is a cWebMenuItem
+                    Set psCaption to C_$Dashboard
+                    
+                    WebRegisterPath ntNavigateBegin oDashboard
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
+                Object oWebMenuItemVibration is a cWebMenuItem
+                    Set psCaption to "Vibration Demo"
+                    WebRegisterPath ntNavigateForward oVibrationDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
+                Object oWebMenuItemContactPicker is a cWebMenuItem
+                    Set psCaption to "ContactPicker Demo"
+                    WebRegisterPath ntNavigateForward oContactPickerDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+            End_Object  
+
+            Object oBackButton is a cWebButton
+                Set psCSSClass to "WebBack_Icon"
+                Set pbRender to False
+                
+                Procedure OnClick
+                    Handle hoTop
+                    
+                    Get TopViewHandle of oViewStack to hoTop
+                    If (hoTop > 0) Begin
+                        Send NavigateCancel of hoTop 
+                    End
+                End_Procedure
+            End_Object
+            
+            Send AddClient of oViewStack Self
+                
+            Procedure OnUpdateViewStack
+                Handle hoTop hoDflt
+                Integer eMode
+                Boolean bTop
+                
+                WebGet peMode of ghoWebApp to eMode
+                
+                Get TopViewHandle of oViewStack to hoTop
+                Get GetDefaultView to hoDflt
+                Move (hoTop=0 or hoTop=hoDflt) to bTop
+                
+                WebSet pbRender of oBackButton to (not(bTop) and eMode >= rmMobile)
+                WebSet pbRender of oMenuButton to (bTop or eMode < rmMobile)
+            End_Procedure
+
+        End_Object
+
+        Object oCaptionPanel is a cWebPanel
+            Set piColumnCount to 12
+
+            Object oCaptionBreadcrumb is a cWebBreadcrumb
+                Set peBreadcrumbStyle to crumbCaption
+                WebSetResponsive peBreadcrumbStyle rmMobile to crumbDropDown
+            End_Object         
+        End_Object
+        
+        Object oActionPanel is a cWebPanel
+            Set peRegion to prRight
+            Set piColumnCount to 1
+            Set piWidth to 120
+
+            Object oMainActions is a cWebActionBar
+                Set psGroupName to "MainActions"
+
+                Set piColumnSpan to 0
+                Set peAlign to alignRight
+            End_Object
+        End_Object
+
+        Object oBreadcrumbPanel is a cWebPanel
+            Set peRegion to prBottom
+            
+            Object oHorizontalBreadcrumb is a cWebBreadcrumb
+                WebSetResponsive pbRender rmMobile to False
+            End_Object         
+        End_Object
+
+    End_Object    
+
+    Use SessionManager.wo
+    Use Login.wo
+    Use WebResourceManager.wo
+    
+    Use Dashboard.wo
+    Use VibrationDemo.wo
+    Use ContactPickerDemo.wo
+    Set phoDefaultView to oDashboard
+
+End_Object
+
+Send StartWebApp of oWebApp

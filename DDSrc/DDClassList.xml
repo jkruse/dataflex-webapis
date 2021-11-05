@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<DataDictionaryList xmlns="http://www.dataaccess.com/VisualDataFlex/2008/DataDictionaryList/">
+	<Tables>
+		<Table>
+			<tableNumber>263</tableNumber>
+			<tableName>WebAppSession</tableName>
+			<DDClasses>
+				<DDClass>
+					<className>cWebAppSessionDataDictionary</className>
+					<classFile>cWebAppSessionDataDictionary.dd</classFile>
+					<preferred>true</preferred>
+				</DDClass>
+			</DDClasses>
+		</Table>
+		<Table>
+			<tableNumber>264</tableNumber>
+			<tableName>WebAppUser</tableName>
+			<DDClasses>
+				<DDClass>
+					<className>cWebAppUserDataDictionary</className>
+					<classFile>cWebAppUserDataDictionary.dd</classFile>
+					<preferred>true</preferred>
+				</DDClass>
+			</DDClasses>
+		</Table>
+	</Tables>
+</DataDictionaryList>

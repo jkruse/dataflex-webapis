@@ -1,0 +1,137 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebGroup.pkg
+Use cWebMenuGroup.pkg 
+Use cWebMenuItem.pkg
+
+Use cContactPickerAPI.pkg
+Use cWebCheckBox.pkg
+Use cWebButton.pkg
+
+Object oContactPickerDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "ContactPicker Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oContactPickerAPI is a cContactPickerAPI
+        Procedure OnSelect String sJsonData
+            Send ShowInfoBox sJsonData
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+        
+        Object oWebLabel is a cWebLabel
+            Set piColumnSpan to 12
+            Set psCaption to "Supported?"
+        End_Object
+
+        Object oWebCheckboxName is a cWebCheckbox
+            Set piColumnSpan to 2
+            Set psCaption to "Name"
+        End_Object
+        
+        Object oWebCheckboxTel is a cWebCheckbox
+            Set piColumnSpan to 2
+            Set psCaption to "Telephone"
+            Set piColumnIndex to 2
+        End_Object
+        
+        Object oWebCheckboxEmail is a cWebCheckbox
+            Set piColumnSpan to 2
+            Set psCaption to "Email"
+            Set piColumnIndex to 4
+        End_Object
+        
+        Object oWebCheckboxAddress is a cWebCheckbox
+            Set piColumnSpan to 2
+            Set psCaption to "Address"
+            Set piColumnIndex to 6
+        End_Object
+        
+        Object oWebCheckboxIcon is a cWebCheckbox
+            Set piColumnSpan to 2
+            Set psCaption to "Icon"
+            Set piColumnIndex to 8
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Pick a contact"
+        
+            Procedure OnClick
+                tContactPickerSelectData stData
+                String sName sTel sEmail sAddress sIcon
+                Integer i
+                
+                WebGet psValue of oWebCheckboxName to sName
+                WebGet psValue of oWebCheckboxTel to sTel
+                WebGet psValue of oWebCheckboxEmail to sEmail
+                WebGet psValue of oWebCheckboxAddress to sAddress
+                WebGet psValue of oWebCheckboxIcon to sIcon
+                
+                If (sName = "1") Begin
+                    Move "name" to stData.aProperties[i]
+                    Increment i
+                End
+                If (sTel = "1") Begin
+                    Move "tel" to stData.aProperties[i]
+                    Increment i
+                End
+                If (sEmail = "1") Begin
+                    Move "email" to stData.aProperties[i]
+                    Increment i
+                End
+                If (sAddress = "1") Begin
+                    Move "address" to stData.aProperties[i]
+                    Increment i
+                End
+                If (sIcon = "1") Begin
+                    Move "icon" to stData.aProperties[i]
+                    Increment i
+                End
+                
+                Send Select of oContactPickerAPI stData
+            End_Procedure
+        End_Object
+        
+    End_Object 
+
+    Procedure OnShow
+        Boolean bIsSupported
+        String sSupportedProperties
+        
+        Forward Send OnShow
+        
+        WebGet pbIsSupported of oContactPickerAPI to bIsSupported
+        WebGet psSupportedProperties of oContactPickerAPI to sSupportedProperties
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "ContactPicker API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+            WebSet pbEnabled of oWebCheckboxName to (sSupportedProperties contains "name")
+            WebSet pbEnabled of oWebCheckboxTel to (sSupportedProperties contains "tel")
+            WebSet pbEnabled of oWebCheckboxEmail to (sSupportedProperties contains "email")
+            WebSet pbEnabled of oWebCheckboxAddress to (sSupportedProperties contains "address")
+            WebSet pbEnabled of oWebCheckboxIcon to (sSupportedProperties contains "icon")
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "ContactPicker API is NOT supported (try on Opera or Chrome Android)"
+            WebSet psTextColor of oWebLabel to "red"
+//            WebSet pbEnabled of oWebCheckboxName to False
+//            WebSet pbEnabled of oWebCheckboxTel to False
+//            WebSet pbEnabled of oWebCheckboxEmail to False
+//            WebSet pbEnabled of oWebCheckboxAddress to False
+//            WebSet pbEnabled of oWebCheckboxIcon to False
+        End
+    End_Procedure
+End_Object

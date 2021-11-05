@@ -1,0 +1,30 @@
+﻿Use cWebObject.pkg
+
+Class cVibrationAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        
+        Set psJSClass to "WebAPIs.Vibration"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+    End_Procedure
+    
+    Procedure Vibrate Integer[] pattern
+        String[] aParams
+        Integer i
+        
+        For i from 0 to (SizeOfArray(pattern) - 1)
+            Move pattern[i] to aParams[i]
+        Loop
+        
+        Send ClientAction "vibrate" aParams
+    End_Procedure
+
+End_Class
