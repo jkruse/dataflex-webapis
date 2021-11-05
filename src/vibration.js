@@ -1,4 +1,4 @@
-class Vibration extends df.WebObject {
+export default class Vibration extends df.WebObject {
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
@@ -13,8 +13,3 @@ class Vibration extends df.WebObject {
         navigator.vibrate(arguments);
     }
 }
-
-export default Vibration;
-
-global.WebAPIs = global.WebAPIs || {};
-global.WebAPIs.Vibration = Vibration;

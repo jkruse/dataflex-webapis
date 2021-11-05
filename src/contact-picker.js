@@ -1,4 +1,4 @@
-class ContactPicker extends df.WebObject {
+export default class ContactPicker extends df.WebObject {
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
@@ -22,8 +22,3 @@ class ContactPicker extends df.WebObject {
         ).then(result => this.fire('OnSelect', [JSON.stringify(result)]));
     }
 }
-
-export default ContactPicker;
-
-global.WebAPIs = global.WebAPIs || {};
-global.WebAPIs.ContactPicker = ContactPicker;

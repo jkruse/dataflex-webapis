@@ -1,0 +1,37 @@
+﻿Use cWebObject.pkg
+
+Class cEyeDropperAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnSelect True
+        { WebProperty=Client }
+        Property String psClientOnSelect ""
+
+        Set psJSClass to "WebAPIs.EyeDropper"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnSelect
+    End_Procedure
+    
+    Procedure Open
+        Send ClientAction "open"
+    End_Procedure
+    
+    Procedure Abort
+        Send ClientAction "abort"
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnSelect String sRGBHex
+    End_Procedure
+
+End_Class

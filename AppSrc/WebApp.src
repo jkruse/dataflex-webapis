@@ -54,18 +54,27 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
-                Object oWebMenuItemVibration is a cWebMenuItem
-                    Set psCaption to "Vibration Demo"
-                    WebRegisterPath ntNavigateForward oVibrationDemo
+                Object oWebMenuItemContactPicker is a cWebMenuItem
+                    Set psCaption to "ContactPicker Demo"
+                    WebRegisterPath ntNavigateForward oContactPickerDemo
 
                     Procedure OnClick
                         Send NavigatePath
                     End_Procedure
                 End_Object
+                
+                Object oWebMenuItemEyeDropper is a cWebMenuItem
+                    Set psCaption to "EyeDropper Demo"
+                    WebRegisterPath ntNavigateForward oEyeDropperDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
 
-                Object oWebMenuItemContactPicker is a cWebMenuItem
-                    Set psCaption to "ContactPicker Demo"
-                    WebRegisterPath ntNavigateForward oContactPickerDemo
+                Object oWebMenuItemVibration is a cWebMenuItem
+                    Set psCaption to "Vibration Demo"
+                    WebRegisterPath ntNavigateForward oVibrationDemo
 
                     Procedure OnClick
                         Send NavigatePath
@@ -145,6 +154,7 @@ Object oWebApp is a cWebApp
     Use Dashboard.wo
     Use VibrationDemo.wo
     Use ContactPickerDemo.wo
+    Use EyeDropperDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

@@ -26,7 +26,7 @@ Object oDashboard is a cWebView
     
         Object oTileContactPicker is a cWebHtmlBox
             Set pbServerOnClick to True
-            Set psCSSClass to "Tile Light"
+            Set psCSSClass to "Tile"
             Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Contact Picker API</div><div class="Tile_Subtitle">access to contacts</div></div>'
                             
             WebRegisterPath ntNavigateForward oContactPickerDemo
@@ -36,11 +36,24 @@ Object oDashboard is a cWebView
             End_Procedure
         End_Object
     
+        Object oTileEyeDropper is a cWebHtmlBox
+            Set pbServerOnClick to True
+            Set psCSSClass to "Tile"
+            Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">EyeDropper API</div><div class="Tile_Subtitle">pick a color using an eyedropper tool</div></div>'
+            Set piColumnIndex to 1
+                            
+            WebRegisterPath ntNavigateForward oEyeDropperDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+    
         Object oTileVibration is a cWebHtmlBox
             Set pbServerOnClick to True
-            Set psCSSClass to "Tile LightAlternate"
+            Set psCSSClass to "Tile"
             Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
-            Set piColumnIndex to 1
+            Set piColumnIndex to 2
             
             WebRegisterPath ntNavigateForward oVibrationDemo
 
