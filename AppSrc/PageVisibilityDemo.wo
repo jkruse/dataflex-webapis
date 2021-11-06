@@ -1,0 +1,74 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebGroup.pkg
+Use cWebMenuGroup.pkg 
+Use cWebMenuItem.pkg
+Use cWebLabel.pkg
+Use cWebEdit.pkg
+
+Use cPageVisibilityAPI.pkg
+
+Object oPageVisibilityDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Page Visibility Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oPageVisibilityAPI is a cPageVisibilityAPI
+        Procedure OnVisibilityChange String sState
+            String sValue
+            WebGet psValue of oWebEdit to sValue
+            If (sValue <> "") Begin
+                Move (sValue + Character(13) + Character(10)) to sValue
+            End
+            Move (SFormat("%1%2: Page visibility state changed to '%3'", sValue, CurrentDateTime(), sState)) to sValue
+            WebSet psValue of oWebEdit to sValue
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 12
+        End_Object
+
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "If supported, page visibility events will be shown below. Try switching tabs and back, minimizing and restoring window, or turning your screen off and on."
+            Set piColumnSpan to 12
+        End_Object
+
+        Object oWebEdit is a cWebEdit
+            Set piColumnSpan to 0
+            Set psLabel to "Edit"
+            Set pbShowLabel to False
+            Set pbFillHeight to True
+            Set pbReadOnly to True
+        End_Object
+    End_Object 
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oPageVisibilityAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Page Visibility API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Page Visibility API is NOT supported (try any modern browser)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

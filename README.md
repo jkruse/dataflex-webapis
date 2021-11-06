@@ -6,6 +6,7 @@ Contains DataFlex implementations of:
 
 * [Contact Picker API](https://developer.mozilla.org/en-US/docs/Web/API/Contact_Picker_API)
 * [EyeDropper API](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API)
+* [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
 * [Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API)
 
 ## How to get it

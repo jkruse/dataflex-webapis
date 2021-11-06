@@ -1,0 +1,29 @@
+﻿Use cWebObject.pkg
+
+Class cPageVisibilityAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnVisibilityChange True
+        { WebProperty=Client }
+        Property String psClientOnVisibilityChange ""
+        
+        Set psJSClass to "WebAPIs.PageVisibility"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnVisibilityChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnVisibilityChange String sState
+    End_Procedure
+
+End_Class

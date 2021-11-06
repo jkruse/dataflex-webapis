@@ -72,6 +72,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemPageVisibility is a cWebMenuItem
+                    Set psCaption to "Page Visibility Demo"
+                    WebRegisterPath ntNavigateForward oPageVisibilityDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
                 Object oWebMenuItemVibration is a cWebMenuItem
                     Set psCaption to "Vibration Demo"
                     WebRegisterPath ntNavigateForward oVibrationDemo
@@ -155,6 +164,7 @@ Object oWebApp is a cWebApp
     Use VibrationDemo.wo
     Use ContactPickerDemo.wo
     Use EyeDropperDemo.wo
+    Use PageVisibilityDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object
