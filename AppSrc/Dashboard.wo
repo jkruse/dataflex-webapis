@@ -20,58 +20,77 @@ Object oDashboard is a cWebView
     Set psCSSClass to "Dashboard"
     
     Object oWebMainPanel is a cWebPanel
-        Set piColumnCount to 3
-        WebSetResponsive piColumnCount rmMobile to 1
-        WebSetResponsive piColumnCount rmTabletPortrait to 2
-    
-        Object oTileContactPicker is a cWebHtmlBox
-            Set pbServerOnClick to True
-            Set psCSSClass to "Tile"
-            Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Contact Picker API</div><div class="Tile_Subtitle">access to contacts</div></div>'
-                            
-            WebRegisterPath ntNavigateForward oContactPickerDemo
-            
-            Procedure OnClick
-                Send NavigatePath
-            End_Procedure
-        End_Object
-    
-        Object oTileEyeDropper is a cWebHtmlBox
-            Set pbServerOnClick to True
-            Set psCSSClass to "Tile"
-            Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">EyeDropper API</div><div class="Tile_Subtitle">pick a color using an eyedropper tool</div></div>'
-            Set piColumnIndex to 1
-                            
-            WebRegisterPath ntNavigateForward oEyeDropperDemo
-            
-            Procedure OnClick
-                Send NavigatePath
-            End_Procedure
-        End_Object
-    
-        Object oTilePageVisibility is a cWebHtmlBox
-            Set pbServerOnClick to True
-            Set psCSSClass to "Tile"
-            Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Page Visibility API</div><div class="Tile_Subtitle">know when a document becomes visible or hidden</div></div>'
-            Set piColumnIndex to 2
-                            
-            WebRegisterPath ntNavigateForward oPageVisibilityDemo
-            
-            Procedure OnClick
-                Send NavigatePath
-            End_Procedure
-        End_Object
-    
-        Object oTileVibration is a cWebHtmlBox
-            Set pbServerOnClick to True
-            Set psCSSClass to "Tile"
-            Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
-            
-            WebRegisterPath ntNavigateForward oVibrationDemo
 
-            Procedure OnClick
-                Send NavigatePath
-            End_Procedure
+        Object oTileGroup is a cWebGroup
+            Set piColumnCount to 3
+            Set psCSSClass to "TilesGroup"
+            Set pbShowBorder to False
+            Set pbShowCaption to False
+            WebSetResponsive piColumnCount rmMobile to 1
+            WebSetResponsive piColumnCount rmTabletPortrait to 2
+
+            Object oTileBroadcastChannel is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Broadcast Channel API</div><div class="Tile_Subtitle">allows communication between browsing contexts on the same origin</div></div>'
+                                
+                WebRegisterPath ntNavigateForward oBroadcastChannelDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
+            Object oTileContactPicker is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Contact Picker API</div><div class="Tile_Subtitle">access to contacts</div></div>'
+                Set piColumnIndex to 1
+                                
+                WebRegisterPath ntNavigateForward oContactPickerDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
+            Object oTileEyeDropper is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">EyeDropper API</div><div class="Tile_Subtitle">pick a color using an eyedropper tool</div></div>'
+                Set piColumnIndex to 2
+                                
+                WebRegisterPath ntNavigateForward oEyeDropperDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
+            Object oTilePageVisibility is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Page Visibility API</div><div class="Tile_Subtitle">know when a document becomes visible or hidden</div></div>'
+                                
+                WebRegisterPath ntNavigateForward oPageVisibilityDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
+            Object oTileVibration is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
+                Set piColumnIndex to 1
+                
+                WebRegisterPath ntNavigateForward oVibrationDemo
+    
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
         End_Object
     End_Object
 End_Object

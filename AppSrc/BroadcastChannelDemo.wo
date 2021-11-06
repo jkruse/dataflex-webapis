@@ -1,0 +1,108 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebGroup.pkg
+Use cWebMenuGroup.pkg 
+Use cWebMenuItem.pkg
+Use cWebLabel.pkg
+Use cWebButton.pkg
+
+Use cBroadcastChannelAPI.pkg
+Use cWebEdit.pkg
+
+Object oBroadcastChannelDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Broadcast Channel Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oBroadcastChannelAPI is a cBroadcastChannelAPI
+        // You must set psName on construction - this is the name of the broadcast channel
+        Set psName to "demo"
+
+        Procedure OnMessage String sData
+            Send Log of oWebEdit (SFormat("Received message '%1'", sData))
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebDescription is a cWebLabel
+            Set psCaption to "Try opening this demo in multiple tabs/windows, and then typing in messages below. Messages will be broadcast to all other listeners in this browser, on the same channel (cBroadcastChannelAPI instances with the same name), on the same origin (protocol+domain). This does NOT transfer message between devices, only between browser contexts in the same browser (like multiple tabs)."
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebForm is a cWebForm
+            Set piColumnSpan to 10
+            Set pbShowLabel to False
+            Set pbServerOnKey to True
+
+            Procedure OnKey Boolean bPrintable String sKey
+                If (sKey = "Enter") Begin
+                    Send OnClick of oWebButton
+                End
+            End_Procedure
+        End_Object
+
+        Object oWebButton is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Send message"
+            Set piColumnIndex to 10
+        
+            Procedure OnClick
+                String sData
+                WebGet psValue of oWebForm to sData
+                Send PostMessage of oBroadcastChannelAPI sData
+                WebSet psValue of oWebForm to ""
+                Send Log of oWebEdit (SFormat("Sent message '%1'", sData))
+            End_Procedure
+        End_Object
+
+        Object oWebEdit is a cWebEdit
+            Set piColumnSpan to 0
+            Set psLabel to "Edit"
+            Set pbShowLabel to False
+            Set pbReadOnly to True
+            Set pbFillHeight to True
+            
+            Procedure Log String sText
+                String sValue
+                WebGet psValue to sValue
+                If (sValue <> "") Begin
+                    Move (sValue + Character(13) + Character(10)) to sValue
+                End
+                Move (SFormat("%1%2: %3", sValue, CurrentDateTime(), sText)) to sValue
+                WebSet psValue to sValue
+            End_Procedure
+        End_Object
+        
+    End_Object
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oBroadcastChannelAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Broadcast Channel API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Broadcast Channel API is NOT supported (try any browser except Internet Explorer and Safari)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

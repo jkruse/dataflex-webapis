@@ -54,8 +54,17 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemBroadcastChannel is a cWebMenuItem
+                    Set psCaption to "Broadcast Channel Demo"
+                    WebRegisterPath ntNavigateForward oBroadcastChannelDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+                
                 Object oWebMenuItemContactPicker is a cWebMenuItem
-                    Set psCaption to "ContactPicker Demo"
+                    Set psCaption to "Contact Picker Demo"
                     WebRegisterPath ntNavigateForward oContactPickerDemo
 
                     Procedure OnClick
@@ -165,6 +174,7 @@ Object oWebApp is a cWebApp
     Use ContactPickerDemo.wo
     Use EyeDropperDemo.wo
     Use PageVisibilityDemo.wo
+    Use BroadcastChannelDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

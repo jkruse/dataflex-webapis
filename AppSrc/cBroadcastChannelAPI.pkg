@@ -1,0 +1,37 @@
+﻿Use cWebObject.pkg
+
+Class cBroadcastChannelAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client }
+        Property String psName ""
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnMessage True
+        { WebProperty=Client }
+        Property String psClientOnMessage ""
+        
+        Set psJSClass to "WebAPIs.BroadcastChannel"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnMessage
+    End_Procedure
+    
+    Procedure PostMessage String sData
+        String[] aParams
+        Move sData to aParams[0]
+        Send ClientAction "postMessage" aParams
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnMessage String sData
+    End_Procedure
+
+End_Class
