@@ -7,6 +7,7 @@ Contains DataFlex implementations of:
 * [Broadcast Channel API](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API)
 * [Contact Picker API](https://developer.mozilla.org/en-US/docs/Web/API/Contact_Picker_API)
 * [EyeDropper API](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API)
+* [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API)
 * [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
 * [Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API)
 
