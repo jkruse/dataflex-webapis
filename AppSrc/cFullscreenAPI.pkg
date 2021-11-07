@@ -1,0 +1,48 @@
+﻿Use cWebObject.pkg
+
+Class cFullscreenAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnFullscreenChange False
+        { WebProperty=Client }
+        Property String psClientOnFullscreenChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnFullscreenError False
+        { WebProperty=Client }
+        Property String psClientOnFullscreenError ""
+        
+        Set psJSClass to "WebAPIs.Fullscreen"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnFullscreenChange
+        WebPublishProcedure OnFullscreenError
+    End_Procedure
+    
+    Procedure ExitFullscreen
+        Send ClientAction "exitFullscreen"
+    End_Procedure
+    
+    Procedure RequestFullscreen Handle hObj
+        String[] aParams
+        Get WebObjectName of hObj to aParams[0]
+        Send ClientAction "requestFullscreen" aParams
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnFullscreenChange String sWebObjectName
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnFullscreenError
+    End_Procedure
+
+End_Class

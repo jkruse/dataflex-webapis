@@ -1,0 +1,122 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebGroup.pkg
+Use cWebMenuGroup.pkg 
+Use cWebMenuItem.pkg
+Use cWebLabel.pkg
+Use cWebButton.pkg
+
+Use cFullscreenAPI.pkg
+Use cWebImage.pkg
+
+Object oFullscreenDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Fullscreen Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oFullscreenAPI is a cFullscreenAPI
+        Set pbServerOnFullscreenChange to True
+
+        Procedure OnFullscreenChange String sWebObjectName
+            Handle hObj
+            
+            If (sWebObjectName = "") Begin
+                // Exiting full-screen
+                Send ShowHeader of oWebApp
+
+                WebSet pbEnabled of oWebButton1 to True
+                WebSet pbEnabled of oWebButton2 to True
+                WebSet pbEnabled of oWebButton3 to False
+
+                WebSet piMaxWidth of oFullscreenDemo to 1024
+            End
+            Else Begin
+                // Entering full-screen
+                WebSet pbEnabled of oWebButton1 to False
+                WebSet pbEnabled of oWebButton2 to False
+                WebSet pbEnabled of oWebButton3 to True
+                
+                Get FindWebObject sWebObjectName to hObj
+                If (hObj = oFullscreenDemo) Begin
+                    // Probably want full width when showing view in full-screen
+                    WebSet piMaxWidth of oFullscreenDemo to 0
+                End
+            End
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 4
+            Set psCaption to "Show entire view in full-screen"
+        
+            Procedure OnClick
+                // Even though not shown, DataFlex will leave room for the header when sizing the view, so we hide it while in full-screen
+                Send HideHeader of oWebApp
+                Send RequestFullscreen of oFullscreenAPI (oFullscreenDemo(Self))
+            End_Procedure
+        End_Object
+        
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 4
+            Set psCaption to "Show image in full-screen"
+            Set piColumnIndex to 4
+        
+            Procedure OnClick
+                // Even though not shown, DataFlex will leave room for the header when sizing the image, so we hide it while in full-screen
+                Send HideHeader of oWebApp
+                Send RequestFullscreen of oFullscreenAPI (oWebImage(Self))
+            End_Procedure
+        End_Object
+
+        Object oWebButton3 is a cWebButton
+            Set piColumnSpan to 4
+            Set psCaption to "Exit full-screen"
+            Set piColumnIndex to 8
+            Set pbEnabled to False
+        
+            Procedure OnClick
+                Send ExitFullscreen of oFullscreenAPI
+            End_Procedure
+        End_Object
+
+        Object oWebImage is a cWebImage
+            Set piColumnSpan to 0
+            Set psUrl to "Images/hamburg-4570577.jpg"
+            Set pePosition to wiFit
+            Set pbFillHeight to True
+        End_Object
+    End_Object 
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oFullscreenAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Fullscreen API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Fullscreen API is NOT supported (try any modern browser except iOS Safari)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

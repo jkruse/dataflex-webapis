@@ -67,10 +67,23 @@ Object oDashboard is a cWebView
                 End_Procedure
             End_Object
         
+            Object oTileFullscreen is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Fullscreen API</div><div class="Tile_Subtitle">present a specific element in full-screen mode</div></div>'
+                                
+                WebRegisterPath ntNavigateForward oFullscreenDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
             Object oTilePageVisibility is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Page Visibility API</div><div class="Tile_Subtitle">know when a document becomes visible or hidden</div></div>'
+                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oPageVisibilityDemo
                 
@@ -83,7 +96,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
-                Set piColumnIndex to 1
+                Set piColumnIndex to 2
                 
                 WebRegisterPath ntNavigateForward oVibrationDemo
     
