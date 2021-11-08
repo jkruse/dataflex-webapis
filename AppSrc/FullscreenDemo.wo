@@ -6,9 +6,10 @@ Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebLabel.pkg
 Use cWebButton.pkg
+Use cWebImage.pkg
+Use cWebHtmlBox.pkg
 
 Use cFullscreenAPI.pkg
-Use cWebImage.pkg
 
 Object oFullscreenDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown
@@ -60,6 +61,11 @@ Object oFullscreenDemo is a cWebView
         Object oWebLabel is a cWebLabel
             Set psCaption to "Supported?"
             Set piColumnSpan to 0
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
         End_Object
 
         Object oWebButton1 is a cWebButton

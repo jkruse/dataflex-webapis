@@ -44,7 +44,7 @@ Object oDashboard is a cWebView
             Object oTileContactPicker is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Contact Picker API</div><div class="Tile_Subtitle">access to contacts</div></div>'
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Contact Picker API</div><div class="Tile_Subtitle">access to contacts</div><span class="material-icons-outlined">https</span></div>'
                 Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oContactPickerDemo
@@ -95,7 +95,7 @@ Object oDashboard is a cWebView
             Object oTileScreenWakeLock is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Screen Wake Lock API</div><div class="Tile_Subtitle">prevent devices from dimming or locking the screen</div></div>'
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Screen Wake Lock API</div><div Class="Tile_Subtitle">prevent devices from dimming or locking the screen</div><span class="material-icons-outlined">https</span></div>'
                 Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oScreenWakeLockDemo
@@ -115,6 +115,16 @@ Object oDashboard is a cWebView
                 Procedure OnClick
                     Send NavigatePath
                 End_Procedure
+            End_Object
+
+            Object oWebSpacer is a cWebSpacer
+                Set piColumnSpan to 3
+                Set piHeight to 20
+            End_Object
+            
+            Object oLegend is a cWebHtmlBox
+                Set psHtml to '<div><span class="material-icons-outlined" style="vertical-align: bottom">https</span> Only works in secure contexts (https)</div>'
+                Set piColumnSpan to 3
             End_Object
         End_Object
     End_Object

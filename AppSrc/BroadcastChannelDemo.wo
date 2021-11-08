@@ -6,9 +6,10 @@ Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebLabel.pkg
 Use cWebButton.pkg
+Use cWebEdit.pkg
+Use cWebHtmlBox.pkg
 
 Use cBroadcastChannelAPI.pkg
-Use cWebEdit.pkg
 
 Object oBroadcastChannelDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown
@@ -37,6 +38,11 @@ Object oBroadcastChannelDemo is a cWebView
         Object oWebLabel is a cWebLabel
             Set psCaption to "Supported?"
             Set piColumnSpan to 0
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
         End_Object
 
         Object oWebDescription is a cWebLabel

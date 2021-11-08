@@ -33,4 +33,4 @@ Include these two lines in your `index.html`:
     <script src="https://unpkg.com/core-js-bundle@3.8.3/minified.js"></script>
     <script src="Custom/index.js"></script>
 
-**NOTE that many of these APIs require a secure context, which means they only work when page is accessed using https!** If you run the demo workspace on your localhost, be prepared for things not to work.
+**NOTE that some of these APIs require a secure context, which means they only work when page is accessed using https!** Those APIs are marked with a padlock icon in the demo application.

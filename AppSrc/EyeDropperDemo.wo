@@ -8,6 +8,7 @@ Use cWebLabel.pkg
 
 Use cEyeDropperAPI.pkg
 Use cWebButton.pkg
+Use cWebHtmlBox.pkg
 
 Object oEyeDropperDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown
@@ -35,6 +36,11 @@ Object oEyeDropperDemo is a cWebView
         Object oWebLabel is a cWebLabel
             Set psCaption to "Supported?"
             Set piColumnSpan to 12
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
         End_Object
 
         Object oWebButton is a cWebButton

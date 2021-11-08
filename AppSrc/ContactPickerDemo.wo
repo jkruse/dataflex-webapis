@@ -4,10 +4,11 @@ Use cWebForm.pkg
 Use cWebGroup.pkg
 Use cWebMenuGroup.pkg 
 Use cWebMenuItem.pkg
-
-Use cContactPickerAPI.pkg
 Use cWebCheckBox.pkg
 Use cWebButton.pkg
+Use cWebHtmlBox.pkg
+
+Use cContactPickerAPI.pkg
 
 Object oContactPickerDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown
@@ -34,6 +35,11 @@ Object oContactPickerDemo is a cWebView
         Object oWebLabel is a cWebLabel
             Set piColumnSpan to 12
             Set psCaption to "Supported?"
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Contact_Picker_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
         End_Object
 
         Object oWebCheckboxName is a cWebCheckbox
@@ -127,11 +133,6 @@ Object oContactPickerDemo is a cWebView
         Else Begin
             WebSet psCaption of oWebLabel to "ContactPicker API is NOT supported (try on Opera or Chrome Android)"
             WebSet psTextColor of oWebLabel to "red"
-//            WebSet pbEnabled of oWebCheckboxName to False
-//            WebSet pbEnabled of oWebCheckboxTel to False
-//            WebSet pbEnabled of oWebCheckboxEmail to False
-//            WebSet pbEnabled of oWebCheckboxAddress to False
-//            WebSet pbEnabled of oWebCheckboxIcon to False
         End
     End_Procedure
 End_Object

@@ -1,0 +1,14 @@
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons+Outlined);
+
+.Tile {
+    position: relative;
+}
+.Tile .material-icons-outlined {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.WebHtmlBox .as-label {
+    padding: 2px;
+}
