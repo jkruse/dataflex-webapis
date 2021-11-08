@@ -99,6 +99,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemScreenWakeLock is a cWebMenuItem
+                    Set psCaption to "Screen Wake Lock Demo"
+                    WebRegisterPath ntNavigateForward oScreenWakeLockDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
                 Object oWebMenuItemVibration is a cWebMenuItem
                     Set psCaption to "Vibration Demo"
                     WebRegisterPath ntNavigateForward oVibrationDemo
@@ -185,6 +194,7 @@ Object oWebApp is a cWebApp
     Use PageVisibilityDemo.wo
     Use BroadcastChannelDemo.wo
     Use FullscreenDemo.wo
+    Use ScreenWakeLockDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

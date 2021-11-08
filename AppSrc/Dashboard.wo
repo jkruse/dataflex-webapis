@@ -92,11 +92,23 @@ Object oDashboard is a cWebView
                 End_Procedure
             End_Object
         
+            Object oTileScreenWakeLock is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Screen Wake Lock API</div><div class="Tile_Subtitle">prevent devices from dimming or locking the screen</div></div>'
+                Set piColumnIndex to 2
+                                
+                WebRegisterPath ntNavigateForward oScreenWakeLockDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
             Object oTileVibration is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
-                Set piColumnIndex to 2
                 
                 WebRegisterPath ntNavigateForward oVibrationDemo
     

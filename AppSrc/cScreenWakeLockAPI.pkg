@@ -1,0 +1,55 @@
+﻿Use cWebObject.pkg
+
+Class cScreenWakeLockAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnSuccess False
+        { WebProperty=Client }
+        Property String psClientOnSuccess ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client }
+        Property String psClientOnError ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnRelease False
+        { WebProperty=Client }
+        Property String psClientOnRelease ""
+        
+        Set psJSClass to "WebAPIs.ScreenWakeLock"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnSuccess
+        WebPublishProcedure OnError
+        WebPublishProcedure OnRelease
+    End_Procedure
+    
+    Procedure Request
+        Send ClientAction "request"
+    End_Procedure
+    
+    Procedure Release
+        Send ClientAction "release"
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnSuccess
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnRelease
+    End_Procedure
+
+End_Class

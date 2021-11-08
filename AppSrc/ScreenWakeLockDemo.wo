@@ -1,0 +1,92 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebForm.pkg 
+Use cWebGroup.pkg
+Use cWebMenuGroup.pkg 
+Use cWebMenuItem.pkg
+Use cWebLabel.pkg
+
+Use cScreenWakeLockAPI.pkg
+Use cWebButton.pkg
+
+Object oScreenWakeLockDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Screen Wake Lock Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oScreenWakeLockAPI is a cScreenWakeLockAPI
+        Set pbServerOnSuccess to True
+        Set pbServerOnError to True
+        Set pbServerOnRelease to True
+
+        Procedure OnSuccess
+            WebSet psCaption of oWebLabel2 to "Screen wake lock is now ACTIVE"
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            WebSet psCaption of oWebLabel2 to (SFormat("There was an error activating screen wake lock: %1 - %2", sErrorName, sErrorMessage))
+        End_Procedure
+
+        Procedure OnRelease
+            WebSet psCaption of oWebLabel2 to "Screen wake lock was RELEASED"
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Request wake lock"
+        
+            Procedure OnClick
+                Send Request of oScreenWakeLockAPI
+            End_Procedure
+        End_Object
+
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Release wake lock"
+            Set piColumnIndex to 6
+        
+            Procedure OnClick
+                Send Release of oScreenWakeLockAPI
+            End_Procedure
+        End_Object
+
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "Screen wake lock is currently inactive"
+            Set piColumnSpan to 0
+        End_Object
+        
+    End_Object 
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oScreenWakeLockAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Screen Wake Lock API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Screen Wake Lock API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

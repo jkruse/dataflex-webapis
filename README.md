@@ -9,6 +9,7 @@ Contains DataFlex implementations of:
 * [EyeDropper API](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API)
 * [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API)
 * [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
+* [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API)
 * [Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API)
 
 ## How to get it
@@ -31,3 +32,5 @@ Include these two lines in your `index.html`:
 
     <script src="https://unpkg.com/core-js-bundle@3.8.3/minified.js"></script>
     <script src="Custom/index.js"></script>
+
+**NOTE that many of these APIs require a secure context, which means they only work when page is accessed using https!** If you run the demo workspace on your localhost, be prepared for things not to work.
