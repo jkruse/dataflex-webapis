@@ -22,6 +22,7 @@ Download either just the prebuilt custom components (WebAPIsComponents.zip) or t
 
 Download or clone the source code from GitHub, install NodeJS, and build the components with
 
+    > npm ci
     > npm run build
 
 ## Usage
