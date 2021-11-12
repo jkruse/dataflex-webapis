@@ -42,6 +42,7 @@ Object oVibrationDemo is a cWebView
             Set piColumnCount to 12   
             WebSetResponsive piColumnCount rmMobile to 3
             Set pbShowCaption to False
+            Set pbShowBorder to False
 
             Object oWebButton1 is a cWebButton
                 Set piColumnSpan to 3

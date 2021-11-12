@@ -56,7 +56,7 @@ Object oWebApp is a cWebApp
 
                 Object oWebMenuItemBroadcastChannel is a cWebMenuItem
                     Set psCaption to "Broadcast Channel Demo"
-                    WebRegisterPath ntNavigateForward oBroadcastChannelDemo
+                    WebRegisterPath ntNavigateBegin oBroadcastChannelDemo
 
                     Procedure OnClick
                         Send NavigatePath
@@ -65,7 +65,7 @@ Object oWebApp is a cWebApp
                 
                 Object oWebMenuItemContactPicker is a cWebMenuItem
                     Set psCaption to "Contact Picker Demo"
-                    WebRegisterPath ntNavigateForward oContactPickerDemo
+                    WebRegisterPath ntNavigateBegin oContactPickerDemo
 
                     Procedure OnClick
                         Send NavigatePath
@@ -74,7 +74,7 @@ Object oWebApp is a cWebApp
                 
                 Object oWebMenuItemEyeDropper is a cWebMenuItem
                     Set psCaption to "EyeDropper Demo"
-                    WebRegisterPath ntNavigateForward oEyeDropperDemo
+                    WebRegisterPath ntNavigateBegin oEyeDropperDemo
                     
                     Procedure OnClick
                         Send NavigatePath
@@ -83,7 +83,16 @@ Object oWebApp is a cWebApp
 
                 Object oWebMenuItemFullscreen is a cWebMenuItem
                     Set psCaption to "Fullscreen Demo"
-                    WebRegisterPath ntNavigateForward oFullscreenDemo
+                    WebRegisterPath ntNavigateBegin oFullscreenDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
+                Object oWebMenuItemNotifications is a cWebMenuItem
+                    Set psCaption to "Notifications Demo"
+                    WebRegisterPath ntNavigateBegin oNotificationsDemo
                     
                     Procedure OnClick
                         Send NavigatePath
@@ -92,7 +101,7 @@ Object oWebApp is a cWebApp
 
                 Object oWebMenuItemPageVisibility is a cWebMenuItem
                     Set psCaption to "Page Visibility Demo"
-                    WebRegisterPath ntNavigateForward oPageVisibilityDemo
+                    WebRegisterPath ntNavigateBegin oPageVisibilityDemo
                     
                     Procedure OnClick
                         Send NavigatePath
@@ -101,7 +110,7 @@ Object oWebApp is a cWebApp
 
                 Object oWebMenuItemScreenWakeLock is a cWebMenuItem
                     Set psCaption to "Screen Wake Lock Demo"
-                    WebRegisterPath ntNavigateForward oScreenWakeLockDemo
+                    WebRegisterPath ntNavigateBegin oScreenWakeLockDemo
                     
                     Procedure OnClick
                         Send NavigatePath
@@ -110,7 +119,7 @@ Object oWebApp is a cWebApp
 
                 Object oWebMenuItemVibration is a cWebMenuItem
                     Set psCaption to "Vibration Demo"
-                    WebRegisterPath ntNavigateForward oVibrationDemo
+                    WebRegisterPath ntNavigateBegin oVibrationDemo
 
                     Procedure OnClick
                         Send NavigatePath
@@ -195,6 +204,7 @@ Object oWebApp is a cWebApp
     Use BroadcastChannelDemo.wo
     Use FullscreenDemo.wo
     Use ScreenWakeLockDemo.wo
+    Use NotificationsDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

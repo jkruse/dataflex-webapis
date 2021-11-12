@@ -1,0 +1,205 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebButton.pkg
+Use cWebGroup.pkg
+Use cWebEdit.pkg
+Use cWebHtmlBox.pkg
+
+Use cNotificationsAPI.pkg
+
+Object oNotificationsDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Notifications Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oNotificationsAPI is a cNotificationsAPI
+        Set pbServerOnPermissionChange to True
+        Set pbServerOnClick to True
+        Set pbServerOnClose to True
+        Set pbServerOnError to True
+        Set pbServerOnShow to True
+
+        Procedure OnPermissionChange
+            String sPermission
+
+            WebGet psPermission to sPermission
+            If (sPermission = WN_PERMISSION_GRANTED) Begin
+                WebSet pbEnabled of oWebButtonPerm to False
+                WebSet psCaption of oWebButtonPerm to "Permission granted"
+                WebSet pbEnabled of oWebGroup to True
+            End
+            Else If (sPermission = WN_PERMISSION_DENIED) Begin
+                WebSet pbEnabled of oWebButtonPerm to False
+                WebSet psCaption of oWebButtonPerm to "Permission denied"
+            End
+        End_Procedure
+
+        Procedure OnClick Integer iID
+            Send Log of oWebEdit (SFormat("User clicked notification %1", iID))
+        End_Procedure
+
+        Procedure OnClose Integer iID
+            Send Log of oWebEdit (SFormat("Notification %1 was closed", iID))
+        End_Procedure
+
+        Procedure OnError Integer iID String sMessage
+            Send Log of oWebEdit (SFormat("Notification %1 failed: %2", iID, sMessage))
+        End_Procedure
+
+        Procedure OnShow Integer iID
+            Send Log of oWebEdit (SFormat("Notification %1 was opened", iID))
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebLabel is a cWebLabel
+            Set piColumnSpan to 0
+            Set psCaption to "Supported?"
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+
+        Object oWebButtonPerm is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Request permission"
+        
+            Procedure OnClick
+                Send RequestPermission of oNotificationsAPI
+            End_Procedure
+        End_Object
+
+        Object oWebGroup is a cWebGroup
+            Set piColumnCount to 12   
+            Set pbShowBorder to False
+            Set pbShowCaption to False
+            Set pbEnabled to False
+            
+            { WebProperty=Server }
+            Property Integer piLastNotification 0
+
+            Object oWebButtonSimple is a cWebButton
+                Set piColumnSpan to 0
+                Set psCaption to "Send simple notification"
+            
+                Procedure OnClick
+                    tWebNotification stNoti
+                    Integer iNotificationID
+                    
+                    Move "Simple notification" to stNoti.sTitle
+                    
+                    Get CreateNotification of oNotificationsAPI stNoti to iNotificationID
+                    WebSet piLastNotification of oWebGroup to iNotificationID
+                    Send Log of oWebEdit (SFormat("Created notification %1", iNotificationID))
+                End_Procedure
+            End_Object
+
+            Object oWebButtonAdvanced is a cWebButton
+                Set piColumnSpan to 0
+                Set psCaption to "Send more advanced notification"
+            
+                Procedure OnClick
+                    tWebNotification stNoti
+                    Integer iNotificationID
+                    
+                    Move "Advanced notification" to stNoti.sTitle
+                    Move "This is a larger notification with body text, icon, image and vibration pattern, which does not close automatically." to stNoti.sBody
+                    Move "favicon.ico" to stNoti.sIcon
+                    Move "Images/PoweredByDataFlexNoti.png" to stNoti.sImage
+                    Move 500 to stNoti.aVibrate[0]
+                    Move 100 to stNoti.aVibrate[1]
+                    Move 500 to stNoti.aVibrate[2]
+                    Move True to stNoti.bRequireInteraction
+                    
+                    Get CreateNotification of oNotificationsAPI stNoti to iNotificationID
+                    WebSet piLastNotification of oWebGroup to iNotificationID
+                    Send Log of oWebEdit (SFormat("Created notification %1", iNotificationID))
+                End_Procedure
+            End_Object
+
+            Object oWebButtonInvalid is a cWebButton
+                Set piColumnSpan to 0
+                Set psCaption to "Try to send invalid notification"
+            
+                Procedure OnClick
+                    tWebNotification stNoti
+                    Integer iNotificationID
+                    
+                    Move "Invalid notification" to stNoti.sTitle
+                    Move 500 to stNoti.aVibrate[0]
+                    Move 100 to stNoti.aVibrate[1]
+                    Move 500 to stNoti.aVibrate[2]
+                    Move True to stNoti.bSilent
+                    
+                    Get CreateNotification of oNotificationsAPI stNoti to iNotificationID
+                    WebSet piLastNotification of oWebGroup to iNotificationID
+                    Send Log of oWebEdit (SFormat("Created notification %1", iNotificationID))
+                End_Procedure
+            End_Object
+
+            Object oWebButtonClose is a cWebButton
+                Set piColumnSpan to 0
+                Set psCaption to "Close last notification"
+            
+                Procedure OnClick
+                    Integer iNotificationID
+                    WebGet piLastNotification of oWebGroup to iNotificationID
+                    If (iNotificationID > 0) Begin
+                        Send CloseNotification of oNotificationsAPI iNotificationID
+                    End
+                End_Procedure
+            End_Object
+        End_Object
+        
+        Object oWebEdit is a cWebEdit
+            Set piColumnSpan to 0
+            Set psLabel to "Edit"
+            Set pbShowLabel to False
+            Set pbReadOnly to True
+            Set pbFillHeight to True
+            
+            Procedure Log String sText
+                String sValue
+                WebGet psValue to sValue
+                If (sValue <> "") Begin
+                    Move (sValue + Character(13) + Character(10)) to sValue
+                End
+                Move (SFormat("%1%2: %3", sValue, CurrentDateTime(), sText)) to sValue
+                WebSet psValue to sValue
+            End_Procedure
+        End_Object
+    End_Object
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oNotificationsAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Notifications API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+            
+            Send OnPermissionChange of oNotificationsAPI
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Notifications API is NOT supported (try anything except iOS Safari)"
+            WebSet psTextColor of oWebLabel to "red"
+
+            WebSet pbEnabled of oWebButtonPerm to False
+        End
+    End_Procedure
+End_Object

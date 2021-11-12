@@ -1,0 +1,124 @@
+﻿Use cWebObject.pkg
+
+Define WN_DIR_AUTO for "auto"
+Define WN_DIR_LTR for "ltr"
+Define WN_DIR_RTL for "rtl"
+
+Define WN_PERMISSION_DEFAULT for "default"
+Define WN_PERMISSION_GRANTED for "granted"
+Define WN_PERMISSION_DENIED for "denied"
+
+Struct tWebNotification
+    String sTitle
+    String sDir        // WN_DIR_*
+    String sLang       // two letter ISO language code
+    String sBadge      // image url
+    String sBody       // body text
+    String sTag        // identifying tag
+    String sIcon       // icon url
+    String sImage      // image url
+    String sData       // arbitrary data
+    Integer[] aVibrate // vibration pattern
+    Boolean bReNotify
+    Boolean bRequireInteraction
+    Boolean bSilent
+End_Struct
+
+Class cNotificationsAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client DesignTime=False }
+        Property String psPermission ""
+        
+        { WebProperty=ServerSession }
+        Property Integer _piID 0
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnPermissionChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnClick False
+        { WebProperty=Client }
+        Property String psClientOnClick ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnClose False
+        { WebProperty=Client }
+        Property String psClientOnClose ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client }
+        Property String psClientOnError ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnShow False
+        { WebProperty=Client }
+        Property String psClientOnShow ""
+        
+        Set psJSClass to "WebAPIs.Notifications"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnPermissionChange
+        WebPublishProcedure OnClick
+        WebPublishProcedure OnClose
+        WebPublishProcedure OnError
+        WebPublishProcedure OnShow
+    End_Procedure
+    
+    Procedure RequestPermission
+        Send ClientAction "requestPermission"
+    End_Procedure
+    
+    // Creates (and displays) a notification, and returns an ID you can use with CloseNotification, and in the event handlers
+    Function CreateNotification tWebNotification stNotification Returns Integer
+        Integer iID
+        Handle hoJson
+        String [] aEmptyArray
+        
+        WebGet _piID to iID
+        Increment iID
+        WebSet _piID to iID
+        
+        Get Create (RefClass(cJsonObject)) to hoJson
+        Send DataTypeToJson of hoJson stNotification
+        Send SetMemberValue of hoJson "id" jsonTypeInteger iID
+        Send ClientActionEx "createNotification" aEmptyArray hoJson
+        Send Destroy of hoJson
+        
+        Function_Return iID
+    End_Function
+    
+    // Closes an existing notification
+    Procedure CloseNotification Integer iID
+        String[] aParams
+        Move iID to aParams[0]
+        Send ClientAction "closeNotification" aParams
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnPermissionChange
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnClick Integer iID
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnClose Integer iID
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnError Integer iID String sMessage
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnShow Integer iID
+    End_Procedure
+
+End_Class
