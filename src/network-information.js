@@ -1,5 +1,5 @@
 function fix(val, def) {
-    return val !== undefined ? val : def;
+    return (val !== undefined && val !== Infinity) ? val : def;
 }
 
 export default class NetworkInformation extends df.WebObject {

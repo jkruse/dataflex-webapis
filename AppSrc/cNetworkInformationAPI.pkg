@@ -1,18 +1,18 @@
 ﻿Use cWebObject.pkg
 
-Define NI_ET_SLOW for "slow-2g"
-Define NI_ET_2G for "2g"
-Define NI_ET_3G for "3g"
-Define NI_ET_4G for "4g"
+Define NI_EFFECTIVE_CONNECTION_TYPE_SLOW_2G for "slow-2g"
+Define NI_EFFECTIVE_CONNECTION_TYPE_2G for "2g"
+Define NI_EFFECTIVE_CONNECTION_TYPE_3G for "3g"
+Define NI_EFFECTIVE_CONNECTION_TYPE_4G for "4g"
 
-Define NI_TYPE_BLUETOOTH for "bluetooth"
-Define NI_TYPE_CELLULAR for "cellular"
-Define NI_TYPE_ETHERNET for "ethernet"
-Define NI_TYPE_NONE for "none"
-Define NI_TYPE_WIFI for "wifi"
-Define NI_TYPE_WIMAX for "wimax"
-Define NI_TYPE_OTHER for "other"
-Define NI_TYPE_UNKNOWN for "unknown"
+Define NI_CONNECTION_TYPE_BLUETOOTH for "bluetooth"
+Define NI_CONNECTION_TYPE_CELLULAR for "cellular"
+Define NI_CONNECTION_TYPE_ETHERNET for "ethernet"
+Define NI_CONNECTION_TYPE_NONE for "none"
+Define NI_CONNECTION_TYPE_WIFI for "wifi"
+Define NI_CONNECTION_TYPE_WIMAX for "wimax"
+Define NI_CONNECTION_TYPE_OTHER for "other"
+Define NI_CONNECTION_TYPE_UNKNOWN for "unknown"
 
 Class cNetworkInformationAPI is a cWebObject
     
@@ -27,13 +27,13 @@ Class cNetworkInformationAPI is a cWebObject
         { WebProperty=Client DesignTime=False }
         Property Number pnDownlinkMax 0
         { WebProperty=Client DesignTime=False }
-        Property String psEffectiveType "" // NI_ET_*
+        Property String psEffectiveType "" // NI_EFFECTIVE_CONNECTION_TYPE_*
         { WebProperty=Client DesignTime=False }
         Property Integer piRTT 0
         { WebProperty=Client DesignTime=False }
         Property Boolean pbSaveData False
         { WebProperty=Client DesignTime=False }
-        Property String psType "" // NI_TYPE_*
+        Property String psType "" // NI_CONNECTION_TYPE_*
 
         { WebProperty=Client }
         Property Boolean pbServerOnNetworkChange True
@@ -52,4 +52,5 @@ Class cNetworkInformationAPI is a cWebObject
     { MethodType=Event }
     Procedure OnNetworkChange
     End_Procedure
+
 End_Class
