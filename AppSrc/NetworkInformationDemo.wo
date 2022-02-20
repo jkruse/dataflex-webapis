@@ -1,0 +1,100 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cWebEdit.pkg
+
+Use cNetworkInformationAPI.pkg
+
+Object oNetworkInformationDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Network Information Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oNetworkInformation is a cNetworkInformationAPI
+        Procedure OnNetworkChange
+            Send LogState "Network changed to"
+        End_Procedure
+        
+        Procedure LogState String sLabel
+            Number nDownlink
+            Number nDownlinkMax
+            String sEffectiveType
+            Integer iRTT
+            Boolean bSaveData
+            String sType
+            
+            WebGet pnDownlink to nDownlink
+            WebGet pnDownlinkMax to nDownlinkMax
+            WebGet psEffectiveType to sEffectiveType
+            WebGet piRTT to iRTT
+            WebGet pbSaveData to bSaveData
+            WebGet psType to sType
+            
+            Send Log of oWebEdit (SFormat("%1: dl = %2, dl-max = %3, et = %4, rtt = %5, sd = %6, type = %7", sLabel, nDownlink, nDownlinkMax, sEffectiveType, iRTT, bSaveData, sType))
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+        
+        Object oWebLabel is a cWebLabel
+            Set piColumnSpan to 0
+            Set psCaption to "Supported?"
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "If supported, network information status will be shown below. Try throttling network on the Network tab of DevTools if on a desktop browser, or changing your connection if on a mobile device."
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebEdit is a cWebEdit
+            Set piColumnSpan to 0
+            Set pbShowLabel to False
+            Set pbReadOnly to True
+            Set pbFillHeight to True
+            
+            Procedure Log String sText
+                String sValue
+                WebGet psValue to sValue
+                If (sValue <> "") Begin
+                    Move (sValue + Character(13) + Character(10)) to sValue
+                End
+                Move (SFormat("%1%2: %3", sValue, CurrentDateTime(), sText)) to sValue
+                WebSet psValue to sValue
+            End_Procedure
+        End_Object
+    End_Object 
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oNetworkInformation to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Network Information API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+
+            Send LogState of oNetworkInformation "Initial network"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Network Information API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+    
+End_Object

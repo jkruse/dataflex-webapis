@@ -8,6 +8,7 @@ Contains DataFlex implementations of:
 * [Contact Picker API](https://developer.mozilla.org/en-US/docs/Web/API/Contact_Picker_API)
 * [EyeDropper API](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API)
 * [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API)
+* [Network Information API](https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API)
 * [Notifications API](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API)
 * [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
 * [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API)

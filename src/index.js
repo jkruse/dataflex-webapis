@@ -2,6 +2,7 @@ import BroadcastChannel from './broadcast-channel';
 import ContactPicker from './contact-picker';
 import EyeDropper from './eye-dropper';
 import Fullscreen from './fullscreen';
+import NetworkInformation from './network-information';
 import Notifications from './notifications';
 import PageVisibility from './page-visibility';
 import ScreenWakeLock from './screen-wake-lock';
@@ -12,6 +13,7 @@ global.WebAPIs = {
     ContactPicker,
     EyeDropper,
     Fullscreen,
+    NetworkInformation,
     Notifications,
     PageVisibility,
     ScreenWakeLock,
