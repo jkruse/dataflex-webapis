@@ -90,6 +90,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemNetworkInformation is a cWebMenuItem
+                    Set psCaption to "Network Information Demo"
+                    WebRegisterPath ntNavigateBegin oNetworkInformationDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
                 Object oWebMenuItemNotifications is a cWebMenuItem
                     Set psCaption to "Notifications Demo"
                     WebRegisterPath ntNavigateBegin oNotificationsDemo
@@ -205,6 +214,7 @@ Object oWebApp is a cWebApp
     Use FullscreenDemo.wo
     Use ScreenWakeLockDemo.wo
     Use NotificationsDemo.wo
+    Use NetworkInformationDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object
