@@ -1,0 +1,102 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cWebEdit.pkg
+Use cWebButton.pkg
+
+Use cWebShareAPI.pkg
+
+Object oWebShareDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Web Share Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oWebShare is a cWebShareAPI
+        Set pbServerOnSuccess to True
+        Set pbServerOnError to True
+
+        Procedure OnSuccess
+            Send Log of oWebEdit "Share success!"
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oWebEdit (SFormat("%1: %2", sErrorName, sErrorMessage))
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+        
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Share link to this application"
+        
+            Procedure OnClick
+                String sURL
+                Get ServerVariable of ghoWebApp "HTTP_REFERER" to sURL
+                Send Share of oWebShare sURL "Kruse-Net WebAPIs Demo" ""
+            End_Procedure
+        End_Object
+
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Share bad data (will fail)"
+        
+            Procedure OnClick
+                Send Share of oWebShare "broken://This is not a URL.com" "Invalid data" ""
+            End_Procedure
+        End_Object
+
+        Object oWebEdit is a cWebEdit
+            Set piColumnSpan to 0
+            Set pbShowLabel to False
+            Set pbReadOnly to True
+            Set pbFillHeight to True
+            
+            Procedure Log String sText
+                String sValue
+                WebGet psValue to sValue
+                If (sValue <> "") Begin
+                    Move (sValue + Character(13) + Character(10)) to sValue
+                End
+                Move (SFormat("%1%2: %3", sValue, CurrentDateTime(), sText)) to sValue
+                WebSet psValue to sValue
+            End_Procedure
+        End_Object
+    End_Object
+    
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oWebShare to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Web Share API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Web Share API is NOT supported (try Chrome, Edge, Opera or Safari)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

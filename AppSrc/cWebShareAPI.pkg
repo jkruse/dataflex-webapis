@@ -1,0 +1,46 @@
+﻿Use cWebObject.pkg
+
+Class cWebShareAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnSuccess False
+        { WebProperty=Client }
+        Property String psClientOnSuccess ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client }
+        Property String psClientOnError ""
+
+        Set psJSClass to "WebAPIs.WebShare"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnSuccess
+        WebPublishProcedure OnError
+    End_Procedure
+    
+    Procedure Share String sURL String sText String sTitle
+        String[] aParams
+        Move sURL to aParams[0]
+        Move sText to aParams[1]
+        Move sTitle to aParams[2]
+        Send ClientAction "share" aParams
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnSuccess
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+
+End_Class
