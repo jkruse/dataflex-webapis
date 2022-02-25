@@ -1,0 +1,147 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cWebEdit.pkg
+Use cWebButton.pkg
+
+Use cWebShareAPI.pkg
+
+Object oWebShareDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Web Share Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oWebShare is a cWebShareAPI
+        Set pbServerOnSuccess to True
+        Set pbServerOnError to True
+
+        Procedure OnSuccess
+            Send Log of oWebEdit "Share success!"
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oWebEdit (SFormat("%1: %2", sErrorName, sErrorMessage))
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+        
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+        
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "Web Share allows you to share a text, a link and/or some files from your application, using the platform native sharing mechanism. Files must be text, pdf, image, audio or video, nothing else is allowed."
+            Set piColumnSpan to 12
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Share text"
+        
+            Procedure OnClick
+                Send ShareText of oWebShare "Web sharing rocks!" "Kruse-Net WebAPIs Demo"
+            End_Procedure
+        End_Object
+
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Share link to this page"
+        
+            Procedure OnClick
+                String sHash
+                Get GenerateStateHash to sHash
+                Send ShareURL of oWebShare "Check out this Web Share demo!" "Kruse-Net WebAPIs Demo" ("#" + sHash) // URL is relative
+            End_Procedure
+        End_Object
+
+        Object oWebButton3 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Share a picture from Hamburg"
+        
+            Procedure OnClick
+                tWebShareFiles stFiles
+                tWebShareFile stFile
+                Move "Hamburg.jpg" to stFile.sName
+                Move "image/jpeg" to stFile.sContentType
+                Move "Images/hamburg-4570577.jpg" to stFile.sURL
+                Move stFile to stFiles.aFiles[0]
+                Send ShareFiles of oWebShare "The beautiful city of Hamburg" "A picture for you" stFiles
+            End_Procedure
+        End_Object
+
+        Object oWebButton4 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Share broken URL"
+        
+            Procedure OnClick
+                Send ShareURL of oWebShare "Invalid data" "" "broken://This is not a URL.com"
+            End_Procedure
+        End_Object
+
+        Object oWebButton5 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Share invalid file"
+            Set piColumnIndex to 6
+        
+            Procedure OnClick
+                tWebShareFiles stFiles
+                tWebShareFile stFile
+                Move "df.js" to stFile.sName
+                Move "application/javascript" to stFile.sContentType
+                Move "DfEngine/df.js" to stFile.sURL
+                Move stFile to stFiles.aFiles[0]
+                Send ShareFiles of oWebShare "Some code" "" stFiles
+            End_Procedure
+        End_Object
+
+        Object oWebEdit is a cWebEdit
+            Set piColumnSpan to 0
+            Set pbShowLabel to False
+            Set pbReadOnly to True
+            Set pbFillHeight to True
+            
+            Procedure Log String sText
+                String sValue
+                WebGet psValue to sValue
+                If (sValue <> "") Begin
+                    Move (sValue + Character(13) + Character(10)) to sValue
+                End
+                Move (SFormat("%1%2: %3", sValue, CurrentDateTime(), sText)) to sValue
+                WebSet psValue to sValue
+            End_Procedure
+        End_Object
+    End_Object
+    
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oWebShare to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Web Share API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Web Share API is NOT supported (try Chrome, Edge, Opera or Safari)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

@@ -1,0 +1,71 @@
+﻿Use cWebObject.pkg
+
+Struct tWebShareFile
+    String sName
+    String sContentType
+    String sURL
+End_Struct
+
+Struct tWebShareFiles
+    tWebShareFile[] aFiles
+End_Struct
+
+Class cWebShareAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnSuccess False
+        { WebProperty=Client }
+        Property String psClientOnSuccess ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client }
+        Property String psClientOnError ""
+
+        Set psJSClass to "WebAPIs.WebShare"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnSuccess
+        WebPublishProcedure OnError
+    End_Procedure
+    
+    Procedure ShareText String sText String sTitle
+        String[] aParams
+        Move sText to aParams[0]
+        Move sTitle to aParams[1]
+        Send ClientAction "share" aParams
+    End_Procedure
+    
+    // Need a separate method for sharing URL, because the empty string is a valid URL, pointing to the current page of the application
+    Procedure ShareURL String sText String sTitle String sURL
+        String[] aParams
+        Move sText to aParams[0]
+        Move sTitle to aParams[1]
+        Move sURL to aParams[2]
+        Send ClientAction "share" aParams
+    End_Procedure
+    
+    Procedure ShareFiles String sText String sTitle tWebShareFiles stFiles
+        String[] aParams
+        Move sText to aParams[0]
+        Move sTitle to aParams[1]
+        Send ClientAction "share" aParams stFiles
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnSuccess
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+
+End_Class

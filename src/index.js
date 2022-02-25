@@ -7,6 +7,7 @@ import Notifications from './notifications';
 import PageVisibility from './page-visibility';
 import ScreenWakeLock from './screen-wake-lock';
 import Vibration from './vibration';
+import WebShare from './web-share';
 
 global.WebAPIs = {
     BroadcastChannel,
@@ -17,5 +18,6 @@ global.WebAPIs = {
     Notifications,
     PageVisibility,
     ScreenWakeLock,
-    Vibration
+    Vibration,
+    WebShare
 };

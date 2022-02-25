@@ -143,6 +143,18 @@ Object oDashboard is a cWebView
                 End_Procedure
             End_Object
 
+            Object oTileWebShare is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Web Share API</div><div Class="Tile_Subtitle">share content from your application</div><span class="material-icons-outlined">https</span></div>'
+                
+                WebRegisterPath ntNavigateForward oWebShareDemo
+    
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+
             Object oWebSpacer is a cWebSpacer
                 Set piColumnSpan to 3
                 Set piHeight to 20

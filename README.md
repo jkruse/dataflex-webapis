@@ -13,6 +13,7 @@ Contains DataFlex implementations of:
 * [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
 * [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API)
 * [Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API)
+* [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API)
 
 ## How to get it
 
