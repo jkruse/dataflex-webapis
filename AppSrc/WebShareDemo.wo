@@ -45,24 +45,69 @@ Object oWebShareDemo is a cWebView
             Set piColumnSpan to 0
             Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
         End_Object
+        
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "Web Share allows you to share a text, a link and/or some files from your application, using the platform native sharing mechanism. Files must be text, pdf, image, audio or video, nothing else is allowed."
+            Set piColumnSpan to 12
+        End_Object
 
         Object oWebButton1 is a cWebButton
             Set piColumnSpan to 0
-            Set psCaption to "Share link to this application"
+            Set psCaption to "Share text"
         
             Procedure OnClick
-                String sURL
-                Get ServerVariable of ghoWebApp "HTTP_REFERER" to sURL
-                Send Share of oWebShare sURL "Kruse-Net WebAPIs Demo" ""
+                Send ShareText of oWebShare "Web sharing rocks!" "Kruse-Net WebAPIs Demo"
             End_Procedure
         End_Object
 
         Object oWebButton2 is a cWebButton
             Set piColumnSpan to 0
-            Set psCaption to "Share bad data (will fail)"
+            Set psCaption to "Share link to this page"
         
             Procedure OnClick
-                Send Share of oWebShare "broken://This is not a URL.com" "Invalid data" ""
+                String sHash
+                Get GenerateStateHash to sHash
+                Send ShareURL of oWebShare "Check out this Web Share demo!" "Kruse-Net WebAPIs Demo" ("#" + sHash) // URL is relative
+            End_Procedure
+        End_Object
+
+        Object oWebButton3 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Share a picture from Hamburg"
+        
+            Procedure OnClick
+                tWebShareFiles stFiles
+                tWebShareFile stFile
+                Move "Hamburg.jpg" to stFile.sName
+                Move "image/jpeg" to stFile.sContentType
+                Move "Images/hamburg-4570577.jpg" to stFile.sURL
+                Move stFile to stFiles.aFiles[0]
+                Send ShareFiles of oWebShare "The beautiful city of Hamburg" "A picture for you" stFiles
+            End_Procedure
+        End_Object
+
+        Object oWebButton4 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Share broken URL"
+        
+            Procedure OnClick
+                Send ShareURL of oWebShare "Invalid data" "" "broken://This is not a URL.com"
+            End_Procedure
+        End_Object
+
+        Object oWebButton5 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Share invalid file"
+            Set piColumnIndex to 6
+        
+            Procedure OnClick
+                tWebShareFiles stFiles
+                tWebShareFile stFile
+                Move "df.js" to stFile.sName
+                Move "application/javascript" to stFile.sContentType
+                Move "DfEngine/df.js" to stFile.sURL
+                Move stFile to stFiles.aFiles[0]
+                Send ShareFiles of oWebShare "Some code" "" stFiles
             End_Procedure
         End_Object
 

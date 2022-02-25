@@ -11,16 +11,36 @@ export default class WebShare extends df.WebObject {
         this.set('pbIsSupported', 'share' in navigator);
     }
 
-    share(url, text, title) {
-        navigator
-            .share({ url, text, title })
-            .then(() => {
-                this.fire('OnSuccess');
+    share(text, title, url) {
+        const data = {
+            text: text || undefined,
+            title: title || undefined,
+            url
+        };
+        Promise.all(this._tActionData?.aFiles?.map(info => this.toFile(info)) || [])
+            .then(files => {
+                if (files.length > 0) {
+                    if (navigator.canShare && navigator.canShare({ files })) {
+                        return {
+                            ...data,
+                            files
+                        };
+                    } else {
+                        throw ({ name: 'CantShareError', message: 'These files can\'t be shared' });
+                    }
+                }
+                return data;
             })
-            .catch(error => {
-                this.fire('OnError', [error.name, error.message]);
-            });
+            .then(data => navigator.share(data))
+            .then(() => this.fire('OnSuccess'))
+            .catch(error => this.fire('OnError', [error.name, error.message]));
+    }
+
+    toFile(info) {
+        return fetch(info.sURL, { credentials: 'same-origin' })
+            .then(response => response.blob())
+            .then(data => new File([data], info.sName, {
+                type: info.sContentType,
+            }));
     }
 }
-
-//TODO: share file: https://stackoverflow.com/questions/25046301/convert-url-to-file-or-blob-for-filereader-readasdataurl
