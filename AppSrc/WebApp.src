@@ -63,6 +63,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
                 
+                Object oWebMenuItemClipboard is a cWebMenuItem
+                    Set psCaption to "Clipboard Demo"
+                    WebRegisterPath ntNavigateBegin oClipboardDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+                
                 Object oWebMenuItemContactPicker is a cWebMenuItem
                     Set psCaption to "Contact Picker Demo"
                     WebRegisterPath ntNavigateBegin oContactPickerDemo
@@ -225,6 +234,7 @@ Object oWebApp is a cWebApp
     Use NotificationsDemo.wo
     Use NetworkInformationDemo.wo
     Use WebShareDemo.wo
+    Use ClipboardDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

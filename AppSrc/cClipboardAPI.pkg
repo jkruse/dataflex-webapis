@@ -1,0 +1,121 @@
+﻿Use cWebObject.pkg
+
+Class cClipboardAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client DesignTime=False }
+        Property String psReadPermission ""
+        { WebProperty=Client DesignTime=False }
+        Property String psWritePermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnReadPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnReadPermissionChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnWritePermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnWritePermissionChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnRead False
+        { WebProperty=Client }
+        Property String psClientOnRead ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnReadText False
+        { WebProperty=Client }
+        Property String psClientOnReadText ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnWrite False
+        { WebProperty=Client }
+        Property String psClientOnWrite ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnWriteText False
+        { WebProperty=Client }
+        Property String psClientOnWriteText ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client }
+        Property String psClientOnError ""
+
+        Set psJSClass to "WebAPIs.Clipboard"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnReadPermissionChange
+        WebPublishProcedure OnWritePermissionChange
+        WebPublishProcedure OnReadText
+        WebPublishProcedure OnWrite
+        WebPublishProcedure OnWriteText
+        WebPublishProcedure OnError
+        WebPublishProcedure OnReadProxy
+    End_Procedure
+    
+    // Read any object from the clipboard, and fire OnRead event with result
+    Procedure Read
+        Send ClientAction "read"
+    End_Procedure
+    
+    // Read text from the clipboard, and fire OnReadText event with result
+    Procedure ReadText
+        Send ClientAction "readText"
+    End_Procedure
+    
+    // Write any object to the clipboard, and fire OnWrite event when done
+    // sURL can be a Data URL (for inline data) or any URL pointing to the object to write
+    Procedure Write String sURL
+        String[] aParams
+        Move sURL to aParams[0]
+        Send ClientAction "write" aParams
+    End_Procedure
+    
+    // Write text to the clipboard, and fire OnWriteText event when done
+    Procedure WriteText String sText
+        String[] aParams
+        Move sText to aParams[0]
+        Send ClientAction "writeText" aParams
+    End_Procedure
+    
+    { Visibility=Private }
+    Procedure OnReadProxy
+        Handle hoJson
+        String[][] aData
+        Get phoActionJsonData to hoJson
+        Get JsonToDataType of hoJson to aData
+        Send OnRead aData
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReadPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnWritePermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnRead String[][] aData
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReadText String sText
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnWrite
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnWriteText
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+
+End_Class

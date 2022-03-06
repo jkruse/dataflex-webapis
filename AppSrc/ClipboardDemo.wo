@@ -1,0 +1,178 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cLogger.pkg
+
+Use cClipboardAPI.pkg
+Use cWebButton.pkg
+
+Object oClipboardDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Clipboard Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oClipboard is a cClipboardAPI
+        { WebProperty=Server }
+        Property String psOnWriteStatus ""
+        
+        Set pbServerOnReadPermissionChange to True
+        Set pbServerOnWritePermissionChange to True
+        Set pbServerOnRead to True
+        Set pbServerOnReadText to True
+        Set pbServerOnWrite to True
+        Set pbServerOnWriteText to True
+        Set pbServerOnError to True
+
+        Procedure OnReadPermissionChange
+            String sPerm
+            WebGet psReadPermission to sPerm
+            Send Log of oLogger (SFormat("Read permission changed to '%1'", sPerm))
+        End_Procedure
+
+        Procedure OnWritePermissionChange
+            String sPerm
+            WebGet psWritePermission to sPerm
+            Send Log of oLogger (SFormat("Write permission changed to '%1'", sPerm))
+        End_Procedure
+
+        // This method receives an array of clipboard items, where each clipboard item is
+        // represented as an array of data URLs containing the various formats that item
+        // is available in.
+        Procedure OnRead String[][] aData
+            Integer i j iArgSize iSize
+            
+            // Because we do some string manipulation here, and send the whole value back to the client,
+            // we have to set an argument size large enough, and it has to stay that large, or returning
+            // the response will crash the application
+            Set_Argument_Size 10000000
+            
+            For i from 0 to (SizeOfArray(aData) - 1)
+                For j from 0 to (SizeOfArray(aData[i]) - 1)
+                    Send Log of oLogger (SFormat("Read: %1", aData[i][j]))
+                Loop
+            Loop
+        End_Procedure
+
+        Procedure OnReadText String sText
+            Send Log of oLogger (SFormat("Successfully read text from clipboard: '%1'", sText))
+            WebSet psCaption of oWebLabel2 to sText
+        End_Procedure
+
+        Procedure OnWrite
+            String sText
+            WebGet psOnWriteStatus to sText
+            Send Log of oLogger sText
+        End_Procedure
+
+        Procedure OnWriteText
+            Send Log of oLogger "Successfully wrote text to clipboard"
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+        
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+        
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "The Clipboard API lets you read text from and write text to the system clipboard."
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Paste clipboard text into label above"
+        
+            Procedure OnClick
+                Send ReadText of oClipboard
+            End_Procedure
+        End_Object
+
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Copy contents of log below to clipboard"
+        
+            Procedure OnClick
+                String sText
+                WebGet psValue of oLogger to sText
+                Send WriteText of oClipboard sText
+            End_Procedure
+        End_Object
+
+        Object oWebButton3 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Read object from clipboard"
+        
+            Procedure OnClick
+                Send Read of oClipboard
+            End_Procedure
+        End_Object
+
+        Object oWebButton4 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Write an image to clipboard"
+        
+            Procedure OnClick
+                WebSet psOnWriteStatus of oClipboard to "Image copied to clipboard, now try pasting in Word or Paint"
+                Send Write of oClipboard "Images/DF_Logo_Retina.png"
+            End_Procedure
+        End_Object
+
+        Object oWebButton5 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Write HTML string to clipboard"
+        
+            Procedure OnClick
+                WebSet psOnWriteStatus of oClipboard to "HTML string copied to clipboard, now try pasting in Word"
+                Send Write of oClipboard "data:text/html;charset=utf-8;base64,PGI+WW91IGNhbiA8ZW0+ZXZlbjwvZW0+IHB1dCBIVE1MIG9uIHRoZSBjbGlwYm9hcmQ8L2I+"
+            End_Procedure
+        End_Object
+        
+        Object oLogger is a cLogger
+        End_Object
+
+    End_Object 
+    
+    Procedure OnShow
+        Boolean bIsSupported
+        String sPerm
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oClipboard to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Clipboard API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+            
+            WebGet psReadPermission of oClipboard to sPerm
+            Send Log of oLogger (SFormat("Read permission is '%1'", sPerm))
+            WebGet psWritePermission of oClipboard to sPerm
+            Send Log of oLogger (SFormat("Write permission is '%1'", sPerm))
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Clipboard API is NOT supported (try anything but Internet Explorer)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object
