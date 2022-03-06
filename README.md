@@ -5,6 +5,7 @@ DataFlex Custom Components for Web APIs.
 Contains DataFlex implementations of:
 
 * [Broadcast Channel API](https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API)
+* [Clipboard API](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API)
 * [Contact Picker API](https://developer.mozilla.org/en-US/docs/Web/API/Contact_Picker_API)
 * [EyeDropper API](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API)
 * [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API)

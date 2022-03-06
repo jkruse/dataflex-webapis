@@ -1,4 +1,5 @@
 import BroadcastChannel from './broadcast-channel';
+import Clipboard from './clipboard';
 import ContactPicker from './contact-picker';
 import EyeDropper from './eye-dropper';
 import Fullscreen from './fullscreen';
@@ -11,6 +12,7 @@ import WebShare from './web-share';
 
 global.WebAPIs = {
     BroadcastChannel,
+    Clipboard,
     ContactPicker,
     EyeDropper,
     Fullscreen,
