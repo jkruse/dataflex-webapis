@@ -1,0 +1,65 @@
+﻿Use cWebBaseControl.pkg
+
+// To detect support without errors, create an instance of this control with pbRender=False, and then check pbIsSupported
+Class cBarcodeDetectionAPI is a cWebBaseControl
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        Set pbFillHeight to True
+        Set pbShowLabel to False
+        Set piColumnSpan to 0
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnSupportedFormats False
+        { WebProperty=Client }
+        Property String psClientOnSupportedFormats ""
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnDetect True
+        { WebProperty=Client }
+        Property String psClientOnDetect ""
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnError True
+        { WebProperty=Client }
+        Property String psClientOnError ""
+        
+        Set psJSClass to "WebAPIs.BarcodeDetection"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnSupportedFormats
+        WebPublishProcedure OnDetect
+        WebPublishProcedure OnError
+    End_Procedure
+    
+    Procedure Detect String[] aFormats
+        String[] aEmptyArray
+        Handle hoJson
+        Get Create (RefClass(cJsonObject)) to hoJson
+        Send DataTypeToJson of hoJson aFormats
+        Send ClientActionEx "detect" aEmptyArray hoJson
+        Send Destroy of hoJson
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnSupportedFormats String sData
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnDetect String sData
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+        // sErrorName will be one of the exceptions listed here: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#exceptions
+        // or "CameraNotSupportedError" if the browser does not support the MediaDevices API
+        // or "BarcodeNotSupportedError" if the browser does not support the BarcodeDetection API
+    End_Procedure
+End_Class

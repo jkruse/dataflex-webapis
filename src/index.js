@@ -1,3 +1,4 @@
+import BarcodeDetection from './barcode-detection';
 import BroadcastChannel from './broadcast-channel';
 import Clipboard from './clipboard';
 import ContactPicker from './contact-picker';
@@ -12,6 +13,7 @@ import Vibration from './vibration';
 import WebShare from './web-share';
 
 global.WebAPIs = {
+    BarcodeDetection,
     BroadcastChannel,
     Clipboard,
     ContactPicker,
