@@ -8,6 +8,9 @@
     top: 15px;
     right: 15px;
 }
+.Tile .material-icons-outlined + .material-icons-outlined {
+    right: 40px;
+}
 
 .WebHtmlBox .as-label {
     padding: 2px;

@@ -1,0 +1,139 @@
+﻿Use cJsonObject.pkg
+Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cWebCheckbox.pkg
+Use cWebButton.pkg
+Use cWebDynamicObjectContainer.pkg
+
+Use cBarcodeDetectionAPI.pkg
+
+Class cWebFormatCheckbox is a cWebCheckbox
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Set psUnchecked to ""
+    End_Procedure
+End_Class
+
+Object oBarcodeDetectionDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Barcode Detection Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+        
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+
+        Object oDetector is a cBarcodeDetectionAPI
+            Set pbServerOnSupportedFormats to True
+            Set pbRender to False // don't render until we know if it's supported
+
+            Procedure OnSupportedFormats String sData
+                Handle hoJson hoObj
+                Boolean bOK
+                Integer i iFormats
+                String sValue
+                
+                Get Create (RefClass(cJsonObject)) to hoJson
+                Get ParseString of hoJson sData to bOK
+                If (bOK and (JsonType(hoJson) = jsonTypeArray)) Begin
+                    Send ResetContainer of oDynaContainer
+                    Get MemberCount of hoJson to iFormats
+                    for i from 0 to (iFormats - 1)
+                        Get MemberValue of hoJson i to sValue
+                        Get CreateDynamicObject of oDynaContainer (RefClass(cWebFormatCheckbox)) ("oFormat" + i) "" to hoObj
+                        Send InitDynamicProp of hoObj "psCaption" sValue
+                        Send InitDynamicProp of hoObj "psChecked" sValue
+                        Send InitDynamicProp of hoObj "piColumnIndex" (Mod(i, 8))
+                        WebSetResponsive piColumnIndex of hoObj rmTabletLandscape to (Mod(i, 6))
+                        WebSetResponsive piColumnIndex of hoObj rmTabletPortrait to (Mod(i, 4))
+                        WebSetResponsive piColumnIndex of hoObj rmMobileLandscape to (Mod(i, 4))
+                        WebSetResponsive piColumnIndex of hoObj rmMobilePortrait to (Mod(i, 3))
+                    Loop
+                    Send Activate of oDynaContainer
+                End
+                WebSet psCaption of oWebLabel2 to (SFormat("Supported formats: %1", sData))
+            End_Procedure
+
+            Procedure OnDetect String sData
+                WebSet psCaption of oWebLabel2 to (SFormat("Detected: %1", sData))
+            End_Procedure
+
+            Procedure OnError String sErrorName String sErrorMessage
+                WebSet psCaption of oWebLabel2 to (SFormat("There was an error detecting barcodes: %1 - %2", sErrorName, sErrorMessage))
+            End_Procedure
+        End_Object
+
+        Object oDynaContainer is a cWebDynamicObjectContainer
+            Set piColumnCount to 8
+            WebSetResponsive piColumnCount rmTabletLandscape to 6
+            WebSetResponsive piColumnCount rmTabletPortrait to 4
+            WebSetResponsive piColumnCount rmMobileLandscape to 4
+            WebSetResponsive piColumnCount rmMobilePortrait to 3
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Detect Barcodes"
+            Set pbEnabled to False
+        
+            Procedure OnClick
+                String[] aIDs aFormats
+                Integer i
+                Handle hoObj
+                String sValue
+                
+                Get DynamicChildren of oDynaContainer "" to aIDs
+                For i from 0 to (SizeOfArray(aIDs) - 1)
+                    Get DynamicObject of oDynaContainer aIDs[i] to hoObj
+                    WebGet psValue of hoObj to sValue
+                    If (sValue <> "") Begin
+                        Move sValue to aFormats[SizeOfArray(aFormats)]
+                    End
+                Loop
+                Send Detect of oDetector aFormats
+            End_Procedure
+        End_Object
+
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to ""
+            Set piColumnSpan to 0
+        End_Object
+    End_Object 
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oDetector to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Barcode Detection API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+            WebSet pbRender of oDetector to True
+            WebSet pbEnabled of oWebButton1 to True
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Barcode Detection API is NOT supported (try Chrome or Opera on Android)"
+            WebSet psTextColor of oWebLabel to "red"
+//            Send OnSupportedFormats of oDetector '["aztec","code_128","code_39","code_93","codabar","data_matrix","ean_13","ean_8","itf","pdf417","qr_code","upc_a","upc_e"]'
+        End
+    End_Procedure
+End_Object

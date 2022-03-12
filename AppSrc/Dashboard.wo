@@ -29,10 +29,23 @@ Object oDashboard is a cWebView
             WebSetResponsive piColumnCount rmMobile to 1
             WebSetResponsive piColumnCount rmTabletPortrait to 2
 
+            Object oTileBarcodeDetection is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Barcode Detection API</div><div class="Tile_Subtitle">detects linear and two-dimensional barcodes in images</div><span class="material-icons-outlined">https</span><span class="material-icons-outlined">warning_amber</span></div>'
+                                
+                WebRegisterPath ntNavigateForward oBarcodeDetectionDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
             Object oTileBroadcastChannel is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Broadcast Channel API</div><div class="Tile_Subtitle">allows communication between browsing contexts on the same origin</div></div>'
+                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oBroadcastChannelDemo
                 
@@ -45,7 +58,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Contact Picker API</div><div class="Tile_Subtitle">access to contacts</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 1
+                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oContactPickerDemo
                 
@@ -58,7 +71,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">EyeDropper API</div><div class="Tile_Subtitle">pick a color using an eyedropper tool</div><span class="material-icons-outlined">warning_amber</span></div>'
-                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oEyeDropperDemo
                 
@@ -71,6 +83,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Fullscreen API</div><div class="Tile_Subtitle">present a specific element in full-screen mode</div></div>'
+                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oFullscreenDemo
                 
@@ -83,7 +96,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Notifications API</div><div class="Tile_Subtitle">display system notifications</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 1
+                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oNotificationsDemo
                 
@@ -96,7 +109,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Page Visibility API</div><div class="Tile_Subtitle">know when a document becomes visible or hidden</div></div>'
-                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oPageVisibilityDemo
                 
@@ -109,6 +121,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Screen Wake Lock API</div><div Class="Tile_Subtitle">prevent devices from dimming or locking the screen</div><span class="material-icons-outlined">https</span></div>'
+                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oScreenWakeLockDemo
                 
@@ -121,7 +134,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
-                Set piColumnIndex to 1
+                Set piColumnIndex to 2
                 
                 WebRegisterPath ntNavigateForward oVibrationDemo
     

@@ -54,6 +54,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemBarcodeDetection is a cWebMenuItem
+                    Set psCaption to "Barcode Detection Demo"
+                    WebRegisterPath ntNavigateBegin oBarcodeDetectionDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+                
                 Object oWebMenuItemBroadcastChannel is a cWebMenuItem
                     Set psCaption to "Broadcast Channel Demo"
                     WebRegisterPath ntNavigateBegin oBroadcastChannelDemo
@@ -205,6 +214,7 @@ Object oWebApp is a cWebApp
     Use FullscreenDemo.wo
     Use ScreenWakeLockDemo.wo
     Use NotificationsDemo.wo
+    Use BarcodeDetectionDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object
