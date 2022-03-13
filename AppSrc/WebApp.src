@@ -81,6 +81,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
                 
+                Object oWebMenuItemCredentialManagement is a cWebMenuItem
+                    Set psCaption to "Credential Management Demo"
+                    WebRegisterPath ntNavigateBegin oCredentialManagementDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+                
                 Object oWebMenuItemEyeDropper is a cWebMenuItem
                     Set psCaption to "EyeDropper Demo"
                     WebRegisterPath ntNavigateBegin oEyeDropperDemo
@@ -235,6 +244,7 @@ Object oWebApp is a cWebApp
     Use NetworkInformationDemo.wo
     Use WebShareDemo.wo
     Use ClipboardDemo.wo
+    Use CredentialManagementDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

@@ -1,6 +1,7 @@
 import BroadcastChannel from './broadcast-channel';
 import Clipboard from './clipboard';
 import ContactPicker from './contact-picker';
+import CredentialManagement from './credential-management';
 import EyeDropper from './eye-dropper';
 import Fullscreen from './fullscreen';
 import NetworkInformation from './network-information';
@@ -14,6 +15,7 @@ global.WebAPIs = {
     BroadcastChannel,
     Clipboard,
     ContactPicker,
+    CredentialManagement,
     EyeDropper,
     Fullscreen,
     NetworkInformation,
