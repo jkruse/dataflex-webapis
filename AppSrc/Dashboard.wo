@@ -1,15 +1,8 @@
 ﻿Use cWebView.pkg
 Use cWebPanel.pkg
-Use cWebForm.pkg
-Use cWebButton.pkg
 Use cWebGroup.pkg
 Use cWebSpacer.pkg
 Use cWebHtmlBox.pkg
-Use cWebMenuGroup.pkg
-Use cWebMenuItem.pkg
-Use cWebLabel.pkg
-Use cWebList.pkg
-Use cWebColumn.pkg
 
 Object oDashboard is a cWebView
     Set piMaxWidth to 1024
@@ -67,10 +60,23 @@ Object oDashboard is a cWebView
                 End_Procedure
             End_Object
         
+            Object oTileCredentialManagement is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Credential Management API</div><div class="Tile_Subtitle">store and retrieve credentials, auto login</div><span class="material-icons-outlined">https</span><span class="material-icons-outlined">warning_amber</span></div>'
+                                
+                WebRegisterPath ntNavigateForward oCredentialManagementDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
             Object oTileEyeDropper is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">EyeDropper API</div><div class="Tile_Subtitle">pick a color using an eyedropper tool</div><span class="material-icons-outlined">warning_amber</span></div>'
+                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oEyeDropperDemo
                 
@@ -83,7 +89,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Fullscreen API</div><div class="Tile_Subtitle">present a specific element in full-screen mode</div></div>'
-                Set piColumnIndex to 1
+                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oFullscreenDemo
                 
@@ -96,7 +102,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Network Information API</div><div class="Tile_Subtitle">get information on the current network connection</div><span class="material-icons-outlined">warning_amber</span></div>'
-                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oNetworkInformationDemo
                 
@@ -109,6 +114,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Notifications API</div><div class="Tile_Subtitle">display system notifications</div><span class="material-icons-outlined">https</span></div>'
+                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oNotificationsDemo
                 
@@ -121,7 +127,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Page Visibility API</div><div class="Tile_Subtitle">know when a document becomes visible or hidden</div></div>'
-                Set piColumnIndex to 1
+                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oPageVisibilityDemo
                 
@@ -134,7 +140,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Screen Wake Lock API</div><div Class="Tile_Subtitle">prevent devices from dimming or locking the screen</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oScreenWakeLockDemo
                 
@@ -147,6 +152,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
+                Set piColumnIndex to 1
                 
                 WebRegisterPath ntNavigateForward oVibrationDemo
     
@@ -159,7 +165,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Web Share API</div><div Class="Tile_Subtitle">share content from your application</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 1
+                Set piColumnIndex to 2
                 
                 WebRegisterPath ntNavigateForward oWebShareDemo
     

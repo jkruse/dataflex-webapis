@@ -3,9 +3,9 @@ Use cWebPanel.pkg
 Use cWebLabel.pkg
 Use cWebHtmlBox.pkg
 Use cLogger.pkg
+Use cWebButton.pkg
 
 Use cClipboardAPI.pkg
-Use cWebButton.pkg
 
 Object oClipboardDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown
