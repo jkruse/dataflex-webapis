@@ -1,0 +1,25 @@
+﻿Use cWebEdit.pkg
+
+Class cLogger is a cWebEdit
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        Set piColumnSpan to 0
+        Set pbShowLabel to False
+        Set pbReadOnly to True
+        Set pbFillHeight to True
+    End_Procedure
+
+    Procedure Log String sText
+        String sTime sValue
+        Move (Left(String(CurrentDateTime()) + "000", 23)) to sTime
+        WebGet psValue to sValue
+        If (sValue <> "") Begin
+            Move (sValue + Character(13) + Character(10)) to sValue
+        End
+        Move (SFormat("%1%2: %3", sValue, sTime, sText)) to sValue
+        WebSet psValue to sValue
+    End_Procedure
+
+End_Class

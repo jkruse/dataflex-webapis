@@ -1,4 +1,4 @@
-﻿Use AllWebAppClasses.pkg
+Use AllWebAppClasses.pkg
 Use cConnection.pkg
 Use cWebMenuItem.pkg
 
@@ -72,9 +72,27 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
                 
+                Object oWebMenuItemClipboard is a cWebMenuItem
+                    Set psCaption to "Clipboard Demo"
+                    WebRegisterPath ntNavigateBegin oClipboardDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+                
                 Object oWebMenuItemContactPicker is a cWebMenuItem
                     Set psCaption to "Contact Picker Demo"
                     WebRegisterPath ntNavigateBegin oContactPickerDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+                
+                Object oWebMenuItemCredentialManagement is a cWebMenuItem
+                    Set psCaption to "Credential Management Demo"
+                    WebRegisterPath ntNavigateBegin oCredentialManagementDemo
 
                     Procedure OnClick
                         Send NavigatePath
@@ -93,6 +111,15 @@ Object oWebApp is a cWebApp
                 Object oWebMenuItemFullscreen is a cWebMenuItem
                     Set psCaption to "Fullscreen Demo"
                     WebRegisterPath ntNavigateBegin oFullscreenDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
+                Object oWebMenuItemNetworkInformation is a cWebMenuItem
+                    Set psCaption to "Network Information Demo"
+                    WebRegisterPath ntNavigateBegin oNetworkInformationDemo
                     
                     Procedure OnClick
                         Send NavigatePath
@@ -129,6 +156,15 @@ Object oWebApp is a cWebApp
                 Object oWebMenuItemVibration is a cWebMenuItem
                     Set psCaption to "Vibration Demo"
                     WebRegisterPath ntNavigateBegin oVibrationDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
+                Object oWebMenuItemWebShare is a cWebMenuItem
+                    Set psCaption to "Web Share Demo"
+                    WebRegisterPath ntNavigateBegin oWebShareDemo
 
                     Procedure OnClick
                         Send NavigatePath
@@ -214,6 +250,10 @@ Object oWebApp is a cWebApp
     Use FullscreenDemo.wo
     Use ScreenWakeLockDemo.wo
     Use NotificationsDemo.wo
+    Use NetworkInformationDemo.wo
+    Use WebShareDemo.wo
+    Use ClipboardDemo.wo
+    Use CredentialManagementDemo.wo
     Use BarcodeDetectionDemo.wo
     Set phoDefaultView to oDashboard
 

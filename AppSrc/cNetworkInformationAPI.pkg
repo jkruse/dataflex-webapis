@@ -1,0 +1,56 @@
+﻿Use cWebObject.pkg
+
+Define NI_EFFECTIVE_CONNECTION_TYPE_SLOW_2G for "slow-2g"
+Define NI_EFFECTIVE_CONNECTION_TYPE_2G for "2g"
+Define NI_EFFECTIVE_CONNECTION_TYPE_3G for "3g"
+Define NI_EFFECTIVE_CONNECTION_TYPE_4G for "4g"
+
+Define NI_CONNECTION_TYPE_BLUETOOTH for "bluetooth"
+Define NI_CONNECTION_TYPE_CELLULAR for "cellular"
+Define NI_CONNECTION_TYPE_ETHERNET for "ethernet"
+Define NI_CONNECTION_TYPE_NONE for "none"
+Define NI_CONNECTION_TYPE_WIFI for "wifi"
+Define NI_CONNECTION_TYPE_WIMAX for "wimax"
+Define NI_CONNECTION_TYPE_OTHER for "other"
+Define NI_CONNECTION_TYPE_UNKNOWN for "unknown"
+
+Class cNetworkInformationAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        // These are all read-only
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client DesignTime=False }
+        Property Number pnDownlink 0
+        { WebProperty=Client DesignTime=False }
+        Property Number pnDownlinkMax 0
+        { WebProperty=Client DesignTime=False }
+        Property String psEffectiveType "" // NI_EFFECTIVE_CONNECTION_TYPE_*
+        { WebProperty=Client DesignTime=False }
+        Property Integer piRTT 0
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbSaveData False
+        { WebProperty=Client DesignTime=False }
+        Property String psType "" // NI_CONNECTION_TYPE_*
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnNetworkChange True
+        { WebProperty=Client }
+        Property String psClientOnNetworkChange ""
+        
+        Set psJSClass to "WebAPIs.NetworkInformation"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnNetworkChange
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnNetworkChange
+    End_Procedure
+
+End_Class
