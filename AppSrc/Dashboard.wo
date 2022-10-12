@@ -63,7 +63,7 @@ Object oDashboard is a cWebView
             Object oTileCredentialManagement is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Credential Management API</div><div class="Tile_Subtitle">store and retrieve credentials, auto login</div><span class="material-icons-outlined">https</span><span class="material-icons-outlined">warning_amber</span></div>'
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Credential Management API</div><div class="Tile_Subtitle">store and retrieve credentials, auto login</div><span class="material-icons-outlined" style="right: 40px">https</span><span class="material-icons-outlined">warning_amber</span></div>'
                                 
                 WebRegisterPath ntNavigateForward oCredentialManagementDemo
                 

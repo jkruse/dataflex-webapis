@@ -49,11 +49,6 @@ Object oClipboardDemo is a cWebView
         Procedure OnRead String[][] aData
             Integer i j iArgSize iSize
             
-            // Because we do some string manipulation here, and send the whole value back to the client,
-            // we have to set an argument size large enough, and it has to stay that large, or returning
-            // the response will crash the application
-            Set_Argument_Size 10000000
-            
             For i from 0 to (SizeOfArray(aData) - 1)
                 For j from 0 to (SizeOfArray(aData[i]) - 1)
                     Send Log of oLogger (SFormat("Read: %1", aData[i][j]))

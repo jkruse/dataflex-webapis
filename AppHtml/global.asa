@@ -1,4 +1,4 @@
-<OBJECT RUNAT=Server SCOPE=Session ID=WebAppServerSession PROGID="WebAppServer.Session.20.0">
+<OBJECT RUNAT=Server SCOPE=Session ID=WebAppServerSession PROGID="WebAppServer.Session.20.1">
 </OBJECT>
 
 <SCRIPT LANGUAGE=VBScript RUNAT=Server>
