@@ -144,6 +144,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemSensor is a cWebMenuItem
+                    Set psCaption to "Sensor Demo"
+                    WebRegisterPath ntNavigateBegin oSensorDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
                 Object oWebMenuItemVibration is a cWebMenuItem
                     Set psCaption to "Vibration Demo"
                     WebRegisterPath ntNavigateBegin oVibrationDemo
@@ -245,6 +254,7 @@ Object oWebApp is a cWebApp
     Use WebShareDemo.wo
     Use ClipboardDemo.wo
     Use CredentialManagementDemo.wo
+    Use SensorDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

@@ -148,6 +148,18 @@ Object oDashboard is a cWebView
                 End_Procedure
             End_Object
         
+            Object oTileSensor is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Sensor API</div><div Class="Tile_Subtitle">access to device sensors</div><span class="material-icons-outlined">https</span></div>'
+                                
+                WebRegisterPath ntNavigateForward oSensorDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
             Object oTileVibration is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"

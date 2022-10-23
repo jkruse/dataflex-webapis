@@ -7,6 +7,7 @@ Use cWebMenuItem.pkg
 Use cWebCheckBox.pkg
 Use cWebButton.pkg
 Use cWebHtmlBox.pkg
+Use cWebLabel.pkg
 
 Use cContactPickerAPI.pkg
 

@@ -1,0 +1,132 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebGroup.pkg
+Use cLogger.pkg
+Use cWebCheckBox.pkg
+Use cWebForm.pkg
+Use cWebHtmlBox.pkg
+Use gFormatNumbers.pkg
+
+Use cSensorAPI.pkg
+
+Object oSensorDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Sensor Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oAbsoluteOrientationSensor is a cAbsoluteOrientationSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAccelerometerPermissionChange to True
+        Set pbServerOnMagnetometerPermissionChange to True
+        Set pbServerOnGyroscopePermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Absolute Orientation Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z Number w
+            WebSet psValue of oWebFormAOS to (SFormat("[%1, %2, %3, %4]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3), FormatNumber(w, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxAOS False
+        End_Procedure
+
+        Procedure OnAccelerometerPermissionChange
+            String sPerm
+            WebGet psAccelerometerPermission to sPerm
+            Send Log of oLogger (SFormat("Accelerometer permission changed to '%1'", sPerm))
+        End_Procedure
+
+        Procedure OnMagnetometerPermissionChange
+            String sPerm
+            WebGet psMagnetometerPermission to sPerm
+            Send Log of oLogger (SFormat("Magnetometer permission changed to '%1'", sPerm))
+        End_Procedure
+
+        Procedure OnGyroscopePermissionChange
+            String sPerm
+            WebGet psGyroscopePermission to sPerm
+            Send Log of oLogger (SFormat("Gyroscope permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebGroupAOS is a cWebGroup
+            Set psCaption to "Absolute Orientation Sensor"
+            Set piColumnCount to 12
+
+            Object oWebLabelAOSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxAOS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/AbsoluteOrientationSensor#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxAOS is a cWebCheckbox
+                Set piColumnSpan to 0
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oAbsoluteOrientationSensor
+                    End
+                    Else Begin
+                        Send Stop of oAbsoluteOrientationSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebFormAOS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+        
+        Object oLogger is a cLogger
+        End_Object
+    End_Object 
+
+    Procedure OnShow
+        Boolean bAOSIsSupported
+        
+        Forward Send OnShow
+        
+        WebGet pbIsSupported of oAbsoluteOrientationSensor to bAOSIsSupported
+        If (bAOSIsSupported) Begin
+            WebSet psCaption of oWebLabelAOSSupported to "Absolute Orientation Sensor API is supported"
+            WebSet psTextColor of oWebLabelAOSSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelAOSSupported to "Absolute Orientation Sensor API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabelAOSSupported to "red"
+            WebSet pbEnabled of oWebGroupAOS to False
+        End
+    End_Procedure
+    
+End_Object
