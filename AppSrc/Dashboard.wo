@@ -151,7 +151,8 @@ Object oDashboard is a cWebView
             Object oTileSensor is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Sensor API</div><div Class="Tile_Subtitle">access to device sensors</div><span class="material-icons-outlined">https</span></div>'
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Sensor API</div><div Class="Tile_Subtitle">access to device sensors</div><span class="material-icons-outlined" style="right: 40px">https</span><span class="material-icons-outlined">warning_amber</span></div>'
+                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oSensorDemo
                 
@@ -164,7 +165,7 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
-                Set piColumnIndex to 1
+                Set piColumnIndex to 2
                 
                 WebRegisterPath ntNavigateForward oVibrationDemo
     
@@ -177,7 +178,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Web Share API</div><div Class="Tile_Subtitle">share content from your application</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 2
                 
                 WebRegisterPath ntNavigateForward oWebShareDemo
     

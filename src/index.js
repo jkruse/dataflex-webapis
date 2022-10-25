@@ -8,12 +8,13 @@ import NetworkInformation from './network-information';
 import Notifications from './notifications';
 import PageVisibility from './page-visibility';
 import ScreenWakeLock from './screen-wake-lock';
-import { AbsoluteOrientationSensor } from './sensor';
+import { AbsoluteOrientationSensor, AccelerometerSensor } from './sensor';
 import Vibration from './vibration';
 import WebShare from './web-share';
 
 global.WebAPIs = {
     AbsoluteOrientationSensor,
+    AccelerometerSensor,
     BroadcastChannel,
     Clipboard,
     ContactPicker,

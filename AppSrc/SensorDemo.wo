@@ -8,6 +8,7 @@ Use cWebHtmlBox.pkg
 Use gFormatNumbers.pkg
 
 Use cSensorAPI.pkg
+Use cWebSlider.pkg
 
 Object oSensorDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown
@@ -61,6 +62,33 @@ Object oSensorDemo is a cWebView
             Send Log of oLogger (SFormat("Gyroscope permission changed to '%1'", sPerm))
         End_Procedure
     End_Object
+    
+    Object oAccelerometerSensor is a cAccelerometerSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAccelerometerPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Accelerometer Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z
+            WebSet psValue of oWebFormAS to (SFormat("[%1, %2, %3]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxAS False
+        End_Procedure
+
+        Procedure OnAccelerometerPermissionChange
+            String sPerm
+            WebGet psAccelerometerPermission to sPerm
+            Send Log of oLogger (SFormat("Accelerometer permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
 
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
@@ -69,6 +97,7 @@ Object oSensorDemo is a cWebView
         Object oWebGroupAOS is a cWebGroup
             Set psCaption to "Absolute Orientation Sensor"
             Set piColumnCount to 12
+            Set piColumnSpan to 6
 
             Object oWebLabelAOSSupported is a cWebLabel
                 Set psCaption to "Supported?"
@@ -81,7 +110,7 @@ Object oSensorDemo is a cWebView
             End_Object
     
             Object oWebCheckboxAOS is a cWebCheckbox
-                Set piColumnSpan to 0
+                Set piColumnSpan to 4
                 Set psCaption to "Enable"
                 Set psCSSClass to "FlipSwitch"
                 Set psChecked to "1"
@@ -101,7 +130,81 @@ Object oSensorDemo is a cWebView
                 End_Procedure
             End_Object
 
+            Object oWebSliderAOS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oAbsoluteOrientationSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet pnFrequency of oAbsoluteOrientationSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
             Object oWebFormAOS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+        
+        Object oWebGroupAS is a cWebGroup
+            Set psCaption to "Accelerometer Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+            Set piColumnIndex to 6
+
+            Object oWebLabelASSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxAS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Accelerometer#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxAS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oAccelerometerSensor
+                    End
+                    Else Begin
+                        Send Stop of oAccelerometerSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderAS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oAccelerometerSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet pnFrequency of oAccelerometerSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormAS is a cWebForm
                 Set piColumnSpan to 0
                 Set psLabel to "Last reading"
                 Set pbReadOnly to True
