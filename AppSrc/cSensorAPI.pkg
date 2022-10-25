@@ -105,7 +105,6 @@ Class cAbsoluteOrientationSensorAPI is a cWebObject
     { MethodType=Event }
     Procedure OnGyroscopePermissionChange
     End_Procedure
-
 End_Class
 
 Class cAccelerometerSensorAPI is a cWebObject
@@ -145,5 +144,41 @@ Class cAccelerometerSensorAPI is a cWebObject
     { MethodType=Event }
     Procedure OnAccelerometerPermissionChange
     End_Procedure
+End_Class
+
+Class cAmbientLightSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
     
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client DesignTime=False }
+        Property String psAmbientLightSensorPermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnAmbientLightSensorPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnAmbientLightSensorPermissionChange ""
+        
+        Set psJSClass to "WebAPIs.AmbientLightSensor"
+    End_Procedure
+    
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnAmbientLightSensorPermissionChange
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnReading Number lux
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnAmbientLightSensorPermissionChange
+    End_Procedure
 End_Class

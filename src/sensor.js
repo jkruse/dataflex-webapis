@@ -133,3 +133,37 @@ export class AccelerometerSensor extends Sensor {
         this.#createSensor(this.pnFrequency, sReferenceFrame);
     }
 }
+
+export class AmbientLightSensor extends Sensor {
+    constructor(sName, oParent) {
+        super(sName, oParent);
+        this.prop(df.tNumber, 'pnFrequency', 1);
+        this.configurePermission('ambient-light-sensor', 'psAmbientLightSensorPermission', 'OnAmbientLightSensorPermissionChange');
+    }
+
+    create(tDef) {
+        super.create(tDef);
+        this.set('pbIsSupported', 'AmbientLightSensor' in window);
+        this.#createSensor(this.pnFrequency);
+    }
+
+    #createSensor(frequency) {
+        this.stop();
+        if (this.pbIsSupported) {
+            try {
+                this.sensor = new window.AmbientLightSensor({ frequency });
+            }
+            catch (error) {
+                this.fire('OnError', [error.name, error.message]);
+            }
+        }
+    }
+
+    get reading() {
+        return [this.sensor.illuminance];
+    }
+
+    set_pnFrequency(nFrequency) {
+        this.#createSensor(nFrequency);
+    }
+}

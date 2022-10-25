@@ -90,6 +90,33 @@ Object oSensorDemo is a cWebView
         End_Procedure
     End_Object
 
+    Object oAmbientLightSensor is a cAmbientLightSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAmbientLightSensorPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Ambient Light Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number lux
+            WebSet psValue of oWebFormALS to (FormatNumber(lux, 3))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxALS False
+        End_Procedure
+
+        Procedure OnAmbientLightSensorPermissionChange
+            String sPerm
+            WebGet psAmbientLightSensorPermission to sPerm
+            Send Log of oLogger (SFormat("Ambient Light Sensor permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
         WebSetResponsive piColumnCount rmMobile to 6
@@ -211,12 +238,70 @@ Object oSensorDemo is a cWebView
             End_Object
         End_Object
         
+        Object oWebGroupALS is a cWebGroup
+            Set psCaption to "Ambient Light Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+
+            Object oWebLabelALSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxALS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/AmbientLightSensor#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxALS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oAmbientLightSensor
+                    End
+                    Else Begin
+                        Send Stop of oAmbientLightSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderALS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oAmbientLightSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet pnFrequency of oAmbientLightSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormALS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
         Object oLogger is a cLogger
         End_Object
     End_Object 
 
     Procedure OnShow
-        Boolean bAOSIsSupported
+        Boolean bAOSIsSupported bASIsSupported bALSIsSupported
         
         Forward Send OnShow
         
@@ -229,6 +314,28 @@ Object oSensorDemo is a cWebView
             WebSet psCaption of oWebLabelAOSSupported to "Absolute Orientation Sensor API is NOT supported (try Chrome, Edge or Opera)"
             WebSet psTextColor of oWebLabelAOSSupported to "red"
             WebSet pbEnabled of oWebGroupAOS to False
+        End
+
+        WebGet pbIsSupported of oAccelerometerSensor to bASIsSupported
+        If (bASIsSupported) Begin
+            WebSet psCaption of oWebLabelASSupported to "Accelerometer Sensor API is supported"
+            WebSet psTextColor of oWebLabelASSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelASSupported to "Accelerometer Sensor API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabelASSupported to "red"
+            WebSet pbEnabled of oWebGroupAS to False
+        End
+
+        WebGet pbIsSupported of oAmbientLightSensor to bALSIsSupported
+        If (bALSIsSupported) Begin
+            WebSet psCaption of oWebLabelALSSupported to "Ambient Light Sensor API is supported"
+            WebSet psTextColor of oWebLabelALSSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelALSSupported to "Ambient Light Sensor API is NOT supported (needs to be enabled by flag)"
+            WebSet psTextColor of oWebLabelALSSupported to "red"
+            WebSet pbEnabled of oWebGroupALS to False
         End
     End_Procedure
     
