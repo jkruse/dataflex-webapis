@@ -167,3 +167,42 @@ export class AmbientLightSensor extends Sensor {
         this.#createSensor(nFrequency);
     }
 }
+
+export class GravitySensor extends Sensor {
+    constructor(sName, oParent) {
+        super(sName, oParent);
+        this.prop(df.tNumber, 'pnFrequency', 1);
+        this.prop(df.tString, 'psReferenceFrame', 'device');
+        this.configurePermission('accelerometer', 'psAccelerometerPermission', 'OnAccelerometerPermissionChange');
+    }
+
+    create(tDef) {
+        super.create(tDef);
+        this.set('pbIsSupported', 'GravitySensor' in window);
+        this.#createSensor(this.pnFrequency, this.psReferenceFrame);
+    }
+
+    #createSensor(frequency, referenceFrame) {
+        this.stop();
+        if (this.pbIsSupported) {
+            try {
+                this.sensor = new window.GravitySensor({ frequency, referenceFrame });
+            }
+            catch (error) {
+                this.fire('OnError', [error.name, error.message]);
+            }
+        }
+    }
+
+    get reading() {
+        return [this.sensor.x, this.sensor.y, this.sensor.z];
+    }
+
+    set_pnFrequency(nFrequency) {
+        this.#createSensor(nFrequency, this.psReferenceFrame);
+    }
+
+    set_psReferenceFrame(sReferenceFrame) {
+        this.#createSensor(this.pnFrequency, sReferenceFrame);
+    }
+}

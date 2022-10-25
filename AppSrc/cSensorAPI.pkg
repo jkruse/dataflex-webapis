@@ -182,3 +182,42 @@ Class cAmbientLightSensorAPI is a cWebObject
     Procedure OnAmbientLightSensorPermissionChange
     End_Procedure
 End_Class
+
+Class cGravitySensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psAccelerometerPermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnAccelerometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnAccelerometerPermissionChange ""
+        
+        Set psJSClass to "WebAPIs.GravitySensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnAccelerometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnAccelerometerPermissionChange
+    End_Procedure
+End_Class

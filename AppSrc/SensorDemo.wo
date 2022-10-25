@@ -117,6 +117,33 @@ Object oSensorDemo is a cWebView
         End_Procedure
     End_Object
 
+    Object oGravitySensor is a cGravitySensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAccelerometerPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Gravity Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z
+            WebSet psValue of oWebFormGS to (SFormat("[%1, %2, %3]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxGS False
+        End_Procedure
+
+        Procedure OnAccelerometerPermissionChange
+            String sPerm
+            WebGet psAccelerometerPermission to sPerm
+            Send Log of oLogger (SFormat("Accelerometer permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
         WebSetResponsive piColumnCount rmMobile to 6
@@ -296,7 +323,67 @@ Object oSensorDemo is a cWebView
             End_Object
         End_Object
 
+        Object oWebGroupGS is a cWebGroup
+            Set psCaption to "Gravity Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+            Set piColumnIndex to 6
+
+            Object oWebLabelGSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxGS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/GravitySensor#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxGS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oGravitySensor
+                    End
+                    Else Begin
+                        Send Stop of oGravitySensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderGS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oGravitySensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet pnFrequency of oGravitySensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormGS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
         Object oLogger is a cLogger
+            Set piMinHeight to 300
         End_Object
     End_Object 
 
