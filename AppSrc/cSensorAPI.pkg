@@ -299,3 +299,42 @@ Class cLinearAccelerationSensorAPI is a cWebObject
     Procedure OnAccelerometerPermissionChange
     End_Procedure
 End_Class
+
+Class cMagnetometerSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psMagnetometerPermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnMagnetometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnMagnetometerPermissionChange ""
+        
+        Set psJSClass to "WebAPIs.MagnetometerSensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnMagnetometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnMagnetometerPermissionChange
+    End_Procedure
+End_Class

@@ -197,3 +197,20 @@ export class LinearAccelerationSensor extends ReferenceFrameSensor {
         return [this.sensor.x, this.sensor.y, this.sensor.z];
     }
 }
+
+export class MagnetometerSensor extends ReferenceFrameSensor {
+    constructor(sName, oParent) {
+        super(sName, oParent, Magnetometer);
+        this.configurePermission('magnetometer', 'psMagnetometerPermission', 'OnMagnetometerPermissionChange');
+    }
+
+    create(tDef) {
+        super.create(tDef);
+        this.set('pbIsSupported', 'Magnetometer' in window);
+        this.createSensor({ frequency: this.pnFrequency, referenceFrame: this.psReferenceFrame });
+    }
+
+    get reading() {
+        return [this.sensor.x, this.sensor.y, this.sensor.z];
+    }
+}

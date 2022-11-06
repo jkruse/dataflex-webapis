@@ -198,6 +198,33 @@ Object oSensorDemo is a cWebView
         End_Procedure
     End_Object
 
+    Object oMagnetometerSensor is a cMagnetometerSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnMagnetometerPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Magnetometer Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z
+            WebSet psValue of oWebFormMS to (SFormat("[%1, %2, %3]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxMS False
+        End_Procedure
+
+        Procedure OnMagnetometerPermissionChange
+            String sPerm
+            WebGet psMagnetometerPermission to sPerm
+            Send Log of oLogger (SFormat("Magnetometer permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
     Object oWebMainPanel is a cWebPanel
         Set piColumnCount to 12
         WebSetResponsive piColumnCount rmMobile to 6
@@ -559,13 +586,72 @@ Object oSensorDemo is a cWebView
             End_Object
         End_Object
 
+        Object oWebGroupMS is a cWebGroup
+            Set psCaption to "Magnetometer Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+
+            Object oWebLabelMSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxMS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Magnetometer#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxMS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oMagnetometerSensor
+                    End
+                    Else Begin
+                        Send Stop of oMagnetometerSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderMS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oMagnetometerSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxMS False
+                    WebSet pnFrequency of oMagnetometerSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormMS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
         Object oLogger is a cLogger
             Set piMinHeight to 300
         End_Object
     End_Object 
 
     Procedure OnShow
-        Boolean bAOSIsSupported bASIsSupported bALSIsSupported bGSIsSupported bGySIsSupported bLASIsSupported
+        Boolean bAOSIsSupported bASIsSupported bALSIsSupported bGSIsSupported bGySIsSupported bLASIsSupported bMSIsSupported
         
         Forward Send OnShow
         
@@ -633,6 +719,17 @@ Object oSensorDemo is a cWebView
             WebSet psCaption of oWebLabelLASSupported to "Linear Acceleration Sensor API is NOT supported (try Chrome, Edge or Opera)"
             WebSet psTextColor of oWebLabelLASSupported to "red"
             WebSet pbEnabled of oWebGroupLAS to False
+        End
+
+        WebGet pbIsSupported of oMagnetometerSensor to bMSIsSupported
+        If (bMSIsSupported) Begin
+            WebSet psCaption of oWebLabelMSSupported to "Magnetometer Sensor API is supported"
+            WebSet psTextColor of oWebLabelMSSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelMSSupported to "Magnetometer Sensor API is NOT supported (needs to be enabled by flag)"
+            WebSet psTextColor of oWebLabelMSSupported to "red"
+            WebSet pbEnabled of oWebGroupMS to False
         End
     End_Procedure
     
