@@ -14,6 +14,7 @@ Contains DataFlex implementations of:
 * [Notifications API](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API)
 * [Page Visibility API](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
 * [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API)
+* [Sensor APIs](https://developer.mozilla.org/en-US/docs/Web/API/Sensor_APIs)
 * [Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API)
 * [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API)
 
@@ -36,7 +37,7 @@ Copy `AppHtml/Custom` and the `AppSrc/*API.pkg` files to your workspace. If you 
 
 Include these two lines in your `index.html`:
 
-    <script src="https://unpkg.com/core-js-bundle@3.8.3/minified.js"></script>
+    <script src="https://unpkg.com/core-js-bundle/minified.js"></script>
     <script src="Custom/index.js"></script>
 
 **NOTE that some of these APIs require a secure context, which means they only work when page is accessed using https!** Those APIs are marked with a padlock icon in the demo application.

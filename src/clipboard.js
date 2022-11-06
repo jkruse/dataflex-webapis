@@ -1,3 +1,5 @@
+import { queryPermission } from "./utils/permissions";
+
 export default class Clipboard extends df.WebObject {
     constructor(sName, oParent) {
         super(sName, oParent);
@@ -17,8 +19,8 @@ export default class Clipboard extends df.WebObject {
         super.create(tDef);
         this.set('pbIsSupported', 'clipboard' in navigator);
         if (this.pbIsSupported && 'permissions' in navigator) {
-            this.#queryPermission('clipboard-read', 'psReadPermission', 'OnReadPermissionChange');
-            this.#queryPermission('clipboard-write', 'psWritePermission', 'OnWritePermissionChange');
+            queryPermission(this, 'clipboard-read', 'psReadPermission', 'OnReadPermissionChange');
+            queryPermission(this, 'clipboard-write', 'psWritePermission', 'OnWritePermissionChange');
         }
     }
 
@@ -63,19 +65,6 @@ export default class Clipboard extends df.WebObject {
         try {
             await navigator.clipboard.writeText(text);
             this.fire('OnWriteText');
-        } catch (error) {
-            this.fire('OnError', [error.name, error.message]);
-        }
-    }
-
-    async #queryPermission(name, property, event) {
-        try {
-            const result = await navigator.permissions.query({ name });
-            this.set(property, result.state || result.status);
-            result.onchange = () => {
-                this.set(property, result.state || result.status);
-                this.fire(event);
-            };
         } catch (error) {
             this.fire('OnError', [error.name, error.message]);
         }

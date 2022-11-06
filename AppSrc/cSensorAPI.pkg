@@ -1,0 +1,390 @@
+﻿Use cWebObject.pkg
+
+Class cSensor_Mixin is a Mixin
+    Procedure Define_cSensor_Mixin
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client }
+        Property Boolean pbServerOnActivate False
+        { WebProperty=Client }
+        Property String psClientOnActivate ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnReading False
+        { WebProperty=Client }
+        Property String psClientOnReading ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client }
+        Property String psClientOnError ""
+    End_Procedure
+    
+    Procedure End_Define_cSensor_Mixin
+        WebPublishProcedure OnActivate
+        WebPublishProcedure OnError
+    End_Procedure
+    
+    Procedure Start
+        Send ClientAction "start"
+    End_Procedure
+    
+    Procedure Stop
+        Send ClientAction "stop"
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnActivate
+    End_Procedure
+    
+//    Procedure OnReading
+//    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+End_Class
+
+Define S_REFERENCE_FRAME_DEVICE for "device"
+Define S_REFERENCE_FRAME_SCREEN for "screen"
+
+Class cAbsoluteOrientationSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psAccelerometerPermission ""
+        { WebProperty=Client DesignTime=False }
+        Property String psMagnetometerPermission ""
+        { WebProperty=Client DesignTime=False }
+        Property String psGyroscopePermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnAccelerometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnAccelerometerPermissionChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnMagnetometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnMagnetometerPermissionChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnGyroscopePermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnGyroscopePermissionChange ""
+        
+        Set psJSClass to "WebAPIs.AbsoluteOrientationSensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnAccelerometerPermissionChange
+        WebPublishProcedure OnMagnetometerPermissionChange
+        WebPublishProcedure OnGyroscopePermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z Number w
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnAccelerometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnMagnetometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnGyroscopePermissionChange
+    End_Procedure
+End_Class
+
+Class cAccelerometerSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psAccelerometerPermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnAccelerometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnAccelerometerPermissionChange ""
+        
+        Set psJSClass to "WebAPIs.AccelerometerSensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnAccelerometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnAccelerometerPermissionChange
+    End_Procedure
+End_Class
+
+Class cAmbientLightSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client DesignTime=False }
+        Property String psAmbientLightSensorPermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnAmbientLightSensorPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnAmbientLightSensorPermissionChange ""
+        
+        Set psJSClass to "WebAPIs.AmbientLightSensor"
+    End_Procedure
+    
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnAmbientLightSensorPermissionChange
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnReading Number lux
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnAmbientLightSensorPermissionChange
+    End_Procedure
+End_Class
+
+Class cGravitySensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psAccelerometerPermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnAccelerometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnAccelerometerPermissionChange ""
+        
+        Set psJSClass to "WebAPIs.GravitySensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnAccelerometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnAccelerometerPermissionChange
+    End_Procedure
+End_Class
+
+Class cGyroscopeSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psCyroscopePermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnGyroscopePermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnGyroscopePermissionChange ""
+        
+        Set psJSClass to "WebAPIs.GyroscopeSensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnGyroscopePermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnGyroscopePermissionChange
+    End_Procedure
+End_Class
+
+Class cLinearAccelerationSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psAccelerometerPermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnAccelerometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnAccelerometerPermissionChange ""
+        
+        Set psJSClass to "WebAPIs.LinearAccelerationSensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnAccelerometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnAccelerometerPermissionChange
+    End_Procedure
+End_Class
+
+Class cMagnetometerSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psMagnetometerPermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnMagnetometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnMagnetometerPermissionChange ""
+        
+        Set psJSClass to "WebAPIs.MagnetometerSensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnMagnetometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnMagnetometerPermissionChange
+    End_Procedure
+End_Class
+
+Class cRelativeOrientationSensorAPI is a cWebObject
+    Import_Class_Protocol cSensor_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cSensor_Mixin
+
+        { WebProperty=Client }
+        Property Number pnFrequency 1
+        { WebProperty=Client EnumList="S_REFERENCE_FRAME_DEVICE, S_REFERENCE_FRAME_SCREEN" }
+        Property String psReferenceFrame S_REFERENCE_FRAME_DEVICE
+        { WebProperty=Client DesignTime=False }
+        Property String psAccelerometerPermission ""
+        { WebProperty=Client DesignTime=False }
+        Property String psGyroscopePermission ""
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnAccelerometerPermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnAccelerometerPermissionChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnGyroscopePermissionChange False
+        { WebProperty=Client }
+        Property String psClientOnGyroscopePermissionChange ""
+        
+        Set psJSClass to "WebAPIs.RelativeOrientationSensor"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        Send End_Define_cSensor_Mixin
+        
+        WebPublishProcedure OnReading
+        WebPublishProcedure OnAccelerometerPermissionChange
+        WebPublishProcedure OnGyroscopePermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnReading Number x Number y Number z Number w
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnAccelerometerPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnGyroscopePermissionChange
+    End_Procedure
+End_Class

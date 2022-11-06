@@ -1,0 +1,841 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebGroup.pkg
+Use cLogger.pkg
+Use cWebCheckBox.pkg
+Use cWebForm.pkg
+Use cWebHtmlBox.pkg
+Use gFormatNumbers.pkg
+
+Use cSensorAPI.pkg
+Use cWebSlider.pkg
+
+Object oSensorDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Sensor Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oAbsoluteOrientationSensor is a cAbsoluteOrientationSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAccelerometerPermissionChange to True
+        Set pbServerOnMagnetometerPermissionChange to True
+        Set pbServerOnGyroscopePermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Absolute Orientation Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z Number w
+            WebSet psValue of oWebFormAOS to (SFormat("[%1, %2, %3, %4]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3), FormatNumber(w, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxAOS False
+        End_Procedure
+
+        Procedure OnAccelerometerPermissionChange
+            String sPerm
+            WebGet psAccelerometerPermission to sPerm
+            Send Log of oLogger (SFormat("Accelerometer permission changed to '%1'", sPerm))
+        End_Procedure
+
+        Procedure OnMagnetometerPermissionChange
+            String sPerm
+            WebGet psMagnetometerPermission to sPerm
+            Send Log of oLogger (SFormat("Magnetometer permission changed to '%1'", sPerm))
+        End_Procedure
+
+        Procedure OnGyroscopePermissionChange
+            String sPerm
+            WebGet psGyroscopePermission to sPerm
+            Send Log of oLogger (SFormat("Gyroscope permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+    
+    Object oAccelerometerSensor is a cAccelerometerSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAccelerometerPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Accelerometer Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z
+            WebSet psValue of oWebFormAS to (SFormat("[%1, %2, %3]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxAS False
+        End_Procedure
+
+        Procedure OnAccelerometerPermissionChange
+            String sPerm
+            WebGet psAccelerometerPermission to sPerm
+            Send Log of oLogger (SFormat("Accelerometer permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
+    Object oAmbientLightSensor is a cAmbientLightSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAmbientLightSensorPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Ambient Light Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number lux
+            WebSet psValue of oWebFormALS to (FormatNumber(lux, 3))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxALS False
+        End_Procedure
+
+        Procedure OnAmbientLightSensorPermissionChange
+            String sPerm
+            WebGet psAmbientLightSensorPermission to sPerm
+            Send Log of oLogger (SFormat("Ambient Light Sensor permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
+    Object oGravitySensor is a cGravitySensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAccelerometerPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Gravity Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z
+            WebSet psValue of oWebFormGS to (SFormat("[%1, %2, %3]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxGS False
+        End_Procedure
+
+        Procedure OnAccelerometerPermissionChange
+            String sPerm
+            WebGet psAccelerometerPermission to sPerm
+            Send Log of oLogger (SFormat("Accelerometer permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
+    Object oGyroscopeSensor is a cGyroscopeSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnGyroscopePermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Gyroscope Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z
+            WebSet psValue of oWebFormGyS to (SFormat("[%1, %2, %3]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxGyS False
+        End_Procedure
+
+        Procedure OnGyroscopePermissionChange
+            String sPerm
+            WebGet psGyroscopePermission to sPerm
+            Send Log of oLogger (SFormat("Gyroscope permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
+    Object oLinearAccelerationSensor is a cLinearAccelerationSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAccelerometerPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Linear Acceleration Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z
+            WebSet psValue of oWebFormLAS to (SFormat("[%1, %2, %3]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxLAS False
+        End_Procedure
+
+        Procedure OnAccelerometerPermissionChange
+            String sPerm
+            WebGet psAccelerometerPermission to sPerm
+            Send Log of oLogger (SFormat("Accelerometer permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
+    Object oMagnetometerSensor is a cMagnetometerSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnMagnetometerPermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Magnetometer Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z
+            WebSet psValue of oWebFormMS to (SFormat("[%1, %2, %3]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxMS False
+        End_Procedure
+
+        Procedure OnMagnetometerPermissionChange
+            String sPerm
+            WebGet psMagnetometerPermission to sPerm
+            Send Log of oLogger (SFormat("Magnetometer permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
+    Object oRelativeOrientationSensor is a cRelativeOrientationSensorAPI
+        Set pnFrequency to 4
+        Set pbServerOnActivate to True
+        Set pbServerOnReading to True
+        Set pbServerOnError to True
+        Set pbServerOnAccelerometerPermissionChange to True
+        Set pbServerOnGyroscopePermissionChange to True
+
+        Procedure OnActivate
+            Send Log of oLogger "Relative Orientation Sensor activated"
+        End_Procedure
+
+        Procedure OnReading Number x Number y Number z Number w
+            WebSet psValue of oWebFormROS to (SFormat("[%1, %2, %3, %4]", FormatNumber(x, 3), FormatNumber(y, 3), FormatNumber(z, 3), FormatNumber(w, 3)))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+            Send SetChecked of oWebCheckboxROS False
+        End_Procedure
+
+        Procedure OnAccelerometerPermissionChange
+            String sPerm
+            WebGet psAccelerometerPermission to sPerm
+            Send Log of oLogger (SFormat("Accelerometer permission changed to '%1'", sPerm))
+        End_Procedure
+
+        Procedure OnGyroscopePermissionChange
+            String sPerm
+            WebGet psGyroscopePermission to sPerm
+            Send Log of oLogger (SFormat("Gyroscope permission changed to '%1'", sPerm))
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebGroupAOS is a cWebGroup
+            Set psCaption to "Absolute Orientation Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+
+            Object oWebLabelAOSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxAOS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/AbsoluteOrientationSensor#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxAOS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oAbsoluteOrientationSensor
+                    End
+                    Else Begin
+                        Send Stop of oAbsoluteOrientationSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderAOS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oAbsoluteOrientationSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxAOS False
+                    WebSet pnFrequency of oAbsoluteOrientationSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormAOS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+        
+        Object oWebGroupAS is a cWebGroup
+            Set psCaption to "Accelerometer Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+            Set piColumnIndex to 6
+
+            Object oWebLabelASSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxAS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Accelerometer#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxAS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oAccelerometerSensor
+                    End
+                    Else Begin
+                        Send Stop of oAccelerometerSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderAS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oAccelerometerSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxAS False
+                    WebSet pnFrequency of oAccelerometerSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormAS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+        
+        Object oWebGroupALS is a cWebGroup
+            Set psCaption to "Ambient Light Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+
+            Object oWebLabelALSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxALS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/AmbientLightSensor#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxALS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oAmbientLightSensor
+                    End
+                    Else Begin
+                        Send Stop of oAmbientLightSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderALS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oAmbientLightSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxALS False
+                    WebSet pnFrequency of oAmbientLightSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormALS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
+        Object oWebGroupGS is a cWebGroup
+            Set psCaption to "Gravity Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+            Set piColumnIndex to 6
+
+            Object oWebLabelGSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxGS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/GravitySensor#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxGS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oGravitySensor
+                    End
+                    Else Begin
+                        Send Stop of oGravitySensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderGS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oGravitySensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxGS False
+                    WebSet pnFrequency of oGravitySensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormGS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
+        Object oWebGroupGyS is a cWebGroup
+            Set psCaption to "Gyroscope Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+
+            Object oWebLabelGySSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxGyS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Gyroscope#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxGyS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oGyroscopeSensor
+                    End
+                    Else Begin
+                        Send Stop of oGyroscopeSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderGyS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oGyroscopeSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxGyS False
+                    WebSet pnFrequency of oGyroscopeSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormGyS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
+        Object oWebGroupLAS is a cWebGroup
+            Set psCaption to "Linear Acceleration Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+            Set piColumnIndex to 6
+
+            Object oWebLabelLASSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxLAS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/LinearAccelerationSensor#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxLAS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oLinearAccelerationSensor
+                    End
+                    Else Begin
+                        Send Stop of oLinearAccelerationSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderLAS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oLinearAccelerationSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxLAS False
+                    WebSet pnFrequency of oLinearAccelerationSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormLAS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
+        Object oWebGroupMS is a cWebGroup
+            Set psCaption to "Magnetometer Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+
+            Object oWebLabelMSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxMS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Magnetometer#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxMS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oMagnetometerSensor
+                    End
+                    Else Begin
+                        Send Stop of oMagnetometerSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderMS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oMagnetometerSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxMS False
+                    WebSet pnFrequency of oMagnetometerSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormMS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
+        Object oWebGroupROS is a cWebGroup
+            Set psCaption to "Relative Orientation Sensor"
+            Set piColumnCount to 12
+            Set piColumnSpan to 6
+            Set piColumnIndex to 6
+
+            Object oWebLabelROSSupported is a cWebLabel
+                Set psCaption to "Supported?"
+                Set piColumnSpan to 0
+            End_Object
+    
+            Object oWebHtmlBoxROS is a cWebHtmlBox
+                Set piColumnSpan to 0
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/RelativeOrientationSensor#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebCheckboxROS is a cWebCheckbox
+                Set piColumnSpan to 4
+                Set psCaption to "Enable"
+                Set psCSSClass to "FlipSwitch"
+                Set psChecked to "1"
+                Set psUnchecked to "0"
+                Set psValue to "0"
+                Set pbServerOnChange to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    If (bChecked) Begin
+                        Send Start of oRelativeOrientationSensor
+                    End
+                    Else Begin
+                        Send Stop of oRelativeOrientationSensor
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebSliderROS is a cWebSlider
+                Set piColumnSpan to 8
+                Set piColumnIndex to 4
+                Set psLabel to "Frequency (1/s)"
+                Set piMinValue to 1
+                Set piMaxValue to 30
+                Set piSliderValue to (pnFrequency(oRelativeOrientationSensor))
+                Set pbServerOnChange to True
+                Set pbShowValue to True
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send SetChecked of oWebCheckboxROS False
+                    WebSet pnFrequency of oRelativeOrientationSensor to (Number(sNewValue))
+                End_Procedure
+            End_Object
+
+            Object oWebFormROS is a cWebForm
+                Set piColumnSpan to 0
+                Set psLabel to "Last reading"
+                Set pbReadOnly to True
+            End_Object
+        End_Object
+
+        Object oLogger is a cLogger
+            Set piMinHeight to 300
+        End_Object
+    End_Object 
+
+    Procedure OnShow
+        Boolean bAOSIsSupported bASIsSupported bALSIsSupported bGSIsSupported bGySIsSupported bLASIsSupported bMSIsSupported bROSIsSupported
+        
+        Forward Send OnShow
+        
+        WebGet pbIsSupported of oAbsoluteOrientationSensor to bAOSIsSupported
+        If (bAOSIsSupported) Begin
+            WebSet psCaption of oWebLabelAOSSupported to "Absolute Orientation Sensor API is supported"
+            WebSet psTextColor of oWebLabelAOSSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelAOSSupported to "Absolute Orientation Sensor API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabelAOSSupported to "red"
+            WebSet pbEnabled of oWebGroupAOS to False
+        End
+
+        WebGet pbIsSupported of oAccelerometerSensor to bASIsSupported
+        If (bASIsSupported) Begin
+            WebSet psCaption of oWebLabelASSupported to "Accelerometer Sensor API is supported"
+            WebSet psTextColor of oWebLabelASSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelASSupported to "Accelerometer Sensor API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabelASSupported to "red"
+            WebSet pbEnabled of oWebGroupAS to False
+        End
+
+        WebGet pbIsSupported of oAmbientLightSensor to bALSIsSupported
+        If (bALSIsSupported) Begin
+            WebSet psCaption of oWebLabelALSSupported to "Ambient Light Sensor API is supported"
+            WebSet psTextColor of oWebLabelALSSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelALSSupported to "Ambient Light Sensor API is NOT supported (needs to be enabled by flag)"
+            WebSet psTextColor of oWebLabelALSSupported to "red"
+            WebSet pbEnabled of oWebGroupALS to False
+        End
+
+        WebGet pbIsSupported of oGravitySensor to bGSIsSupported
+        If (bGSIsSupported) Begin
+            WebSet psCaption of oWebLabelGSSupported to "Gravity Sensor API is supported"
+            WebSet psTextColor of oWebLabelGSSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelGSSupported to "Gravity Sensor API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabelGSSupported to "red"
+            WebSet pbEnabled of oWebGroupGS to False
+        End
+
+        WebGet pbIsSupported of oGyroscopeSensor to bGySIsSupported
+        If (bGySIsSupported) Begin
+            WebSet psCaption of oWebLabelGySSupported to "Gyroscope Sensor API is supported"
+            WebSet psTextColor of oWebLabelGySSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelGySSupported to "Gyroscope Sensor API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabelGySSupported to "red"
+            WebSet pbEnabled of oWebGroupGyS to False
+        End
+
+        WebGet pbIsSupported of oLinearAccelerationSensor to bLASIsSupported
+        If (bLASIsSupported) Begin
+            WebSet psCaption of oWebLabelLASSupported to "Linear Acceleration Sensor API is supported"
+            WebSet psTextColor of oWebLabelLASSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelLASSupported to "Linear Acceleration Sensor API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabelLASSupported to "red"
+            WebSet pbEnabled of oWebGroupLAS to False
+        End
+
+        WebGet pbIsSupported of oMagnetometerSensor to bMSIsSupported
+        If (bMSIsSupported) Begin
+            WebSet psCaption of oWebLabelMSSupported to "Magnetometer Sensor API is supported"
+            WebSet psTextColor of oWebLabelMSSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelMSSupported to "Magnetometer Sensor API is NOT supported (needs to be enabled by flag)"
+            WebSet psTextColor of oWebLabelMSSupported to "red"
+            WebSet pbEnabled of oWebGroupMS to False
+        End
+
+        WebGet pbIsSupported of oRelativeOrientationSensor to bROSIsSupported
+        If (bROSIsSupported) Begin
+            WebSet psCaption of oWebLabelROSSupported to "Relative Orientation Sensor API is supported"
+            WebSet psTextColor of oWebLabelROSSupported to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabelROSSupported to "Relative Orientation Sensor API is NOT supported (try Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabelROSSupported to "red"
+            WebSet pbEnabled of oWebGroupROS to False
+        End
+    End_Procedure
+    
+End_Object
