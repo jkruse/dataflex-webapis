@@ -214,3 +214,21 @@ export class MagnetometerSensor extends ReferenceFrameSensor {
         return [this.sensor.x, this.sensor.y, this.sensor.z];
     }
 }
+
+export class RelativeOrientationSensor extends ReferenceFrameSensor {
+    constructor(sName, oParent) {
+        super(sName, oParent, window.RelativeOrientationSensor);
+        this.configurePermission('accelerometer', 'psAccelerometerPermission', 'OnAccelerometerPermissionChange');
+        this.configurePermission('gyroscope', 'psGyroscopePermission', 'OnGyroscopePermissionChange');
+    }
+
+    create(tDef) {
+        super.create(tDef);
+        this.set('pbIsSupported', 'RelativeOrientationSensor' in window);
+        this.createSensor({ frequency: this.pnFrequency, referenceFrame: this.psReferenceFrame });
+    }
+
+    get reading() {
+        return this.sensor.quaternion;
+    }
+}

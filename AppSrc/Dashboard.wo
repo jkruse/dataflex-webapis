@@ -151,7 +151,7 @@ Object oDashboard is a cWebView
             Object oTileSensor is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
-                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Sensor API</div><div Class="Tile_Subtitle">access to device sensors</div><span class="material-icons-outlined" style="right: 40px">https</span><span class="material-icons-outlined">warning_amber</span></div>'
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Sensor APIs</div><div Class="Tile_Subtitle">access to device sensors</div><span class="material-icons-outlined" style="right: 40px">https</span><span class="material-icons-outlined">warning_amber</span></div>'
                 Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oSensorDemo
