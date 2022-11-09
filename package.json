@@ -18,21 +18,21 @@
     "dist": "rimraf dist && copyfiles -f \"%ProgramFiles%/DataFlex 20.1/Lib/WebAppMaster/Data/[Ww]eb[Aa]pp[Ss]erver[Pp]rops.*\" Data && npm run build && 7z a dist/WebAPIsDemo.zip * -r -x!.git -x!.github -x!.vscode -x!CssThemes -x!DfEngine -x!*.dep -x!*.prn -x!IdeSrc/* -x!node_modules -x!*.dbg -x!*.exe -x!*.log && 7z a dist/WebAPIsComponents.zip AppHtml/Custom/* AppSrc/*API.pkg LICENSE.txt"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.5",
-    "@babel/preset-env": "^7.16.11",
-    "babel-loader": "^8.2.3",
+    "@babel/core": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.0",
     "clean-webpack-plugin": "^4.0.0",
     "copyfiles": "^2.4.1",
-    "css-loader": "^6.7.0",
-    "mini-css-extract-plugin": "^2.6.0",
+    "css-loader": "^6.7.1",
+    "mini-css-extract-plugin": "^2.6.1",
     "rimraf": "^3.0.2",
-    "source-map-loader": "^3.0.1",
-    "webpack": "^5.70.0",
-    "webpack-cli": "^4.9.2",
+    "source-map-loader": "^4.0.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^4.10.0",
     "webpack-merge": "^5.8.0"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.15.0"
   },
   "private": true
 }
