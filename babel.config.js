@@ -3,9 +3,7 @@ module.exports = function (api) {
 
     const presets = ["@babel/preset-env"];
 
-    const plugins = [
-        "@babel/plugin-proposal-private-methods"
-    ];
+    const plugins = [];
 
     return {
         presets,
