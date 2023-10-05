@@ -20,11 +20,10 @@ export default class Notifications extends df.WebObject {
         }
     }
 
-    requestPermission() {
-        Notification.requestPermission().then(permission => {
-            this.set('psPermission', permission);
-            this.fire('OnPermissionChange');
-        });
+    async requestPermission() {
+        const permission = await Notification.requestPermission();
+        this.set('psPermission', permission);
+        this.fire('OnPermissionChange');
     }
 
     createNotification() {

@@ -11,11 +11,9 @@ export default class EyeDropperComponent extends df.WebObject {
         this.set('pbIsSupported', !!window.EyeDropper);
     }
 
-    open() {
-        const dropper = new EyeDropper();
-        dropper
-            .open({ signal: this._abortController.signal })
-            .then(result => this.fire('OnSelect', [result.sRGBHex]))
+    async open() {
+        const result = await new EyeDropper().open({ signal: this._abortController.signal });
+        this.fire('OnSelect', [result.sRGBHex]);
     }
 
     abort() {

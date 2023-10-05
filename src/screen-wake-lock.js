@@ -12,21 +12,20 @@ export default class ScreenWakeLock extends df.WebObject {
         this.set('pbIsSupported', 'wakeLock' in navigator);
     }
 
-    request() {
-        navigator.wakeLock.request('screen')
-            .then(wakeLock => {
-                this._wakeLock = wakeLock;
-                this._wakeLock.addEventListener('release', () => this.fire('OnRelease'));
-                this.fire('OnSuccess');
-            })
-            .catch(error => {
-                this.fire('OnError', [error.name, error.message])
-            });
+    async request() {
+        try {
+            this._wakeLock = await navigator.wakeLock.request('screen');
+            this._wakeLock.addEventListener('release', () => this.fire('OnRelease'));
+            this.fire('OnSuccess');
+        } catch (error) {
+            this.fire('OnError', [error.name, error.message]);
+        }
     }
 
-    release() {
+    async release() {
         if (this._wakeLock) {
-            this._wakeLock.release().then(() => this._wakeLock = null);
+            await this._wakeLock.release();
+            this._wakeLock = null;
         }
     }
 }

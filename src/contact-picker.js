@@ -6,19 +6,21 @@ export default class ContactPicker extends df.WebObject {
         this.event('OnSelect', df.cCallModeDefault);
     }
 
-    create(tDef) {
+    async create(tDef) {
         super.create(tDef);
         this.set('pbIsSupported', 'contacts' in navigator);
         if (this.pbIsSupported) {
-            navigator.contacts.getProperties().then(p => this.set('psSupportedProperties', p.join(',')));
+            const properties = await navigator.contacts.getProperties();
+            this.set('psSupportedProperties', properties.join(','));
         }
     }
 
-    select() {
+    async select() {
         const params = this._tActionData;
-        navigator.contacts.select(
+        const result = await navigator.contacts.select(
             params.aProperties,
             { multiple: params.bMultiple }
-        ).then(result => this.fire('OnSelect', [JSON.stringify(result)]));
+        );
+        this.fire('OnSelect', [JSON.stringify(result)]);
     }
 }

@@ -34,11 +34,12 @@ export default class Fullscreen extends df.WebObject {
         document.exitFullscreen();
     }
 
-    requestFullscreen(sObjName) {
+    async requestFullscreen(sObjName) {
         const obj = this.getWebApp().findObj(sObjName);
         if (obj) {
+            await obj._eElem.requestFullscreen();
             // Need to call 'sizeHeight' in case obj is a control, but it doesn't exist if obj is a container, hence optional chaining
-            obj._eElem.requestFullscreen().then(() => obj.sizeHeight?.(-1));
+            obj.sizeHeight?.(-1);
         }
     }
 
