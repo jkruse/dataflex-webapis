@@ -25,8 +25,8 @@ export default class Fullscreen extends df.WebObject {
     }
 
     destroy() {
-        df.dom.off('fullscreenchange', document, this.onFullscreenChange);
-        df.dom.off('fullscreenerror', document, this.onFullscreenError);
+        df.dom.off('fullscreenchange', document, this.onFullscreenChange, this);
+        df.dom.off('fullscreenerror', document, this.onFullscreenError, this);
         super.destroy();
     }
 
@@ -37,7 +37,8 @@ export default class Fullscreen extends df.WebObject {
     requestFullscreen(sObjName) {
         const obj = this.getWebApp().findObj(sObjName);
         if (obj) {
-            obj._eElem.requestFullscreen().then(() => obj.sizeHeight(-1));
+            // Need to call 'sizeHeight' in case obj is a control, but it doesn't exist if obj is a container, hence optional chaining
+            obj._eElem.requestFullscreen().then(() => obj.sizeHeight?.(-1));
         }
     }
 
