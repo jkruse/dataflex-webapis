@@ -1,0 +1,116 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cWebButton.pkg
+Use cLogger.pkg
+
+Use cScreenOrientationAPI.pkg
+Use cFullscreenAPI.pkg
+
+Object oScreenOrientationDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Screen Orientation Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oScreenOrientationAPI is a cScreenOrientationAPI
+        Set pbServerOnLock to True
+        Set pbServerOnError to True
+        
+        Procedure OnChange String sType Integer iAngle
+            Send Log of oLogger (SFormat("Orientation = %1, angle = %2", sType, iAngle))
+        End_Procedure
+
+        Procedure OnLock String sType
+            Send Log of oLogger (SFormat("Orientation locked to %1", sType))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+        End_Procedure
+    End_Object
+    
+    Object oFullscreenAPI is a cFullscreenAPI
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+        
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 12
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/ScreenOrientation#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+
+        Object oWebButtonFullscreen is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "Fullscreen"
+        
+            Procedure OnClick
+                Send RequestFullscreen of oFullscreenAPI (oScreenOrientationDemo(Self))
+            End_Procedure
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "Lock to portrait"
+            Set piColumnIndex to 3
+        
+            Procedure OnClick
+                Send LockOrientation of oScreenOrientationAPI SO_PORTRAIT
+            End_Procedure
+        End_Object
+
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "Lock to landscape"
+            Set piColumnIndex to 6
+        
+            Procedure OnClick
+                Send LockOrientation of oScreenOrientationAPI SO_LANDSCAPE
+            End_Procedure
+        End_Object
+
+        Object oWebButton3 is a cWebButton
+            Set piColumnSpan to 3
+            Set psCaption to "Unlock"
+            Set piColumnIndex to 9
+            WebSetResponsive piColumnIndex rmMobile to 3
+        
+            Procedure OnClick
+                Send UnlockOrientation of oScreenOrientationAPI
+            End_Procedure
+        End_Object
+
+        Object oLogger is a cLogger
+        End_Object
+    End_Object
+    
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oScreenOrientationAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Screen Orientation API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Screen Orientation API is NOT supported (try any major browser / newer iOS Safari)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

@@ -7,6 +7,7 @@ import Fullscreen from './fullscreen';
 import NetworkInformation from './network-information';
 import Notifications from './notifications';
 import PageVisibility from './page-visibility';
+import ScreenOrientation from './screen-orientation';
 import ScreenWakeLock from './screen-wake-lock';
 import {
     AbsoluteOrientationSensor,
@@ -39,6 +40,7 @@ global.WebAPIs = {
     Notifications,
     PageVisibility,
     RelativeOrientationSensor,
+    ScreenOrientation,
     ScreenWakeLock,
     Vibration,
     WebShare

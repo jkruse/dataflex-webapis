@@ -1,0 +1,66 @@
+﻿Use cWebObject.pkg
+
+Define SO_ANY for "any"
+Define SO_NATURAL for "natural"
+Define SO_LANDSCAPE for "landscape"
+Define SO_LANDSCAPE_PRIMARY for "landscape-primary"
+Define SO_LANDSCAPE_SECONDARY for "landscape-secondary"
+Define SO_PORTRAIT for "portrait"
+Define SO_PORTRAIT_PRIMARY for "portrait-primary"
+Define SO_PORTRAIT_SECONDARY for "portrait-secondary"
+
+Class cScreenOrientationAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+
+        { WebProperty=Client }
+        Property Boolean pbServerOnChange True
+        { WebProperty=Client }
+        Property String psClientOnChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnLock False
+        { WebProperty=Client }
+        Property String psClientOnLock ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client }
+        Property String psClientOnError ""
+
+        Set psJSClass to "WebAPIs.ScreenOrientation"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnChange
+        WebPublishProcedure OnLock
+        WebPublishProcedure OnError
+    End_Procedure
+    
+    Procedure LockOrientation String sType // SO_*
+        String[] aParams
+        Move sType to aParams[0]
+        Send ClientAction "lock" aParams
+    End_Procedure
+    
+    Procedure UnlockOrientation
+        Send ClientAction "unlock"
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnChange String sType Integer iAngle
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnLock String sType
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+
+End_Class

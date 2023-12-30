@@ -135,6 +135,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemScreenOrientation is a cWebMenuItem
+                    Set psCaption to "Screen Orientation Demo"
+                    WebRegisterPath ntNavigateBegin oScreenOrientationDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
                 Object oWebMenuItemScreenWakeLock is a cWebMenuItem
                     Set psCaption to "Screen Wake Lock Demo"
                     WebRegisterPath ntNavigateBegin oScreenWakeLockDemo
@@ -255,6 +264,7 @@ Object oWebApp is a cWebApp
     Use ClipboardDemo.wo
     Use CredentialManagementDemo.wo
     Use SensorDemo.wo
+    Use ScreenOrientationDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object
