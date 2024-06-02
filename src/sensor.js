@@ -115,7 +115,7 @@ export class AbsoluteOrientationSensor extends ReferenceFrameSensor {
 
 export class AccelerometerSensor extends ReferenceFrameSensor {
     constructor(sName, oParent) {
-        super(sName, oParent, Accelerometer);
+        super(sName, oParent, window.Accelerometer);
         this.configurePermission('accelerometer', 'psAccelerometerPermission', 'OnAccelerometerPermissionChange');
     }
 
@@ -166,7 +166,7 @@ export class GravitySensor extends ReferenceFrameSensor {
 
 export class GyroscopeSensor extends ReferenceFrameSensor {
     constructor(sName, oParent) {
-        super(sName, oParent, Gyroscope);
+        super(sName, oParent, window.Gyroscope);
         this.configurePermission('gyroscope', 'psGyroscopePermission', 'OnGyroscopePermissionChange');
     }
 
@@ -200,7 +200,7 @@ export class LinearAccelerationSensor extends ReferenceFrameSensor {
 
 export class MagnetometerSensor extends ReferenceFrameSensor {
     constructor(sName, oParent) {
-        super(sName, oParent, Magnetometer);
+        super(sName, oParent, window.Magnetometer);
         this.configurePermission('magnetometer', 'psMagnetometerPermission', 'OnMagnetometerPermissionChange');
     }
 
