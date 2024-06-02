@@ -17,6 +17,7 @@ Contains DataFlex implementations of:
 * [Sensor APIs](https://developer.mozilla.org/en-US/docs/Web/API/Sensor_APIs)
 * [Vibration API](https://developer.mozilla.org/en-US/docs/Web/API/Vibration_API)
 * [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API)
+* [Web Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API)
 
 ## How to get it
 
@@ -35,7 +36,7 @@ Download or clone the source code from GitHub, install NodeJS, and build the com
 
 Copy `AppHtml/Custom` and the `AppSrc/*API.pkg` files to your workspace. If you don't have the `AppHtml/Custom` folder, see "How to get it" above.
 
-Include these two lines in your `index.html`:
+Include these two lines in your `index.html` (if your application only runs on fairly modern browsers, you can probably omit the first one):
 
     <script src="https://unpkg.com/core-js-bundle/minified.js"></script>
     <script src="Custom/index.js"></script>
