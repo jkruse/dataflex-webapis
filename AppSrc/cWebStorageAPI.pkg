@@ -1,0 +1,91 @@
+﻿Use cWebObject.pkg
+
+Class cWebStorage_Mixin is a Mixin
+    Procedure Define_cWebStorage_Mixin
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client DesignTime=False }
+        Property Integer piLength 0
+    End_Procedure
+    
+    Procedure GetKey Handle hoReturnObj Handle hoReturnMsg Integer iIndex
+        String sReturnMessage
+        String[] aParams
+        
+        Get WebMethodName of hoReturnObj hoReturnMsg to sReturnMessage
+        If (sReturnMessage <> "") Begin
+            Get WebObjectName of hoReturnObj to aParams[0]
+            Move sReturnMessage to aParams[1]
+            Move iIndex to aParams[2]
+            Send ClientAction "key" aParams
+        End
+    End_Procedure
+    
+    Procedure GetItem Handle hoReturnObj Handle hoReturnMsg String sKeyName
+        String sReturnMessage
+        String[] aParams
+        
+        Get WebMethodName of hoReturnObj hoReturnMsg to sReturnMessage
+        If (sReturnMessage <> "") Begin
+            Get WebObjectName of hoReturnObj to aParams[0]
+            Move sReturnMessage to aParams[1]
+            Move sKeyName to aParams[2]
+            Send ClientAction "getItem" aParams
+        End
+    End_Procedure
+    
+    Procedure SetItem String sKeyName String sKeyValue
+        String[] aParams
+        Move sKeyName to aParams[0]
+        Move sKeyValue to aParams[1]
+        Send ClientAction "setItem" aParams
+    End_Procedure
+    
+    Procedure RemoveItem String sKeyName
+        String[] aParams
+        Move sKeyName to aParams[0]
+        Send ClientAction "removeItem" aParams
+    End_Procedure
+    
+    Procedure Clear
+        Send ClientAction "clear"
+    End_Procedure
+End_Class
+
+Class cLocalStorageAPI is a cWebObject
+    Import_Class_Protocol cWebStorage_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cWebStorage_Mixin
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnStorage False
+        { WebProperty=Client }
+        Property String psClientOnStorage ""
+
+        Set psJSClass to "WebAPIs.LocalStorage"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+        
+        WebPublishProcedure OnStorage
+    End_Procedure
+
+    // Triggers when *another* window changes localStorage only
+    { MethodType=Event }
+    Procedure OnStorage String sKeyName String sNewValue String sOldValue String sURL
+    End_Procedure
+End_Class
+
+Class cSessionStorageAPI is a cWebObject
+    Import_Class_Protocol cWebStorage_Mixin
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        Send Define_cWebStorage_Mixin
+        
+        Set psJSClass to "WebAPIs.SessionStorage"
+    End_Procedure
+End_Class

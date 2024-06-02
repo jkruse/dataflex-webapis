@@ -199,6 +199,19 @@ Object oDashboard is a cWebView
                 End_Procedure
             End_Object
 
+            Object oTileWebStorage is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Web Storage API</div><div Class="Tile_Subtitle">store data in the browser</div></div>'
+                Set piColumnIndex to 2
+                
+                WebRegisterPath ntNavigateForward oWebStorageDemo
+    
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+
             Object oWebSpacer is a cWebSpacer
                 Set piColumnSpan to 3
                 Set piHeight to 20

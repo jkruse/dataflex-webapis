@@ -1,0 +1,231 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cWebEdit.pkg
+Use cWebButton.pkg
+
+Use cWebStorageAPI.pkg
+
+Object oWebStorageDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    Set Verify_Save_msg to 0 // don't confirm saves
+    
+    Set psCaption to "Web Storage Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 12
+    Set pbServerOnShow to True
+    
+    Object oLocalStorage is a cLocalStorageAPI
+        Set pbServerOnStorage to True
+
+        Procedure OnStorage String sKeyName String sNewValue String sOldValue String sURL
+            If (sKeyName = "") Begin
+                Send Log of oWebEdit (SFormat("LocalStorage was cleared by page at %1", sURL))
+            End
+            Else Begin
+                Send Log of oWebEdit (SFormat("Key '%1' was changed from '%2' to '%3' by page at %4", sKeyName, sOldValue, sNewValue, sURL))
+            End
+        End_Procedure
+    End_Object
+    
+    Object oSessionStorage is a cSessionStorageAPI
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+        
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+        
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "Web Storage lets you store and retrieve string values in the browser, local to the current site, either permanently (localStorage) or for the current session (sessionStorage). To test the 'storage' event, try opening this demo in a new tab, and manipulating localStorage from there."
+            Set piColumnSpan to 12
+        End_Object
+
+        Object oWebButton1 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Enumerate localStorage"
+            
+            Procedure OnKey String sName
+                Send Log of oWebEdit (SFormat("Found key '%1' in localStorage", sName))
+            End_Procedure
+            
+            WebPublishProcedure OnKey
+        
+            Procedure OnClick
+                Integer iCount i
+                WebGet piLength of oLocalStorage to iCount
+                If (iCount = 0) Begin
+                    Send Log of oWebEdit "No keys in localStorage"
+                End
+                Else Begin
+                    For i from 0 to (iCount - 1)
+                        Send GetKey of oLocalStorage Self (RefProc(OnKey)) i
+                    Loop
+                End
+            End_Procedure
+        End_Object
+
+        Object oWebButton2 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Enumerate sessionStorage"
+            Set piColumnIndex to 6
+        
+            Procedure OnKey String sName
+                Send Log of oWebEdit (SFormat("Found key '%1' in sessionStorage", sName))
+            End_Procedure
+            
+            WebPublishProcedure OnKey
+
+            Procedure OnClick
+                Integer iCount i
+                WebGet piLength of oSessionStorage to iCount
+                If (iCount = 0) Begin
+                    Send Log of oWebEdit "No keys in sessionStorage"
+                End
+                Else Begin
+                    For i from 0 to (iCount - 1)
+                        Send GetKey of oSessionStorage Self (RefProc(OnKey)) i
+                    Loop
+                End
+            End_Procedure
+        End_Object
+
+        Object oWebButton3 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Save value in localStorage"
+        
+            Procedure OnClick
+                Send SetItem of oLocalStorage "DemoKey" "Example local value set by demo"
+                Send Log of oWebEdit "Value saved in localStorage key 'DemoKey'"
+            End_Procedure
+        End_Object
+
+        Object oWebButton4 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Save value in sessionStorage"
+            Set piColumnIndex to 6
+        
+            Procedure OnClick
+                Send SetItem of oSessionStorage "DemoKey" "Example session value set by demo"
+                Send Log of oWebEdit "Value saved in sessionStorage key 'DemoKey'"
+            End_Procedure
+        End_Object
+
+        Object oWebButton5 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Retrieve value from localStorage"
+            Set piColumnIndex to 0
+            
+            Procedure OnValue String sValue
+                Send Log of oWebEdit (SFormat("Got value '%1' from localStorage", sValue))
+            End_Procedure
+            
+            WebPublishProcedure OnValue
+        
+            Procedure OnClick
+                Send GetItem of oLocalStorage Self (RefProc(OnValue)) "DemoKey"
+            End_Procedure
+        End_Object
+
+        Object oWebButton6 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Retrieve value from sessionStorage"
+            Set piColumnIndex to 6
+            
+            Procedure OnValue String sValue
+                Send Log of oWebEdit (SFormat("Got value '%1' from sessionStorage", sValue))
+            End_Procedure
+            
+            WebPublishProcedure OnValue
+        
+            Procedure OnClick
+                Send GetItem of oSessionStorage Self (RefProc(OnValue)) "DemoKey"
+            End_Procedure
+        End_Object
+        
+        Object oWebButton7 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Remove value from localStorage"
+            
+            Procedure OnClick
+                Send RemoveItem of oLocalStorage "DemoKey"
+            End_Procedure
+        End_Object
+
+        Object oWebButton8 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Remove value from sessionStorage"
+            Set piColumnIndex to 6
+            
+            Procedure OnClick
+                Send RemoveItem of oSessionStorage "DemoKey"
+            End_Procedure
+        End_Object
+
+        Object oWebButton9 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Clear localStorage"
+            
+            Procedure OnClick
+                Send Clear of oLocalStorage
+            End_Procedure
+        End_Object
+
+        Object oWebButton10 is a cWebButton
+            Set piColumnSpan to 6
+            Set psCaption to "Clear sessionStorage"
+            Set piColumnIndex to 6
+            
+            Procedure OnClick
+                Send Clear of oSessionStorage
+            End_Procedure
+        End_Object
+
+        Object oWebEdit is a cWebEdit
+            Set piColumnSpan to 0
+            Set pbShowLabel to False
+            Set pbReadOnly to True
+            Set pbFillHeight to True
+            
+            Procedure Log String sText
+                String sValue
+                WebGet psValue to sValue
+                If (sValue <> "") Begin
+                    Move (sValue + Character(13) + Character(10)) to sValue
+                End
+                Move (SFormat("%1%2: %3", sValue, CurrentDateTime(), sText)) to sValue
+                WebSet psValue to sValue
+            End_Procedure
+        End_Object
+    End_Object
+    
+    Procedure OnShow
+        Boolean bLocalIsSupported bSessionIsSupported
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oLocalStorage to bLocalIsSupported
+        WebGet pbIsSupported of oSessionStorage to bSessionIsSupported
+        If (bLocalIsSupported and bSessionIsSupported) Begin
+            WebSet psCaption of oWebLabel to "Web Storage API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "Web Storage API is NOT supported (try any real browser)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

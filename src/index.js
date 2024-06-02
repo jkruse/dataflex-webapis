@@ -21,6 +21,7 @@ import {
 } from './sensor';
 import Vibration from './vibration';
 import WebShare from './web-share';
+import { LocalStorage, SessionStorage } from './web-storage';
 
 global.WebAPIs = {
     AbsoluteOrientationSensor,
@@ -35,6 +36,7 @@ global.WebAPIs = {
     GravitySensor,
     GyroscopeSensor,
     LinearAccelerationSensor,
+    LocalStorage,
     MagnetometerSensor,
     NetworkInformation,
     Notifications,
@@ -42,6 +44,7 @@ global.WebAPIs = {
     RelativeOrientationSensor,
     ScreenOrientation,
     ScreenWakeLock,
+    SessionStorage,
     Vibration,
     WebShare
 };

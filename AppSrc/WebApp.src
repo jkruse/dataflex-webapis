@@ -179,6 +179,15 @@ Object oWebApp is a cWebApp
                         Send NavigatePath
                     End_Procedure
                 End_Object
+
+                Object oWebMenuItemWebStorage is a cWebMenuItem
+                    Set psCaption to "Web Storage Demo"
+                    WebRegisterPath ntNavigateBegin oWebStorageDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
             End_Object  
 
             Object oBackButton is a cWebButton
@@ -265,6 +274,7 @@ Object oWebApp is a cWebApp
     Use CredentialManagementDemo.wo
     Use SensorDemo.wo
     Use ScreenOrientationDemo.wo
+    Use WebStorageDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object
