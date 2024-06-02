@@ -1,6 +1,6 @@
 {
   "name": "dataflex-webapis",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "DataFlex Custom Components for Web APIs",
   "keywords": [
     "dataflex",
@@ -15,7 +15,7 @@
   "scripts": {
     "watch": "webpack --watch --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "dist": "rimraf dist && copyfiles -f \"%ProgramFiles%/DataFlex 23.0/Lib/WebAppMaster/Data/[Ww]eb[Aa]pp[Ss]erver[Pp]rops.*\" Data && npm run build && 7z a dist/WebAPIsDemo.zip * -r -x!.git -x!.github -x!.vscode -x!CssThemes -x!DfEngine -x!*.dep -x!*.prn -x!IdeSrc/* -x!node_modules -x!*.dbg -x!*.exe -x!*.log && 7z a dist/WebAPIsComponents.zip AppHtml/Custom/* AppSrc/*API.pkg LICENSE.txt"
+    "dist": "rimraf dist && copyfiles -f \"%ProgramFiles%/DataFlex 24.0/Lib/WebAppMaster/Data/[Ww]eb[Aa]pp[Ss]erver[Pp]rops.*\" Data && npm run build && 7z a dist/WebAPIsDemo.zip * -r -x!.git -x!.github -x!.vscode -x!CssThemes -x!DfEngine -x!*.dep -x!*.prn -x!IdeSrc/* -x!node_modules -x!*.dbg -x!*.exe -x!*.log && 7z a dist/WebAPIsComponents.zip AppHtml/Custom/* AppSrc/*API.pkg LICENSE.txt"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
