@@ -1,3 +1,4 @@
+import { readBlob } from "./utils/blob";
 import { queryPermission } from "./utils/permissions";
 
 export default class Clipboard extends df.WebObject {
@@ -30,7 +31,7 @@ export default class Clipboard extends df.WebObject {
             items.map(item => Promise.all(
                 item.types.map(async (type) => {
                     const blob = await item.getType(type);
-                    return this.#readBlob(blob);
+                    return readBlob(blob);
                 })
             ))
         );
@@ -68,14 +69,5 @@ export default class Clipboard extends df.WebObject {
         } catch (error) {
             this.fire('OnError', [error.name, error.message]);
         }
-    }
-
-    #readBlob(blob) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
     }
 }

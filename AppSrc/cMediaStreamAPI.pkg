@@ -1,0 +1,201 @@
+﻿Use cWebObject.pkg
+
+Define MS_KIND_VIDEO for "videoinput"
+Define MS_KIND_AUDIO for "audioinput"
+
+Struct tInputDeviceInfo
+    String deviceId
+    String groupId
+    String kind // MS_KIND_VIDEO or MS_KIND_AUDIO
+    String label
+End_Struct
+
+Define MSAPI_DEFAULT for -1
+
+Enum_List
+    Define MSAPI_OFF
+    Define MSAPI_ON
+End_Enum_List
+
+Enum_List
+    Define MSAPI_FACING_MODE_USER
+    Define MSAPI_FACING_MODE_ENVIRONMENT
+    Define MSAPI_FACING_MODE_LEFT
+    Define MSAPI_FACING_MODE_RIGHT
+End_Enum_List
+
+Enum_List
+    Define MSAPI_RESIZE_MODE_NONE
+    Define MSAPI_RESIZE_MODE_CROP_AND_SCALE
+End_Enum_List
+
+Enum_List
+    Define MSAPI_DISPLAY_SURFACE_BROWSER
+    Define MSAPI_DISPLAY_SURFACE_WINDOW
+    Define MSAPI_DISPLAY_SURFACE_MONITOR
+End_Enum_List
+
+// Abstract base class, don't create instances of this
+Class cMediaStream is a cWebObject
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnError ""
+    End_Procedure
+    
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnError
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+End_Class
+
+Class cUserMediaStreamAPI is a cMediaStream
+    Procedure Construct_Object
+        Forward Send Construct_Object
+        { WebProperty=Client DesignTime=False }
+        Property String psMicrophonePermission ""
+        { WebProperty=Client DesignTime=False }
+        Property String psCameraPermission ""
+        
+        // Set to True to include an audio stream
+        { WebProperty=Client Category=Audio }
+        Property Boolean pbAudio False
+        // Set to a deviceId from OnEnumerateDevices to request a specific device
+        { WebProperty=Client Category=Audio }
+        Property String psAudioDeviceId ""
+        // Set to MSAPI_ON to request auto gain control, or MSAPI_OFF to request no auto gain control
+        { WebProperty=Client Category=Audio EnumList="MSAPI_DEFAULT, MSAPI_ON, MSAPI_OFF" }
+        Property Integer peAutoGainControl MSAPI_DEFAULT
+        // Set to a positive integer to request a specific number of channels (1=mono, 2=stereo, etc)
+        { WebProperty=Client Category=Audio }
+        Property Integer piChannelCount MSAPI_DEFAULT
+        // Set to MSAPI_ON to request echo cancellation, or MSAPI_OFF to request no echo cancellation
+        { WebProperty=Client Category=Audio EnumList="MSAPI_DEFAULT, MSAPI_ON, MSAPI_OFF" }
+        Property Integer peEchoCancellation MSAPI_DEFAULT
+        // Set to a non-negative number to request a specific latency in seconds
+        { WebProperty=Client Category=Audio }
+        Property Number pnLatency MSAPI_DEFAULT
+        // Set to MSAPI_ON to request noise suppression, or MSAPI_OFF to request no noise suppression
+        { WebProperty=Client Category=Audio EnumList="MSAPI_DEFAULT, MSAPI_ON, MSAPI_OFF" }
+        Property Integer peNoiseSuppression MSAPI_DEFAULT
+        // Set to a positive integer to request a specific samplerate
+        { WebProperty=Client Category=Audio }
+        Property Integer piSampleRate MSAPI_DEFAULT
+        // Set to a positive integer to request a specific sample size in bits per linear sample
+        { WebProperty=Client Category=Audio }
+        Property Integer piSampleSize MSAPI_DEFAULT
+
+        // Set to True to include a video stream
+        { WebProperty=Client Category=Video }
+        Property Boolean pbVideo False
+        // Set to a deviceId from OnEnumerateDevices to request a specific device
+        { WebProperty=Client Category=Video }
+        Property String psVideoDeviceId ""
+        // Set to a positive number to request a specific aspect ratio
+        { WebProperty=Client Category=Video }
+        Property Number pnAspectRatio MSAPI_DEFAULT
+        // Set to one of the MSAPI_FACING_MODE_* values to request a camera facing a specific way
+        { WebProperty=Client Category=Video EnumList="MSAPI_DEFAULT, MSAPI_FACING_MODE_USER, MSAPI_FACING_MODE_ENVIRONMENT, MSAPI_FACING_MODE_LEFT, MSAPI_FACING_MODE_RIGHT" }
+        Property Integer peFacingMode MSAPI_DEFAULT
+        // Set to a positive number to request a specific frame rate in frames per second
+        { WebProperty=Client Category=Video }
+        Property Number pnFrameRate MSAPI_DEFAULT
+        // Set to a positive integer to request a specific height in pixels
+        { WebProperty=Client Category=Video }
+        Property Integer piHeight MSAPI_DEFAULT
+        // Set to a positive integer to request a specific width in pixels
+        { WebProperty=Client Category=Video }
+        Property Integer piWidth MSAPI_DEFAULT
+        // Set to MSAPI_RESZIE_MODE_NONE to request original source resolution, or MSAPI_RESIZE_MODE_CROP_AND_SCALE to allow cropping and scaling to match constraints
+        { WebProperty=Client Category=Video EnumList="MSAPI_DEFAULT, MSAPI_RESIZE_MODE_NONE, MSAPI_RESIZE_MODE_CROP_AND_SCALE" }
+        Property Integer peResizeMode MSAPI_DEFAULT
+
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnMicrophonePermissionChange False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnMicrophonePermissionChange ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnCameraPermissionChange False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnCameraPermissionChange ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnEnumerateDevices False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnEnumerateDevices ""
+
+        Set psJSClass to "WebAPIs.UserMediaStream"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnMicrophonePermissionChange
+        WebPublishProcedure OnCameraPermissionChange
+        WebPublishProcedure OnEnumerateDevicesProxy
+    End_Procedure
+
+    // You need permission in order to get information on available devices - if you don't already have it, call this to prompt user
+    Procedure RequestPermission
+        Send ClientAction "requestPermission"
+    End_Procedure
+
+    // Once you have permission, call this to get a list of available devices
+    Procedure EnumerateDevices
+        Send ClientAction "enumerateDevices"
+    End_Procedure
+
+    { Visibility=Private }
+    Procedure OnEnumerateDevicesProxy
+        Handle hoJson
+        tInputDeviceInfo[] stDevices
+        Get phoActionJsonData to hoJson
+        Get JsonToDataType of hoJson to stDevices
+        Send OnEnumerateDevices stDevices
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnMicrophonePermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnCameraPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnEnumerateDevices tInputDeviceInfo[] stDevices
+    End_Procedure
+End_Class
+
+Class cDisplayMediaStreamAPI is a cMediaStream
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client Category="Audio" }
+        Property Boolean pbAudio False
+        { WebProperty=Client Category="Video" }
+        Property Boolean pbMonitorTypeSurfaces True
+        { WebProperty=Client Category="Video" }
+        Property Boolean pbPreferCurrentTab False
+        { WebProperty=Client Category="Video" }
+        Property Boolean pbSelfBrowserSurface False
+        { WebProperty=Client Category="Video" }
+        Property Boolean pbSurfaceSwitching False
+        { WebProperty=Client Category="Audio" }
+        Property Boolean pbSystemAudio True
+        { WebProperty=Client Category="Video" EnumList="MSAPI_DEFAULT, MSAPI_DISPLAY_SURFACE_BROWSER, MSAPI_DISPLAY_SURFACE_WINDOW, MSAPI_DISPLAY_SURFACE_MONITOR" }
+        Property Integer peDisplaySurface MSAPI_DEFAULT
+
+        Set psJSClass to "WebAPIs.DisplayMediaStream"
+    End_Procedure
+End_Class

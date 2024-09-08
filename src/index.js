@@ -4,6 +4,8 @@ import ContactPicker from './contact-picker';
 import CredentialManagement from './credential-management';
 import EyeDropper from './eye-dropper';
 import Fullscreen from './fullscreen';
+import { DisplayMediaStream, UserMediaStream } from './mediastream';
+import MediaStreamRecording from './mediastream-recording';
 import NetworkInformation from './network-information';
 import Notifications from './notifications';
 import PageVisibility from './page-visibility';
@@ -31,6 +33,7 @@ global.WebAPIs = {
     Clipboard,
     ContactPicker,
     CredentialManagement,
+    DisplayMediaStream,
     EyeDropper,
     Fullscreen,
     GravitySensor,
@@ -38,6 +41,7 @@ global.WebAPIs = {
     LinearAccelerationSensor,
     LocalStorage,
     MagnetometerSensor,
+    MediaStreamRecording,
     NetworkInformation,
     Notifications,
     PageVisibility,
@@ -45,6 +49,7 @@ global.WebAPIs = {
     ScreenOrientation,
     ScreenWakeLock,
     SessionStorage,
+    UserMediaStream,
     Vibration,
     WebShare
 };

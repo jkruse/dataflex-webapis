@@ -108,6 +108,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemMediaStreamRecording is a cWebMenuItem
+                    Set psCaption to "MediaStream Recording Demo"
+                    WebRegisterPath ntNavigateBegin oMediaStreamRecordingDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
                 Object oWebMenuItemNetworkInformation is a cWebMenuItem
                     Set psCaption to "Network Information Demo"
                     WebRegisterPath ntNavigateBegin oNetworkInformationDemo
@@ -275,6 +284,7 @@ Object oWebApp is a cWebApp
     Use SensorDemo.wo
     Use ScreenOrientationDemo.wo
     Use WebStorageDemo.wo
+    Use MediaStreamRecordingDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

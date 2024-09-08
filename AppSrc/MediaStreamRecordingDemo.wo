@@ -1,0 +1,1047 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebButton.pkg
+Use cLogger.pkg
+
+Use cMediaStreamAPI.pkg
+Use cMediaStreamRecordingAPI.pkg
+Use cWebCheckBox.pkg
+Use cWebCombo.pkg
+Use cWebHtmlBox.pkg
+Use cWebGroup.pkg
+Use cWebAccordionContainer.pkg
+Use cWebAccordionCard.pkg
+Use cWebFloatingPanel.pkg
+
+Object oMediaStreamRecordingDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    
+    Set psCaption to "MediaStream Recording Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 6
+    Set pbServerOnShow to True
+    
+    { WebProperty=Server }
+    Property tInputDeviceInfo[] pstDevices
+    
+    Object oUserMediaStream is a cUserMediaStreamAPI
+        Set pbServerOnMicrophonePermissionChange to True
+        Set pbServerOnCameraPermissionChange to True
+        Set pbServerOnEnumerateDevices to True
+
+        Procedure OnMicrophonePermissionChange
+            String sPerm
+            WebGet psMicrophonePermission to sPerm
+            Send Log of oLogger (SFormat("Microphone permission changed to '%1'", sPerm))
+            If (sPerm = "granted") Begin
+                WebGet psCameraPermission to sPerm
+                WebSet pbEnabled of oBtnRequestPermission to (sPerm <> "granted")
+            End
+            Else Begin
+                WebSet pbEnabled of oBtnRequestPermission to True
+            End
+        End_Procedure
+
+        Procedure OnCameraPermissionChange
+            String sPerm
+            WebGet psCameraPermission to sPerm
+            Send Log of oLogger (SFormat("Camera permission changed to '%1'", sPerm))
+            If (sPerm = "granted") Begin
+                WebGet psMicrophonePermission to sPerm
+                WebSet pbEnabled of oBtnRequestPermission to (sPerm <> "granted")
+            End
+            Else Begin
+                WebSet pbEnabled of oBtnRequestPermission to True
+            End
+        End_Procedure
+
+        Procedure OnEnumerateDevices tInputDeviceInfo[] stDevices
+            Integer i iCount
+            Move (SizeOfArray(stDevices)) to iCount
+            If (iCount = 0) Begin
+                Send Log of oLogger "No devices available"
+            End
+            Else Begin
+                For i from 0 to (iCount - 1)
+                    Send Log of oLogger (SFormat("%1 - %2", stDevices[i].kind, stDevices[i].label))
+                Loop
+            End
+            WebSet pstDevices of oMediaStreamRecordingDemo to stDevices
+            Send Refill of oWebComboAudio
+            Send Refill of oWebComboVideo
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+        End_Procedure
+    End_Object
+    
+    Object oDisplayMediaStream is a cDisplayMediaStreamAPI
+    End_Object
+
+    Object oMediaStreamRecording is a cMediaStreamRecordingAPI
+        Set pbServerOnError to True
+        Set pbServerOnConnect to True
+        Set pbServerOnDisconnect to True
+        Set pbServerOnStart to True
+        Set pbServerOnStop to True
+        Set pbServerOnPause to True
+        Set pbServerOnResume to True
+        Set pbServerOnDataAvailable to True
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+        End_Procedure
+        
+        Function InfoDisplay tMediaTrackSettings stSettings Returns String
+            String s br
+            Move (Character(13) + Character(10) + "    ") to br
+            
+            // Common settings
+            If (stSettings.deviceId <> "") Move (s + br + "deviceId: " + stSettings.deviceId) to s
+            If (stSettings.groupId <> "") Move (s + br + "groupId: " + stSettings.groupId) to s
+            
+            // Audio settings
+            If (stSettings.autoGainControl <> "") Move (s + br + "autoGainControl: " + stSettings.autoGainControl) to s
+            If (stSettings.channelCount <> "") Move (s + br + "channelCount: " + stSettings.channelCount) to s
+            If (stSettings.echoCancellation <> "") Move (s + br + "echoCancellation: " + stSettings.echoCancellation) to s
+            If (stSettings.latency <> "") Move (s + br + "latency: " + stSettings.latency) to s
+            If (stSettings.noiseSuppression <> "") Move (s + br + "noiseSuppression: " + stSettings.noiseSuppression) to s
+            If (stSettings.sampleRate <> "") Move (s + br + "sampleRate: " + stSettings.sampleRate) to s
+            If (stSettings.sampleSize <> "") Move (s + br + "sampleSize: " + stSettings.sampleSize) to s
+            
+            // Video settings
+            If (stSettings.aspectRatio <> "") Move (s + br + "aspectRatio: " + stSettings.aspectRatio) to s
+            If (stSettings.facingMode <> "") Move (s + br + "facingMode: " + stSettings.facingMode) to s
+            If (stSettings.frameRate <> "") Move (s + br + "frameRate: " + stSettings.frameRate) to s
+            If (stSettings.height <> "") Move (s + br + "height: " + stSettings.height) to s
+            If (stSettings.width <> "") Move (s + br + "width: " + stSettings.width) to s
+            If (stSettings.resizeMode <> "") Move (s + br + "resizeMode: " + stSettings.resizeMode) to s
+            
+            // Display settings
+            If (stSettings.cursor <> "") Move (s + br + "cursor: " + stSettings.cursor) to s
+            If (stSettings.displaySurface <> "") Move (s + br + "displaySurface: " + stSettings.displaySurface) to s
+            If (stSettings.logicalSurface <> "") Move (s + br + "logicalSurface: " + stSettings.logicalSurface) to s
+            
+            Function_Return s
+        End_Function
+
+        Procedure OnConnect String sState tMediaStreamInfo stInfo //String sMimeType Integer iVideoBitsPerSecond Integer iAudioBitsPerSecond String sAudioBitrateMode
+            Integer i
+            String sInfo
+            
+            Send Log of oLogger (SFormat("Connected, state: %1, mime: %2, video: %3 Mbps, audio: %4 Kbps, mode: %5", sState, stInfo.mimeType, (stInfo.videoBitsPerSecond/1000000.0), (stInfo.audioBitsPerSecond/1000.0), stInfo.audioBitrateMode))
+            For i from 0 to (SizeOfArray(stInfo.tracks) - 1)
+                Get InfoDisplay stInfo.tracks[i].settings to sInfo
+                Send Log of oLogger (SFormat("Track %1 (%2, %3):%4", (i+1), stInfo.tracks[i].kind, stInfo.tracks[i].label, sInfo))
+            Loop
+            Send UpdateButtonStates of oWebMainPanel sState
+        End_Procedure
+
+        Procedure OnDisconnect
+            Send Log of oLogger "Disconnected"
+            Send UpdateButtonStates of oWebMainPanel ""
+        End_Procedure
+
+        Procedure OnStart String sState
+            Send Log of oLogger (SFormat("Recording started, state: %1", sState))
+            Send UpdateButtonStates of oWebMainPanel sState
+        End_Procedure
+
+        Procedure OnStop String sState
+            Send Log of oLogger (SFormat("Recording stopped, state: %1", sState))
+            Send UpdateButtonStates of oWebMainPanel sState
+            Send AttachRecording "my-video-element"
+        End_Procedure
+
+        Procedure OnPause String sState
+            Send Log of oLogger (SFormat("Recording paused, state: %1", sState))
+            Send UpdateButtonStates of oWebMainPanel sState
+        End_Procedure
+
+        Procedure OnResume String sState
+            Send Log of oLogger (SFormat("Recording resumed, state: %1", sState))
+            Send UpdateButtonStates of oWebMainPanel sState
+        End_Procedure
+
+        Procedure OnDataAvailable String sMimeType UChar[] ucData
+            Send Log of oLogger (SFormat("Received %1 bytes, mime: %2", SizeOfArray(ucData), sMimeType))
+            // This is where we would store the received data
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+        
+        Object oWebLabel is a cWebLabel
+            Set psCaption to "Supported?"
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+        
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "The MediaStream Recording API lets you capture data generated by a MediaStream or HTMLMediaElement, meaning you can record from devices, screen or media elements on page. Select your capture sources below, and click 'Connect' to create a stream, then 'Start recording' to record. Recording will only include the first audio and video stream you select."
+            Set piColumnSpan to 0
+        End_Object
+        
+        Object oWebLabel3 is a cWebLabel
+            Set psCaption to "Note that Firefox does not support querying device permissions, so in Firefox permissions will always show as unknown, and you won't know if enumerating devices will work."
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebGroup1 is a cWebGroup
+            Set pbShowBorder to False
+            Set pbShowCaption to False
+            Set piColumnSpan to 6
+
+            Object oCbDevice is a cWebCheckbox
+                Set piColumnSpan to 0
+                Set psCaption to "Record from user device"
+                Set pbServerOnChange to True
+                Set psToolTip to "Include tracks from microphone and/or camera devices"
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    WebSet pbEnabled of oWebGroupDevice to bChecked
+                    If (bChecked) Begin
+                        Send AddStream of oMediaStreamRecording oUserMediaStream
+                    End
+                    Else Begin
+                        Send RemoveStream of oMediaStreamRecording oUserMediaStream
+                    End
+                End_Procedure
+            End_Object
+
+            Object oWebGroupDevice is a cWebGroup
+                Set piColumnCount to 6
+                Set pbShowCaption to False
+                Set pbEnabled to False
+
+                Object oCbAudio is a cWebCheckbox
+                    Set piColumnSpan to 2
+                    Set psCaption to "Audio"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Include an audio track"
+    
+                    Procedure OnChange String sNewValue String sOldValue
+                        Boolean bChecked
+                        Get GetChecked to bChecked
+                        WebSet pbAudio of oUserMediaStream to bChecked
+                    End_Procedure
+                End_Object
+    
+                Object oCbVideo is a cWebCheckbox
+                    Set piColumnIndex to 2
+                    Set piColumnSpan to 2
+                    Set psCaption to "Video"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Include a video track"
+    
+                    Procedure OnChange String sNewValue String sOldValue
+                        Boolean bChecked
+                        Get GetChecked to bChecked
+                        WebSet pbVideo of oUserMediaStream to bChecked
+                    End_Procedure
+                End_Object
+    
+                Object oBtnRequestPermission is a cWebButton
+                    Set piColumnSpan to 3
+                    Set psCaption to "Request permission"
+                    Set psToolTip to "Ask user to grant permission to use devices of the types selected above (audio/video)"
+                    
+                    Procedure OnClick
+                        Send RequestPermission of oUserMediaStream
+                    End_Procedure
+                End_Object
+    
+                Object oBtnEnumerate is a cWebButton
+                    Set piColumnIndex to 3
+                    Set piColumnSpan to 3
+                    Set psCaption to "Enumerate devices"
+                    Set psToolTip to "Get a list of all audio and video devices - only works if user has previously granted permission"
+                
+                    Procedure OnClick
+                        Send EnumerateDevices of oUserMediaStream
+                    End_Procedure
+                End_Object
+    
+                Object oWebComboAudio is a cWebCombo
+                    Set piColumnSpan to 0
+                    Set psLabel to "Select audio device:"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Select a specific audio device to use - click 'Enumerate devices' above to fill this dropdown"
+        
+                    Procedure OnFill
+                        tInputDeviceInfo[] stDevices
+                        Integer i
+                        
+                        Forward Send OnFill
+                        
+                        WebGet pstDevices of oMediaStreamRecordingDemo to stDevices
+                        Send AddComboItem "" "Default"
+                        For i from 0 to (SizeOfArray(stDevices) - 1)
+                            If (stDevices[i].kind = MS_KIND_AUDIO) Begin
+                                Send AddComboItem stDevices[i].deviceId stDevices[i].label
+                            End
+                        Loop
+                    End_Procedure
+    
+                    Procedure OnChange String sNewValue String sOldValue
+                        WebSet psAudioDeviceId of oUserMediaStream to sNewValue
+                    End_Procedure
+                End_Object
+    
+                Object oWebComboVideo is a cWebCombo
+                    Set piColumnSpan to 0
+                    Set psLabel to "Select video device:"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Select a specific video device to use - click 'Enumerate devices' above to fill this dropdown"
+        
+                    Procedure OnFill
+                        tInputDeviceInfo[] stDevices
+                        Integer i
+                        
+                        Forward Send OnFill
+                        
+                        WebGet pstDevices of oMediaStreamRecordingDemo to stDevices
+                        Send AddComboItem "" "Default"
+                        For i from 0 to (SizeOfArray(stDevices) - 1)
+                            If (stDevices[i].kind = MS_KIND_VIDEO) Begin
+                                Send AddComboItem stDevices[i].deviceId stDevices[i].label
+                            End
+                        Loop
+                    End_Procedure
+    
+                    Procedure OnChange String sNewValue String sOldValue
+                        WebSet psVideoDeviceId of oUserMediaStream to sNewValue
+                    End_Procedure
+                End_Object
+
+                Object oBtnOtherIdeals is a cWebButton
+                    Set piColumnSpan to 0
+                    Set psCaption to "Choose other ideals"
+                    Set pbShowLabel to True
+                    Set psLabel to "And/or:"
+                    Set psToolTip to "Set track ideals - the browser will try to fulfill these when you click 'Connect', but nothing is guaranteed"
+                
+                    Procedure OnClick
+                        Send Show of oFloatIdeals
+                    End_Procedure
+                End_Object
+
+                Object oFloatIdeals is a cWebFloatingPanel
+                    Set piColumnCount to 2
+                    Set piWidth to 650
+                    Set psCssClass to "Shadow WithArrow"
+                    Set phoFloatByControl to oBtnOtherIdeals
+                    Set pbHideOnBlur to True
+
+                    Object oGroupAudioIdeals is a cWebGroup
+                        Set psCaption to "Audio ideals"
+                        Set piColumnCount to 1
+                        Set piColumnSpan to 1
+
+                        Object oWebCombo1 is a cWebCombo
+                            Set psLabel to "Auto gain control:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "Do you want auto gain control on/off?"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem MSAPI_ON "On"
+                                Send AddComboItem MSAPI_OFF "Off"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet peAutoGainControl of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo2 is a cWebCombo
+                            Set psLabel to "Channel count:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "How many channels would you like? (these are just examples)"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem 1 "1 - Mono"
+                                Send AddComboItem 2 "2 - Stereo"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet piChannelCount of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo3 is a cWebCombo
+                            Set psLabel to "Echo cancellation:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "Do you want echo cancellation on/off?"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem MSAPI_ON "On"
+                                Send AddComboItem MSAPI_OFF "Off"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet peEchoCancellation of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo4 is a cWebCombo
+                            Set psLabel to "Latency:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "What is your desired latency? (these are just examples)"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem 0 "Lowest possible"
+                                Send AddComboItem 0.5 "500 ms"
+                                Send AddComboItem 1 "1000 ms"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet pnLatency of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo5 is a cWebCombo
+                            Set psLabel to "Noise suppression:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "Do you want noise suppression on/off?"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem MSAPI_ON "On"
+                                Send AddComboItem MSAPI_OFF "Off"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet peNoiseSuppression of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo6 is a cWebCombo
+                            Set psLabel to "Sample rate:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "What is your desired sample rate? (these are just examples)"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem 8000 "8 KHz"
+                                Send AddComboItem 16000 "16 KHz"
+                                Send AddComboItem 48000 "48 KHz"
+                                Send AddComboItem 96000 "96 KHz"
+                                Send AddComboItem 192000 "192 KHz"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet piSampleRate of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo7 is a cWebCombo
+                            Set psLabel to "Sample size:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "What is your desired sample size? (these are just examples)"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem 8 "8 bits"
+                                Send AddComboItem 16 "16 bits"
+                                Send AddComboItem 32 "32 bits"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet piSampleRate of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+                    End_Object
+
+                    Object oGroupVideoIdeals is a cWebGroup
+                        Set psCaption to "Video ideals"
+                        Set piColumnCount to 1
+                        Set piColumnIndex to 1
+                        Set piColumnSpan to 1
+
+                        Object oWebCombo1 is a cWebCombo
+                            Set psLabel to "Aspect ratio:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "What is your desired aspect ratio? (these are just examples)"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem 1 "1:1"
+                                Send AddComboItem (4.0/3.0) "4:3"
+                                Send AddComboItem (14.0/9.0) "14:9"
+                                Send AddComboItem (16.0/10.0) "16:10"
+                                Send AddComboItem (16.0/9.0) "16:9"
+                                Send AddComboItem 1.85 "1.85:1"
+                                Send AddComboItem 2 "2:1"
+                                Send AddComboItem 2.4 "2.40:1"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet pnAspectRatio of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo2 is a cWebCombo
+                            Set psLabel to "Facing mode:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "Do you want a camera facing user, environment, left or right?"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem MSAPI_FACING_MODE_USER "User"
+                                Send AddComboItem MSAPI_FACING_MODE_ENVIRONMENT "Environment"
+                                Send AddComboItem MSAPI_FACING_MODE_LEFT "Left"
+                                Send AddComboItem MSAPI_FACING_MODE_RIGHT "Right"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet peFacingMode of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo3 is a cWebCombo
+                            Set psLabel to "Frame rate:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "What is your desired frame rate? (these are just examples)"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem 20 "20 fps"
+                                Send AddComboItem 25 "25 fps"
+                                Send AddComboItem 30 "30 fps"
+                                Send AddComboItem 60 "60 fps"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet pnFrameRate of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo4 is a cWebCombo
+                            Set psLabel to "Height:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "What is your desired height? (these are just examples)"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem 360 "360 px"
+                                Send AddComboItem 480 "480 px"
+                                Send AddComboItem 720 "720 px"
+                                Send AddComboItem 1080 "1080 px"
+                                Send AddComboItem 1200 "1200 px"
+                                Send AddComboItem 1600 "1600 px"
+                                Send AddComboItem 2160 "2160 px"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet piHeight of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo5 is a cWebCombo
+                            Set psLabel to "Width:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "What is your desired width? (these are just examples)"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem 640 "640 px"
+                                Send AddComboItem 1280 "1280 px"
+                                Send AddComboItem 1600 "1600 px"
+                                Send AddComboItem 1920 "1920 px"
+                                Send AddComboItem 2560 "2560 px"
+                                Send AddComboItem 3840 "3840 px"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet piWidth of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+
+                        Object oWebCombo6 is a cWebCombo
+                            Set psLabel to "Resize mode:"
+                            Set pbServerOnChange to True
+                            Set psToolTip to "Can the browser crop and scale a video source or not?"
+
+                            Procedure OnFill
+                                Forward Send OnFill
+                                Send AddComboItem MSAPI_DEFAULT "Default"
+                                Send AddComboItem MSAPI_RESIZE_MODE_NONE "None"
+                                Send AddComboItem MSAPI_RESIZE_MODE_CROP_AND_SCALE "Crop and scale"
+                            End_Procedure
+
+                            Procedure OnChange String sNewValue String sOldValue
+                                WebSet peResizeMode of oUserMediaStream to sNewValue
+                            End_Procedure
+                        End_Object
+                    End_Object
+                End_Object
+            End_Object
+
+        End_Object
+        
+        Object oWebGroup2 is a cWebGroup
+            Set piColumnIndex to 6
+            Set piColumnSpan to 6
+            Set pbShowBorder to False
+            Set pbShowCaption to False
+            
+            Object oCbDisplay is a cWebCheckbox
+                Set piColumnSpan to 0
+                Set psCaption to "Record from display"
+                Set pbServerOnChange to True
+                Set psToolTip to "Include tracks from screen and internal audio sources"
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Boolean bChecked
+                    Get GetChecked to bChecked
+                    WebSet pbEnabled of oWebGroupDisplay to bChecked
+                    If (bChecked) Begin
+                        Send AddStream of oMediaStreamRecording oDisplayMediaStream
+                    End
+                    Else Begin
+                        Send RemoveStream of oMediaStreamRecording oDisplayMediaStream
+                    End
+                End_Procedure
+            End_Object
+    
+            Object oWebGroupDisplay is a cWebGroup
+                Set piColumnCount to 6
+                Set pbShowCaption to False
+                Set pbEnabled to False
+
+                Object oCbAudio is a cWebCheckbox
+                    Set piColumnSpan to 3
+                    Set psCaption to "Include audio"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Include an audio track"
+
+                    Procedure OnChange String sNewValue String sOldValue
+                        Boolean bChecked
+                        Get GetChecked to bChecked
+                        WebSet pbAudio of oDisplayMediaStream to bChecked
+                        WebSet pbEnabled of oCbSystemAudio to bChecked
+                    End_Procedure
+                End_Object
+
+                Object oCbSystemAudio is a cWebCheckbox
+                    Set piColumnIndex to 3
+                    Set piColumnSpan to 3
+                    Set psCaption to "Include system audio"
+                    Set psValue to "1"
+                    Set pbServerOnChange to True
+                    Set pbEnabled to False
+                    Set psToolTip to "Include other system audio, playing outside of the chosen surface"
+                    
+                    Procedure OnChange String sNewValue String sOldValue
+                        Boolean bChecked
+                        Get GetChecked to bChecked
+                        WebSet pbSystemAudio of oDisplayMediaStream to bChecked
+                    End_Procedure
+                End_Object
+
+                Object oCbSelfBrowserSurface is a cWebCheckbox
+                    Set piColumnSpan to 3
+                    Set psCaption to "Allow current tab"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Allow user to select the current browser tab - do not check this if the current tab is going to show the stream"
+                    
+                    Procedure OnChange String sNewValue String sOldValue
+                        Boolean bChecked
+                        Get GetChecked to bChecked
+                        WebSet pbSelfBrowserSurface of oDisplayMediaStream to bChecked
+                        WebSet pbEnabled of oCbPreferCurrentTab to bChecked
+                    End_Procedure
+                End_Object
+                
+                Object oCbPreferCurrentTab is a cWebCheckbox
+                    Set piColumnIndex to 3
+                    Set piColumnSpan to 3
+                    Set psCaption to "Prefer current tab"
+                    Set pbServerOnChange to True
+                    Set pbEnabled to False
+                    Set psToolTip to "Prefer user to select the current browser tab (will only allow that tab in Chrome/Edge)"
+                    
+                    Procedure OnChange String sNewValue String sOldValue
+                        Boolean bChecked
+                        Get GetChecked to bChecked
+                        WebSet pbPreferCurrentTab of oDisplayMediaStream to bChecked
+                    End_Procedure
+                End_Object
+                
+                Object oCbSurfaceSwitching is a cWebCheckbox
+                    Set piColumnSpan to 0
+                    Set psCaption to "Include controls to switch shared tab"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Ask browser to let user switch shared tab"
+                    
+                    Procedure OnChange String sNewValue String sOldValue
+                        Boolean bChecked
+                        Get GetChecked to bChecked
+                        WebSet pbSurfaceSwitching of oDisplayMediaStream to bChecked
+                    End_Procedure
+                End_Object
+
+                Object oCbMonitors is a cWebCheckbox
+                    Set piColumnSpan to 0
+                    Set psCaption to "Allow sharing entire screens"
+                    Set psValue to "1"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Allow sharing entire screens (not just windows or tabs)"
+
+                    Procedure OnChange String sNewValue String sOldValue
+                        Boolean bChecked
+                        Get GetChecked to bChecked
+                        WebSet pbMonitorTypeSurfaces of oDisplayMediaStream to bChecked
+                        Send Refill of oWebComboDisplaySurface
+                    End_Procedure
+                End_Object
+
+                Object oWebComboDisplaySurface is a cWebCombo
+                    Set piColumnSpan to 0
+                    Set psLabel to "Suggested surface"
+                    Set pbServerOnChange to True
+                    Set psToolTip to "Which kind of surface do you suggest user to share"
+
+                    Procedure OnFill
+                        Boolean bMonitor
+                        Get GetChecked of oCbMonitors to bMonitor
+                        Send AddComboItem MSAPI_DEFAULT "Default"
+                        Send AddComboItem MSAPI_DISPLAY_SURFACE_BROWSER "Browser tab"
+                        Send AddComboItem MSAPI_DISPLAY_SURFACE_WINDOW "Window"
+                        If (bMonitor) Begin
+                            Send AddComboItem MSAPI_DISPLAY_SURFACE_MONITOR "Screen"
+                        End
+                    End_Procedure
+
+                    Procedure OnChange String sNewValue String sOldValue
+                        WebSet peDisplaySurface of oDisplayMediaStream to sNewValue
+                    End_Procedure
+                End_Object
+            End_Object
+        End_Object
+        
+        Object oBtnRecordingParameters is a cWebButton
+            Set piColumnSpan to 0
+            Set psCaption to "Set advanced recording parameters"
+            Set psToolTip to "This is where you can configure the recorder"
+            
+            Procedure OnClick
+                Send Show of oFloatRecordingParameters
+            End_Procedure
+        End_Object
+        
+        Object oFloatRecordingParameters is a cWebFloatingPanel
+            Set piWidth to 400
+            Set psCssClass to "Shadow WithArrow"
+            Set pbHideOnBlur to True
+            Set phoFloatByControl to oBtnRecordingParameters
+
+            Object oWebCombo1 is a cWebCombo
+                Set psLabel to "Mime type:"
+                Set pbServerOnChange to True
+                Set piLabelOffset to 180
+                Set psToolTip to "Set your desired container format and codec - not all of these are guaranteed to be supported, select one to check"
+
+                Procedure OnFill
+                    Forward Send OnFill
+                    Send AddComboItem "" "Default"
+                    Send AddComboItem "video/webm;codecs=vp9" "video/webm - vp9"
+                    Send AddComboItem "video/webm;codecs=vp8" "video/webm - vp8"
+                    Send AddComboItem "video/webm;codecs=avc1" "video/webm - avc1"
+                    Send AddComboItem "video/webm;codecs=av1" "video/webm - av1"
+                    Send AddComboItem "video/webm;codecs=h264" "video/webm - h264"
+                    Send AddComboItem "video/webm;codecs=opus" "video/webm - opus"
+                    Send AddComboItem "video/webm;codecs=pcm" "video/webm - pcm"
+                    Send AddComboItem "video/mp4;codecs=vp9" "video/mp4 - vp9"
+                    Send AddComboItem "video/mp4;codecs=avc1" "video/mp4 - avc1"
+                    Send AddComboItem "video/mp4;codecs=opus" "video/mp4 - opus"
+                    Send AddComboItem "video/x-matroska;codecs=vp9" "video/x-matroska - vp9"
+                    Send AddComboItem "video/x-matroska;codecs=vp8" "video/x-matroska - vp8"
+                    Send AddComboItem "video/x-matroska;codecs=avc1" "video/x-matroska - avc1"
+                    Send AddComboItem "video/x-matroska;codecs=av1" "video/x-matroska - av1"
+                    Send AddComboItem "video/x-matroska;codecs=h264" "video/x-matroska - h264"
+                    Send AddComboItem "video/x-matroska;codecs=opus" "video/x-matroska - opus"
+                    Send AddComboItem "video/x-matroska;codecs=pcm" "video/x-matroska - pcm"
+                    Send AddComboItem "audio/webm;codecs=opus" "audio/webm - opus"
+                    Send AddComboItem "audio/webm;codecs=pcm" "audio/webm - pcm"
+                End_Procedure
+
+                Procedure MimeTypeSupported String sMimeType Boolean bResult
+                    If (bResult) Begin
+                        Send Log of oLogger (SFormat("Mime type '%1' is supported", sMimeType))
+                    End
+                    Else Begin
+                        Send Log of oLogger (SFormat("Mime type '%1' is NOT supported", sMimeType))
+                    End
+                End_Procedure
+                
+                WebPublishProcedure MimeTypeSupported
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet psMimeType of oMediaStreamRecording to sNewValue
+                    Send IsTypeSupported of oMediaStreamRecording Self (RefProc(MimeTypeSupported)) sNewValue
+                End_Procedure
+            End_Object
+
+            Object oWebCombo2 is a cWebCombo
+                Set psLabel to "Audio bitrate:"
+                Set pbServerOnChange to True
+                Set piLabelOffset to 180
+                Set psToolTip to "What is your desired audio bitrate? (these are just examples)"
+
+                Procedure OnFill
+                    Forward Send OnFill
+                    Send AddComboItem 0 "Default"
+                    Send AddComboItem 64000 "64 Kbps (low-quality MP3)"
+                    Send AddComboItem 128000 "128 Kbps (voice/meeting)"
+                    Send AddComboItem 160000 "160 Kbps (music streaming)"
+                    Send AddComboItem 192000 "192 Kbps (720p video)"
+                    Send AddComboItem 320000 "320 Kbps (full HD video)"
+                    Send AddComboItem 1411000 "1411 Kbps (CD quality)"
+                End_Procedure
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet piAudioBitsPerSecond of oMediaStreamRecording to sNewValue
+                End_Procedure
+            End_Object
+
+            Object oWebCombo3 is a cWebCombo
+                Set psLabel to "Video bitrate:"
+                Set pbServerOnChange to True
+                Set piLabelOffset to 180
+                Set psToolTip to "What is your desired video bitrate? (these are just examples)"
+
+                Procedure OnFill
+                    Forward Send OnFill
+                    Send AddComboItem 0 "Default"
+                    Send AddComboItem 1000000 "1 Mbps"
+                    Send AddComboItem 2500000 "2.5 Mbps"
+                    Send AddComboItem 4000000 "4 Mbps"
+                    Send AddComboItem 6000000 "6 Mbps"
+                End_Procedure
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet piVideoBitsPerSecond of oMediaStreamRecording to sNewValue
+                End_Procedure
+            End_Object
+
+// Not showing this, because it doesn't make a lot of sense
+//            Object oWebCombo4 is a cWebCombo
+//                Set psLabel to "Shared bps:"
+//                Set pbServerOnChange to True
+//                Set piLabelOffset to 180
+//
+//                Procedure OnFill
+//                    Forward Send OnFill
+//                    Send AddComboItem 0 "Default"
+//                End_Procedure
+//
+//                Procedure OnChange String sNewValue String sOldValue
+//                    WebSet piBitsPerSecond of oMediaStreamRecording to sNewValue
+//                End_Procedure
+//            End_Object
+
+            Object oWebCombo5 is a cWebCombo
+                Set psLabel to "Audio bitrate mode:"
+                Set pbServerOnChange to True
+                Set piLabelOffset to 180
+                Set psToolTip to "Do you want constant or variable audio bitrate?"
+
+                Procedure OnFill
+                    Forward Send OnFill
+                    Send AddComboItem MSR_DEFAULT "Default"
+                    Send AddComboItem MSR_AUDIO_BITRATE_MODE_CONSTANT "Constant"
+                    Send AddComboItem MSR_AUDIO_BITRATE_MODE_VARIABLE "Variable"
+                End_Procedure
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet peAudioBitrateMode of oMediaStreamRecording to sNewValue
+                End_Procedure
+            End_Object
+
+            Object oWebCombo6 is a cWebCombo
+                Set psLabel to "Keyframe interval duration:"
+                Set pbServerOnChange to True
+                Set piLabelOffset to 180
+                Set psToolTip to "What is your desired keyframe interval in time?"
+
+                Procedure OnFill
+                    Forward Send OnFill
+                    Send AddComboItem 0 "Default"
+                    Send AddComboItem 0.5 "0.5 seconds"
+                    Send AddComboItem 1 "1 second"
+                    Send AddComboItem 2 "2 seconds"
+                    Send AddComboItem 4 "4 seconds"
+                End_Procedure
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet pnVideoKeyFrameIntervalDuration of oMediaStreamRecording to sNewValue
+                End_Procedure
+            End_Object
+
+            Object oWebCombo7 is a cWebCombo
+                Set psLabel to "Keyframe interval count:"
+                Set pbServerOnChange to True
+                Set piLabelOffset to 180
+                Set psToolTip to "What is your desired keyframe interval in frames?"
+
+                Procedure OnFill
+                    Forward Send OnFill
+                    Send AddComboItem 0 "Default"
+                    Send AddComboItem 10 "10 frames"
+                    Send AddComboItem 20 "20 frames"
+                    Send AddComboItem 30 "30 frames"
+                    Send AddComboItem 45 "45 frames"
+                    Send AddComboItem 60 "60 frames"
+                End_Procedure
+
+                Procedure OnChange String sNewValue String sOldValue
+                    WebSet piVideoKeyFrameIntervalCount of oMediaStreamRecording to sNewValue
+                End_Procedure
+            End_Object
+        End_Object
+
+        Object oBtnConnect is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Connect"
+            Set psToolTip to "Establish a media stream based on chosen parameters and connect to it - in this demo it will play below, but it doesn't have to"
+        
+            Procedure OnClick
+                Send Connect of oMediaStreamRecording "my-video-element"
+            End_Procedure
+        End_Object
+
+        Object oBtnStart is a cWebButton
+            Set piColumnIndex to 2
+            Set piColumnSpan to 2
+            Set psCaption to "Start recording"
+            Set pbEnabled to False
+            Set psToolTip to "Start recording from the media stream - in this demo the recorder will send data to the server every second, but you can use another interval, or no interval at all to get the entire recording when it ends"
+        
+            Procedure OnClick
+                Send Start of oMediaStreamRecording 1000
+            End_Procedure
+        End_Object
+        
+        Object oBtnPause is a cWebButton
+            Set piColumnIndex to 4
+            Set piColumnSpan to 2
+            Set psCaption to "Pause recording"
+            Set pbEnabled to False
+            
+            Procedure OnClick
+                Send Pause of oMediaStreamRecording
+            End_Procedure
+        End_Object
+        
+        Object oBtnResume is a cWebButton
+            Set piColumnIndex to 6
+            Set piColumnSpan to 2
+            Set psCaption to "Resume recording"
+            Set pbEnabled to False
+            
+            Procedure OnClick
+                Send Resume of oMediaStreamRecording
+            End_Procedure
+        End_Object
+
+        Object oBtnStop is a cWebButton
+            Set piColumnIndex to 8
+            Set piColumnSpan to 2
+            Set psCaption to "Stop recording"
+            Set pbEnabled to False
+            Set psToolTip to "End the recording, triggering the OnStop event, which in this demo will attach the recording to the video element below (but you don't have to)"
+        
+            Procedure OnClick
+                Send Stop of oMediaStreamRecording
+            End_Procedure
+        End_Object
+
+        Object oBtnDisconnect is a cWebButton
+            Set piColumnIndex to 10
+            Set piColumnSpan to 2
+            Set psCaption to "Disconnect"
+            Set pbEnabled to False
+            Set psToolTip to "Close the media stream, releasing all resources held"
+        
+            Procedure OnClick
+                Send Disconnect of oMediaStreamRecording
+            End_Procedure
+        End_Object
+        
+        Procedure UpdateButtonStates String sState
+            WebSet pbEnabled of oBtnConnect to (sState = "")
+            WebSet pbEnabled of oBtnStart to (sState = "inactive")
+            WebSet pbEnabled of oBtnPause to (sState = "recording")
+            WebSet pbEnabled of oBtnResume to (sState = "paused")
+            WebSet pbEnabled of oBtnStop to ((sState = "recording") or (sState = "paused"))
+            WebSet pbEnabled of oBtnDisconnect to (sState <> "")
+        End_Procedure
+
+        Object oVideo is a cWebHtmlBox
+            Set piColumnIndex to 2
+            Set piColumnSpan to 8
+            Set psHtml to '<video controls style="width: 100%" id="my-video-element"></video>'
+            Set psToolTip to "Mostly for demo purposes, we alternate between showing the live media stream and the recording here, as the component has features for both, but displaying media streams is really outside the scope of this API"
+        End_Object
+
+        Object oLogger is a cLogger
+            Set piMinHeight to 200
+        End_Object
+
+    End_Object 
+    
+    Procedure OnShow
+        Boolean bIsSupported
+        String sPermMic sPermCam
+        
+        Forward Send OnShow
+
+        WebGet pbIsSupported of oMediaStreamRecording to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "MediaStream Recording API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+
+            WebGet psMicrophonePermission of oUserMediaStream to sPermMic
+            Send Log of oLogger (SFormat("Microphone permission is '%1'", sPermMic))
+            WebGet psCameraPermission of oUserMediaStream to sPermCam
+            Send Log of oLogger (SFormat("Camera permission is '%1'", sPermCam))
+            
+            If ((sPermMic = "granted") and (sPermCam = "granted")) Begin
+                WebSet pbEnabled of oBtnRequestPermission to False
+            End
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "MediaStream Recording API is NOT supported (try any modern browser)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

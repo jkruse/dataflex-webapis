@@ -1,0 +1,291 @@
+﻿Use cWebObject.pkg
+Use cCharTranslate.pkg
+
+Struct tMediaTrackSettings
+    String deviceId
+    String groupId
+    
+    String autoGainControl
+    String channelCount
+    String echoCancellation
+    String latency
+    String noiseSuppression
+    String sampleRate
+    String sampleSize
+    
+    String aspectRatio
+    String facingMode
+    String frameRate
+    String height
+    String width
+    String resizeMode
+    
+    String cursor
+    String displaySurface
+    String logicalSurface
+End_Struct
+
+Struct tMediaStreamTrackInfo
+    String kind
+    String label
+    tMediaTrackSettings settings
+End_Struct
+
+Struct tMediaStreamInfo
+    String mimeType
+    Integer videoBitsPerSecond
+    Integer audioBitsPerSecond
+    String audioBitrateMode
+    tMediaStreamTrackInfo[] tracks
+End_Struct
+
+Define MSR_DEFAULT for -1
+Enum_List
+    Define MSR_AUDIO_BITRATE_MODE_CONSTANT
+    Define MSR_AUDIO_BITRATE_MODE_VARIABLE
+End_Enum_List
+
+Class cMediaStreamRecordingAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client Visibility=Private }
+        Property String[] paMediaStreams
+        { WebProperty=Client Category="Recording parameters" }
+        Property String psMimeType ""
+        { WebProperty=Client Category="Recording parameters" }
+        Property Integer piAudioBitsPerSecond 0
+        { WebProperty=Client Category="Recording parameters" }
+        Property Integer piVideoBitsPerSecond 0
+        { WebProperty=Client Category="Recording parameters" }
+        Property Integer piBitsPerSecond 0
+        { WebProperty=Client Category="Recording parameters" EnumList="MSR_AUDIO_BITRATE_MODE_CONSTANT, MSR_AUDIO_BITRATE_MODE_VARIABLE" }
+        Property Integer peAudioBitrateMode MSR_DEFAULT
+        { WebProperty=Client Category="Recording parameters" }
+        Property Number pnVideoKeyFrameIntervalDuration 0
+        { WebProperty=Client Category="Recording parameters" }
+        Property Integer piVideoKeyFrameIntervalCount 0
+        
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnConnect False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnConnect ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnDisconnect False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnDisconnect ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnError ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnPause False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnPause ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnResume False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnResume ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnStart False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnStart ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnStop False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnStop ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnDataAvailable False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnDataAvailable ""
+        
+        Object oCharTranslate is a cCharTranslate
+        End_Object
+
+        Set psJSClass to "WebAPIs.MediaStreamRecording"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnConnectProxy
+        WebPublishProcedure OnDisconnect
+        WebPublishProcedure OnError
+        WebPublishProcedure OnPause
+        WebPublishProcedure OnResume
+        WebPublishProcedure OnStart
+        WebPublishProcedure OnStop
+        WebPublishProcedure OnDataAvailableProxy
+    End_Procedure
+    
+    // Call this to check if a mime type is supported by the browser
+    // Will call the provided message with String sMimeType and Boolean bResult
+    Procedure IsTypeSupported Handle hoReturnObj Handle hoReturnMsg String sMimeType
+        String sReturnMessage
+        String[] aParams
+        
+        Get WebMethodName of hoReturnObj hoReturnMsg to sReturnMessage
+        If (sReturnMessage <> "") Begin
+            Get WebObjectName of hoReturnObj to aParams[0]
+            Move sReturnMessage to aParams[1]
+            Move sMimeType to aParams[2]
+            Send ClientAction "isTypeSupported" aParams
+        End
+    End_Procedure
+    
+    // Add a stream to this recording, make sure to call this before "connect"
+    Procedure AddStream Handle hoMediaStream
+        String sMediaStream
+        Boolean bIsMediaStream
+        String[] saMediaStreams
+        Integer iIndex
+        
+        Get WebObjectName of hoMediaStream to sMediaStream
+        Get IsObjectOfClass of hoMediaStream (RefClass(cMediaStream)) to bIsMediaStream
+        If (bIsMediaStream) Begin
+            WebGet paMediaStreams to saMediaStreams
+            Move (SearchArray(sMediaStream, saMediaStreams)) to iIndex
+            If (iIndex = -1) Begin
+                Move sMediaStream to saMediaStreams[SizeOfArray(saMediaStreams)]
+                WebSet paMediaStreams to saMediaStreams
+            End
+        End
+        Else Begin
+            Error DFERR_BAD_PARAMETER (SFormat("%1 is not a media stream", sMediaStream))
+        End
+    End_Procedure
+    
+    // Remove a stream from this recording, only takes effect next time "connect" is called
+    Procedure RemoveStream Handle hoMediaStream
+        String sMediaStream
+        String[] saMediaStreams
+        Integer iIndex
+
+        Get WebObjectName of hoMediaStream to sMediaStream
+        WebGet paMediaStreams to saMediaStreams
+        Move (SearchArray(sMediaStream, saMediaStreams)) to iIndex
+        If (iIndex <> -1) Begin
+            Move (RemoveFromArray(saMediaStreams, iIndex)) to saMediaStreams
+            WebSet paMediaStreams to saMediaStreams
+        End
+    End_Procedure
+    
+    // Connect to the media stream to prepare for recording
+    // If you pass the id of a media element (<video> or <audio>), the stream will start playing on that element
+    Procedure Connect String sOptionalElementId
+        String[] aParams
+        If (num_arguments > 0) Begin
+            Move sOptionalElementId to aParams[0]
+        End
+        Send ClientAction "connect" aParams
+    End_Procedure
+    
+    // Start recording
+    // With no parameter, OnDataAvailable will only fire (once) when the stream ends, with the complete recording, or whenever you call RequestData
+    // With a parameter, OnDataAvailable will fire approximately every <iOptionalTimeslice> milliseconds with a block of the recording
+    Procedure Start Integer iOptionalTimeslice
+        String[] aParams
+        If (num_arguments > 0) Begin
+            Move iOptionalTimeslice to aParams[0]
+        End
+        Send ClientAction "start" aParams
+    End_Procedure
+    
+    // Stop recording
+    Procedure Stop
+        Send ClientAction "stop"
+    End_Procedure
+    
+    // Pause recording
+    Procedure Pause
+        Send ClientAction "pause"
+    End_Procedure
+    
+    // Resume recording
+    Procedure Resume
+        Send ClientAction "resume"
+    End_Procedure
+    
+    // Trigger a call of OnDataAvailable with whatever is currently in the recording buffer
+    Procedure RequestData
+        Send ClientAction "requestData"
+    End_Procedure
+    
+    // Disconnect from the media stream and release any media device resources held
+    Procedure Disconnect
+        Send ClientAction "disconnect"
+    End_Procedure
+    
+    // Attach the last recording to a media element (<video> or <audio>) on page, for easy client-side playback
+    Procedure AttachRecording String sElementID
+        String[] aParams
+        Move sElementID to aParams[0]
+        Send ClientAction "attachRecording" aParams
+    End_Procedure
+    
+    { Visibility=Private }
+    Procedure OnConnectProxy String sState
+        Handle hoJson
+        tMediaStreamInfo stInfo
+
+        Get phoActionJsonData to hoJson
+        If (hoJson <> C_WebUnresolvedObject) Begin
+            If (IsOfJsonType(hoJson, jsonTypeObject)) Begin
+                Set pbRequireAllMembers of hoJson to False
+                Get JsonToDataType of hoJson to stInfo
+                Send OnConnect sState stInfo
+            End
+        End
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnConnect String sState tMediaStreamInfo stInfo
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnDisconnect
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnPause String sState
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnResume String sState
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnStart String sState
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnStop String sState
+    End_Procedure
+    
+    { Visibility=Private }
+    Procedure OnDataAvailableProxy String sDataURL
+        Integer iPos
+        String sMimeType
+        UChar[] ucBase64 ucBinary
+        
+        Move (Pos(";base64,", sDataURL, 1, 100)) to iPos
+        Move (Mid(sDataURL, iPos - 6, 6)) to sMimeType
+        Move (StringToUCharArray(Mid(sDataURL, Length(sDataURL), iPos + 8))) to ucBase64
+        Get Base64DecodeUCharArray of oCharTranslate ucBase64 to ucBinary
+        
+        Send OnDataAvailable sMimeType ucBinary
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnDataAvailable String sMimeType UChar[] ucData
+        // Note that the client-side version of this event receives a single Blob argument instead
+    End_Procedure
+
+End_Class
