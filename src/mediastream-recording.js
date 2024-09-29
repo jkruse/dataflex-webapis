@@ -42,7 +42,7 @@ export default class MediaStreamRecording extends df.WebObject {
 
     create(tDef) {
         super.create(tDef);
-        this.set('pbIsSupported', !!window.MediaRecorder);
+        this.set('pbIsSupported', !!window.MediaRecorder && 'withResolvers' in Promise);
         if (this.paMediaStreams) {
             this.set_paMediaStreams(this.paMediaStreams);
         }
@@ -205,25 +205,36 @@ export default class MediaStreamRecording extends df.WebObject {
 
     async #onDataAvailable(event) {
         this.#chunks.push(event.data);
+        let cancelled = false;
 
         // Fire client-side event with the Blob
-        this.fireEx({ sEvent: 'OnDataAvailable', aParams: [event.data], bSkipServer: true });
+        this.fireEx({
+            sEvent: 'OnDataAvailable',
+            aParams: [event.data],
+            bSkipServer: true,
+            fHandler: oEvent => cancelled = oEvent.bCanceled
+        });
 
-        // Let the 'onStop' handler know that we're processing data
-        const { promise, resolve } = Promise.withResolvers();
-        this.#processingData = promise;
+        // For the server-side handler we need to convert the Blob, so we only do that
+        // if client-side handler didn't cancel and server-side handler is enabled
+        console.log(this.pbServerOnDataAvailable);
+        if (!cancelled && this.pbServerOnDataAvailable) {
+            // Let the 'onStop' handler know that we're processing data
+            const { promise, resolve } = Promise.withResolvers();
+            this.#processingData = promise;
 
-        try {
-            // Fire server-side event with a DataURL string
-            const dataUrl = await readBlob(event.data);
-            this.fireEx({ sEvent: 'OnDataAvailable', aParams: [dataUrl], bSkipClient: true });
-        } catch (error) {
-            this.fire('OnError', [error.name, error.message]);
+            try {
+                // Fire server-side event with a DataURL string
+                const dataUrl = await readBlob(event.data);
+                this.fireEx({ sEvent: 'OnDataAvailable', aParams: [dataUrl], bSkipClient: true });
+            } catch (error) {
+                this.fire('OnError', [error.name, error.message]);
+            }
+
+            // Let the 'onStop' handler know that we're done processing data
+            resolve();
+            this.#processingData = null;
         }
-
-        // Let the 'onStop' handler know that we're done processing data
-        resolve();
-        this.#processingData = null;
     }
 
     async #onStop() {
