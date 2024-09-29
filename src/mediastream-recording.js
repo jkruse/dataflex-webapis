@@ -217,7 +217,6 @@ export default class MediaStreamRecording extends df.WebObject {
 
         // For the server-side handler we need to convert the Blob, so we only do that
         // if client-side handler didn't cancel and server-side handler is enabled
-        console.log(this.pbServerOnDataAvailable);
         if (!cancelled && this.pbServerOnDataAvailable) {
             // Let the 'onStop' handler know that we're processing data
             const { promise, resolve } = Promise.withResolvers();
