@@ -15,12 +15,13 @@ Object oDashboard is a cWebView
     Object oWebMainPanel is a cWebPanel
 
         Object oTileGroup is a cWebGroup
-            Set piColumnCount to 3
             Set psCSSClass to "TilesGroup"
             Set pbShowBorder to False
             Set pbShowCaption to False
-            WebSetResponsive piColumnCount rmMobile to 1
+            Set peLayoutType to ltGrid
+            Set piColumnCount to 3
             WebSetResponsive piColumnCount rmTabletPortrait to 2
+            WebSetResponsive piColumnCount rmMobile to 1
 
             Object oTileBroadcastChannel is a cWebHtmlBox
                 Set pbServerOnClick to True
@@ -38,7 +39,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Clipboard API</div><div class="Tile_Subtitle">access to system clipboard</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oClipboardDemo
                 
@@ -51,7 +51,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Contact Picker API</div><div class="Tile_Subtitle">access to contacts</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oContactPickerDemo
                 
@@ -76,7 +75,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">EyeDropper API</div><div class="Tile_Subtitle">pick a color using an eyedropper tool</div><span class="material-icons-outlined">warning_amber</span></div>'
-                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oEyeDropperDemo
                 
@@ -89,7 +87,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Fullscreen API</div><div class="Tile_Subtitle">present a specific element in full-screen mode</div></div>'
-                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oFullscreenDemo
                 
@@ -114,7 +111,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Network Information API</div><div class="Tile_Subtitle">get information on the current network connection</div><span class="material-icons-outlined">warning_amber</span></div>'
-                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oNetworkInformationDemo
                 
@@ -127,7 +123,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Notifications API</div><div class="Tile_Subtitle">display system notifications</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oNotificationsDemo
                 
@@ -140,7 +135,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Page Visibility API</div><div class="Tile_Subtitle">know when a document becomes visible or hidden</div></div>'
-                Set piColumnIndex to 0
                                 
                 WebRegisterPath ntNavigateForward oPageVisibilityDemo
                 
@@ -153,7 +147,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Screen Orientation API</div><div Class="Tile_Subtitle">information about the current orientation of the document</div></div>'
-                Set piColumnIndex to 1
                                 
                 WebRegisterPath ntNavigateForward oScreenOrientationDemo
                 
@@ -166,7 +159,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Screen Wake Lock API</div><div Class="Tile_Subtitle">prevent devices from dimming or locking the screen</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 2
                                 
                 WebRegisterPath ntNavigateForward oScreenWakeLockDemo
                 
@@ -179,7 +171,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div Class="Tile_Title">Sensor APIs</div><div Class="Tile_Subtitle">access to device sensors</div><span class="material-icons-outlined" style="right: 40px">https</span><span class="material-icons-outlined">warning_amber</span></div>'
-                Set piColumnIndex to 0
                                 
                 WebRegisterPath ntNavigateForward oSensorDemo
                 
@@ -192,7 +183,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Vibration API</div><div Class="Tile_Subtitle">access to vibration hardware</div></div>'
-                Set piColumnIndex to 1
                 
                 WebRegisterPath ntNavigateForward oVibrationDemo
     
@@ -205,7 +195,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Web Share API</div><div Class="Tile_Subtitle">share content from your application</div><span class="material-icons-outlined">https</span></div>'
-                Set piColumnIndex to 2
                 
                 WebRegisterPath ntNavigateForward oWebShareDemo
     
@@ -218,7 +207,6 @@ Object oDashboard is a cWebView
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"
                 Set psHtml to '<div class="WebCon_Sizer" data-ServerOnClick="openview"><div class="Tile_Title">Web Storage API</div><div Class="Tile_Subtitle">store data in the browser</div></div>'
-                Set piColumnIndex to 0
                 
                 WebRegisterPath ntNavigateForward oWebStorageDemo
     
@@ -226,17 +214,18 @@ Object oDashboard is a cWebView
                     Send NavigatePath
                 End_Procedure
             End_Object
+        End_Object
 
-            Object oWebSpacer is a cWebSpacer
-                Set piColumnSpan to 3
-                Set piHeight to 20
-            End_Object
-            
-            Object oLegend is a cWebHtmlBox
-                Set psHtml to ('<div><span class="material-icons-outlined" style="vertical-align: bottom">https</span> Only works in secure contexts (https)</div>' + ;
-                               '<div><span class="material-icons-outlined" style="vertical-align: bottom">warning_amber</span> Experimental API</div>')
-                Set piColumnSpan to 3
-            End_Object
+        Object oWebSpacer is a cWebSpacer
+            Set piColumnSpan to 0
+            Set piHeight to 20
+        End_Object
+        
+        Object oLegend is a cWebHtmlBox
+            Set psHtml to ('<div><span class="material-icons-outlined" style="vertical-align: bottom">https</span> Only works in secure contexts (https)</div>' + ;
+                           '<div><span class="material-icons-outlined" style="vertical-align: bottom">warning_amber</span> Experimental API</div>')
+            Set piColumnSpan to 0
+            Set psCSSClass to "legend"
         End_Object
     End_Object
 End_Object

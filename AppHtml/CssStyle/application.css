@@ -9,6 +9,17 @@
     right: 15px;
 }
 
+.legend {
+    padding-left: 10px;
+}
+.df-ModeMobile .legend {
+    padding-left: 0;
+}
+
 .WebHtmlBox .as-label {
     padding: 2px;
+}
+
+.Tile_Title, .Tile_Subtitle {
+    padding: 0 5px;
 }
