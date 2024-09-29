@@ -137,6 +137,7 @@ Class cMediaStreamRecordingAPI is a cWebObject
     End_Procedure
     
     // Add a stream to this recording, make sure to call this before "connect"
+    // You can also call it design-time for fixed setups
     Procedure AddStream Handle hoMediaStream
         String sMediaStream
         Boolean bIsMediaStream
@@ -146,11 +147,21 @@ Class cMediaStreamRecordingAPI is a cWebObject
         Get WebObjectName of hoMediaStream to sMediaStream
         Get IsObjectOfClass of hoMediaStream (RefClass(cMediaStream)) to bIsMediaStream
         If (bIsMediaStream) Begin
-            WebGet paMediaStreams to saMediaStreams
+            If (Initializing(Host(Self))) Begin
+                Get paMediaStreams to saMediaStreams
+            End
+            Else Begin
+                WebGet paMediaStreams to saMediaStreams
+            End
             Move (SearchArray(sMediaStream, saMediaStreams)) to iIndex
             If (iIndex = -1) Begin
                 Move sMediaStream to saMediaStreams[SizeOfArray(saMediaStreams)]
-                WebSet paMediaStreams to saMediaStreams
+                If (Initializing(Host(Self))) Begin
+                    Set paMediaStreams to saMediaStreams
+                End
+                Else Begin
+                    WebSet paMediaStreams to saMediaStreams
+                End
             End
         End
         Else Begin

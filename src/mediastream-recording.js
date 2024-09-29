@@ -15,6 +15,7 @@ export default class MediaStreamRecording extends df.WebObject {
     #recorder;
     #chunks = [];
     #objectUrl;
+    #processingData;
 
     constructor(sName, oParent) {
         super(sName, oParent);
@@ -42,6 +43,9 @@ export default class MediaStreamRecording extends df.WebObject {
     create(tDef) {
         super.create(tDef);
         this.set('pbIsSupported', !!window.MediaRecorder);
+        if (this.paMediaStreams) {
+            this.set_paMediaStreams(this.paMediaStreams);
+        }
     }
 
     destroy() {
@@ -205,19 +209,35 @@ export default class MediaStreamRecording extends df.WebObject {
         // Fire client-side event with the Blob
         this.fireEx({ sEvent: 'OnDataAvailable', aParams: [event.data], bSkipServer: true });
 
-        // Fire server-side event with a DataURL string
-        const dataUrl = await readBlob(event.data);
-        this.fireEx({ sEvent: 'OnDataAvailable', aParams: [dataUrl], bSkipClient: true });
+        // Let the 'onStop' handler know that we're processing data
+        const { promise, resolve } = Promise.withResolvers();
+        this.#processingData = promise;
+
+        try {
+            // Fire server-side event with a DataURL string
+            const dataUrl = await readBlob(event.data);
+            this.fireEx({ sEvent: 'OnDataAvailable', aParams: [dataUrl], bSkipClient: true });
+        } catch (error) {
+            this.fire('OnError', [error.name, error.message]);
+        }
+
+        // Let the 'onStop' handler know that we're done processing data
+        resolve();
+        this.#processingData = null;
     }
 
     async #onStop() {
+        // MediaRecorder always fires 'stop' after the last 'dataavailable', but because we await data conversion in
+        // #onDataAvailable, before we forward the event, this method could be called during that await.
+        // So we await #processingData here to ensure the correct order of events on the server.
+        await this.#processingData;
         if (this.#objectUrl) {
             URL.revokeObjectURL(this.#objectUrl);
         }
         const blob = new Blob(this.#chunks, { type: this.#chunks[0].type });
         this.#objectUrl = URL.createObjectURL(blob);
         this.#chunks = [];
-        this.fire('OnStop', [this.#recorder.state]);
+        this.fire('OnStop', [this.#recorder?.state ?? '']);
     }
 
     set_paMediaStreams(value) {
