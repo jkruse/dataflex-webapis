@@ -40,3 +40,4 @@ WebApp.log
 # Output folders
 AppHtml/Custom/
 dist/
+/.idea/
