@@ -1,3 +1,4 @@
+import BatteryStatus from "./battery-status";
 import BroadcastChannel from './broadcast-channel';
 import Clipboard from './clipboard';
 import ContactPicker from './contact-picker';
@@ -29,6 +30,7 @@ global.WebAPIs = {
     AbsoluteOrientationSensor,
     AccelerometerSensor,
     AmbientLightSensor,
+    BatteryStatus,
     BroadcastChannel,
     Clipboard,
     ContactPicker,

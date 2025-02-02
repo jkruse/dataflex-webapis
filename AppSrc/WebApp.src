@@ -54,6 +54,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemBatteryStatus is a cWebMenuItem
+                    Set psCaption to "Battery Status Demo"
+                    WebRegisterPath ntNavigateBegin oBatteryStatusDemo
+
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+                
                 Object oWebMenuItemBroadcastChannel is a cWebMenuItem
                     Set psCaption to "Broadcast Channel Demo"
                     WebRegisterPath ntNavigateBegin oBroadcastChannelDemo
@@ -285,6 +294,7 @@ Object oWebApp is a cWebApp
     Use ScreenOrientationDemo.wo
     Use WebStorageDemo.wo
     Use MediaStreamRecordingDemo.wo
+    Use BatteryStatusDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object

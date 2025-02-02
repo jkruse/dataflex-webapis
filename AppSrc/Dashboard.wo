@@ -23,6 +23,24 @@ Object oDashboard is a cWebView
             WebSetResponsive piColumnCount rmTabletPortrait to 2
             WebSetResponsive piColumnCount rmMobile to 1
 
+            Object oTileBatteryStatus is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to """
+                    <div class="WebCon_Sizer" data-ServerOnClick="openview">
+                        <div Class="Tile_Title">Battery Status API</div>
+                        <div class="Tile_Subtitle">info about battery status</div>
+                        <span class="material-icons-outlined">https</span>
+                    </div>
+                    """
+                                
+                WebRegisterPath ntNavigateForward oBatteryStatusDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
             Object oTileBroadcastChannel is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"

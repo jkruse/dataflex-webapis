@@ -1,0 +1,135 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cLogger.pkg
+
+Use cBatteryStatusAPI.pkg
+Use cWebCheckBox.pkg
+
+Object oBatteryStatusDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    
+    Set psCaption to "Battery Status Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 6
+    Set pbServerOnShow to True
+
+    Object oBatteryStatusAPI is a cBatteryStatusAPI
+        Procedure OnChargingChange Boolean bCharging
+            If (bCharging) Begin
+                Send Log of oLogger "Device is charging"
+            End
+            Else Begin
+                Send Log of oLogger "Device is not charging"
+            End
+        End_Procedure
+
+        Procedure OnLevelChange Number nLevel
+            Send Log of oLogger (SFormat("Battery level is %1%", nLevel * 100))
+        End_Procedure
+
+        Procedure OnChargingTimeChange Integer iRemainingSeconds
+            If (iRemainingSeconds > -1) Begin
+                Send Log of oLogger (SFormat("Time to fully charged is %1 seconds", iRemainingSeconds))
+            End
+            Else Begin
+                Send Log of oLogger "Not currently charging"
+            End
+        End_Procedure
+
+        Procedure OnDischargingTimeChange Integer iRemainingSeconds
+            If (iRemainingSeconds > -1) Begin
+                Send Log of oLogger (SFormat("Time to fully discharged is %1 seconds", iRemainingSeconds))
+            End
+            Else Begin
+                Send Log of oLogger "Not currently discharging"
+            End
+        End_Procedure
+    End_Object
+    
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebLabel is a cWebLabel
+            Set piColumnSpan to 0
+            Set psCaption to "Supported?"
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+
+        Object oWebLabel2 is a cWebLabel
+            Set psCaption to "The Battery Status API lets you receive events about changes in the battery status of the device. Note that the 'charging time' and 'discharging time' events do not seem to provide useful information."
+            Set piColumnSpan to 0
+        End_Object
+
+        Object oWebCheckbox1 is a cWebCheckbox
+            Set piColumnSpan to 3
+            Set psCaption to "Charging status"
+            Set pbServerOnChange to True
+
+            Procedure OnChange String sNewValue String sOldValue
+                WebSet pbServerOnChargingChange of oBatteryStatusAPI to (sNewValue = "1")
+            End_Procedure
+        End_Object
+
+        Object oWebCheckbox2 is a cWebCheckbox
+            Set piColumnSpan to 3
+            Set psCaption to "Level status"
+            Set pbServerOnChange to True
+            Set piColumnIndex to 3
+
+            Procedure OnChange String sNewValue String sOldValue
+                WebSet pbServerOnLevelChange of oBatteryStatusAPI to (sNewValue = "1")
+            End_Procedure
+        End_Object
+
+        Object oWebCheckbox3 is a cWebCheckbox
+            Set piColumnSpan to 3
+            Set psCaption to "Charging time status"
+            Set pbServerOnChange to True
+            Set piColumnIndex to 6
+
+            Procedure OnChange String sNewValue String sOldValue
+                WebSet pbServerOnChargingTimeChange of oBatteryStatusAPI to (sNewValue = "1")
+            End_Procedure
+        End_Object
+
+        Object oWebCheckbox4 is a cWebCheckbox
+            Set piColumnSpan to 3
+            Set psCaption to "Discharging time status"
+            Set pbServerOnChange to True
+            Set piColumnIndex to 9
+
+            Procedure OnChange String sNewValue String sOldValue
+                WebSet pbServerOnDischargingTimeChange of oBatteryStatusAPI to (sNewValue = "1")
+            End_Procedure
+        End_Object
+
+        Object oLogger is a cLogger
+        End_Object
+    End_Object
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+        
+        WebGet pbIsSupported of oBatteryStatusAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "BatteryStatus API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "BatteryStatus API is NOT supported (try on Chrome, Edge or Opera)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

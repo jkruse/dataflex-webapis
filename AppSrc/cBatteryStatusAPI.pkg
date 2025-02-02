@@ -1,0 +1,60 @@
+﻿Use cWebObject.pkg
+
+Class cBatteryStatusAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        
+        { WebProperty=Client }
+        Property Boolean pbServerOnChargingChange False
+        { WebProperty=Client }
+        Property String psClientOnChargingChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnLevelChange False
+        { WebProperty=Client }
+        Property String psClientOnLevelChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnChargingTimeChange False
+        { WebProperty=Client }
+        Property String psClientOnChargingTimeChange ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnDischargingTimeChange False
+        { WebProperty=Client }
+        Property String psClientOnDischargingTimeChange ""
+
+        Set psJSClass to "WebAPIs.BatteryStatus"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnChargingChange
+        WebPublishProcedure OnLevelChange
+        WebPublishProcedure OnChargingTimeChange
+        WebPublishProcedure OnDischargingTimeChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnChargingChange Boolean bCharging
+        // Reflects whether device is currently charging / connected to external power supply
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnLevelChange Number nLevel
+        // Reflects the current battery charge level from 0.0 to 1.0
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnChargingTimeChange Integer iRemainingSeconds
+        // Reflects time left to fully charged in seconds, or -1 if not charging
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnDischargingTimeChange Integer iRemainingSeconds
+        // Reflects time left to fully discharged in seconds, or -1 if not discharging
+    End_Procedure
+
+End_Class
