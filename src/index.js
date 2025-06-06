@@ -6,6 +6,7 @@ import CredentialManagement from './credential-management';
 import EyeDropper from './eye-dropper';
 import Fullscreen from './fullscreen';
 import { DisplayMediaStream, UserMediaStream } from './mediastream';
+import MediaStreamImageCapture from './mediastream-image-capture';
 import MediaStreamRecording from './mediastream-recording';
 import NetworkInformation from './network-information';
 import Notifications from './notifications';
@@ -43,6 +44,7 @@ global.WebAPIs = {
     LinearAccelerationSensor,
     LocalStorage,
     MagnetometerSensor,
+    MediaStreamImageCapture,
     MediaStreamRecording,
     NetworkInformation,
     Notifications,

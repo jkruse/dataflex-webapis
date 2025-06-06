@@ -11,13 +11,6 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebCheckbox</className>
-			<image>cWebCheckbox.ico</image>
-			<package>cWebCheckBox.pkg</package>
-			<groupName>Web Data Entry</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
 			<className>cWebColorForm</className>
 			<image>cWebColorForm.ico</image>
 			<package>cWebColorForm.pkg</package>
@@ -29,6 +22,160 @@
 			<image>cWebColorPicker.ico</image>
 			<package>cWebColorPicker.pkg</package>
 			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebDrawing</className>
+			<image>cWebDrawing.ico</image>
+			<package>cWebDrawing.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebFileUploadButton</className>
+			<image>cWebFileUploadButton.ico</image>
+			<package>cWebFileUploadButton.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebFileUploadForm</className>
+			<image>cWebFileUploadForm.ico</image>
+			<package>cWebFileUploadForm.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebHorizontalLine</className>
+			<image>cWebHorizontalLine.ico</image>
+			<package>cWebHorizontalLine.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebHtmlBox</className>
+			<image>cWebHtmlBox.ico</image>
+			<package>cWebHtmlBox.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebIFrame</className>
+			<image>cWebIFrame.ico</image>
+			<package>cWebIFrame.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebImage</className>
+			<image>cWebImage.ico</image>
+			<package>cWebImage.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebLabel</className>
+			<image>cWebLabel.ico</image>
+			<package>cWebLabel.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebProgressBar</className>
+			<image>cWebProgressBar.ico</image>
+			<package>cWebProgressBar.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebSpacer</className>
+			<image>cWebSpacer.ico</image>
+			<package>cWebSpacer.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebTreeView</className>
+			<image>cWebTreeView.ico</image>
+			<package>cWebTreeView.pkg</package>
+			<groupName>Web Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebCheckbox</className>
+			<image>cWebCheckbox.ico</image>
+			<package>cWebCheckBox.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebCombo</className>
+			<image>cWebCombo.ico</image>
+			<package>cWebCombo.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebDateForm</className>
+			<image>cWebDateForm.ico</image>
+			<package>cWebDateForm.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebDatePicker</className>
+			<image>cWebDatePicker.ico</image>
+			<package>cWebDatePicker.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebEdit</className>
+			<image>cWebEdit.ico</image>
+			<package>cWebEdit.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebForm</className>
+			<image>cWebForm.ico</image>
+			<package>cWebForm.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebParentCombo</className>
+			<image>cWebParentCombo.ico</image>
+			<package>cWebParentCombo.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebRadio</className>
+			<image>cWebRadio.ico</image>
+			<package>cWebRadio.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebSlider</className>
+			<image>cWebSlider.ico</image>
+			<package>cWebSlider.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebSuggestionForm</className>
+			<image>cWebSuggestionForm.ico</image>
+			<package>cWebSuggestionForm.pkg</package>
+			<groupName>Web Data Entry</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebTagsForm</className>
+			<image>cWebTagsForm.ico</image>
+			<package>cWebTagsForm.pkg</package>
+			<groupName>Web Data Entry</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
@@ -81,6 +228,13 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
+			<className>cWebColumnSelectionIndicator</className>
+			<image>cWebColumnSelectionIndicator.ico</image>
+			<package>cWebColumnSelectionIndicator.pkg</package>
+			<groupName>Web Lists &amp;&amp; Grids</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
 			<className>cWebColumnSuggestion</className>
 			<image>cWebColumnSuggestion.ico</image>
 			<package>cWebColumnSuggestion.pkg</package>
@@ -88,66 +242,10 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebCombo</className>
-			<image>cWebCombo.ico</image>
-			<package>cWebCombo.pkg</package>
-			<groupName>Web Data Entry</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebCommandBar</className>
-			<image>cWebCommandBar.ico</image>
-			<package>cWebCommandbar.pkg</package>
-			<groupName>Web Menu System</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebDateForm</className>
-			<image>cWebDateForm.ico</image>
-			<package>cWebDateForm.pkg</package>
-			<groupName>Web Data Entry</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebDatePicker</className>
-			<image>cWebDatePicker.ico</image>
-			<package>cWebDatePicker.pkg</package>
-			<groupName>Web Data Entry</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebEdit</className>
-			<image>cWebEdit.ico</image>
-			<package>cWebEdit.pkg</package>
-			<groupName>Web Data Entry</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebFileUploadForm</className>
-			<image>cWebFileUploadForm.ico</image>
-			<package>cWebFileUploadForm.pkg</package>
-			<groupName>Web Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebFileUploadButton</className>
-			<image>cWebFileUploadButton.ico</image>
-			<package>cWebFileUploadButton.pkg</package>
-			<groupName>Web Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebForm</className>
-			<image>cWebForm.ico</image>
-			<package>cWebForm.pkg</package>
-			<groupName>Web Data Entry</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebGeoLocation</className>
-			<image>cWebGeoLocation.ico</image>
-			<package>cWebGeoLocation.pkg</package>
-			<groupName>Others</groupName>
+			<className>cWebColumnTags</className>
+			<image>cWebColumnTags.ico</image>
+			<package>cWebColumnTags.pkg</package>
+			<groupName>Web Lists &amp;&amp; Grids</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
@@ -158,45 +256,10 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebHtmlBox</className>
-			<image>cWebHtmlBox.ico</image>
-			<package>cWebHtmlBox.pkg</package>
-			<groupName>Web Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
 			<className>cWebHtmlList</className>
 			<image>cWebHtmlList.ico</image>
 			<package>cWebHtmlList.pkg</package>
 			<groupName>Web Lists &amp;&amp; Grids</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebHorizontalLine</className>
-			<image>cWebHorizontalLine.ico</image>
-			<package>cWebHorizontalLine.pkg</package>
-			<groupName>Web Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebIFrame</className>
-			<image>cWebIFrame.ico</image>
-			<package>cWebIFrame.pkg</package>
-			<groupName>Web Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebImage</className>
-			<image>cWebImage.ico</image>
-			<package>cWebImage.pkg</package>
-			<groupName>Web Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebLabel</className>
-			<image>cWebLabel.ico</image>
-			<package>cWebLabel.pkg</package>
-			<groupName>Web Controls</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
@@ -211,6 +274,34 @@
 			<image>cWebListSwipeButton.ico</image>
 			<package>cWebListSwipeButton.pkg</package>
 			<groupName>Web Lists &amp;&amp; Grids</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebMultiSelectList</className>
+			<image>cWebMultiSelectList.ico</image>
+			<package>cWebMultiSelectList.pkg</package>
+			<groupName>Web Lists &amp;&amp; Grids</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebPromptList</className>
+			<image>cWebList.ico</image>
+			<package>cWebPromptList.pkg</package>
+			<groupName>Web Lists &amp;&amp; Grids</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebCommandBar</className>
+			<image>cWebCommandBar.ico</image>
+			<package>cWebCommandbar.pkg</package>
+			<groupName>Web Menu System</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebContextMenu</className>
+			<image>cWebContextMenu.ico</image>
+			<package>cWebContextMenu.pkg</package>
+			<groupName>Web Menu System</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
@@ -235,6 +326,13 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
+			<className>cWebMenuItemCheckbox</className>
+			<image>cWebMenuItemCheckbox.ico</image>
+			<package>cWebMenuItemCheckbox.pkg</package>
+			<groupName>Web Menu System</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
 			<className>cWebMenuItemLoadView</className>
 			<image>cWebMenuItem.ico</image>
 			<package>cWebMenuItemLoadView.pkg</package>
@@ -249,66 +347,136 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebObject</className>
-			<image>cWebObject.ico</image>
-			<package>cWebObject.pkg</package>
+			<className>cWebToolbar</className>
+			<image>cWebToolbar.ico</image>
+			<package>cWebToolbar.pkg</package>
+			<groupName>Web Menu System</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>Array</className>
+			<image>ControlArray.ico</image>
+			<package>VdfBase.pkg</package>
 			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebParentCombo</className>
-			<image>cWebParentCombo.ico</image>
-			<package>cWebParentCombo.pkg</package>
-			<groupName>Web Data Entry</groupName>
+			<className>BusinessProcess</className>
+			<image>ControlBusinessProcess.ico</image>
+			<package>BatchDD.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebProgressBar</className>
-			<image>cWebProgressBar.ico</image>
-			<package>cWebProgressBar.pkg</package>
-			<groupName>Web Controls</groupName>
+			<className>cApplication</className>
+			<image>ControlApplication.ico</image>
+			<package>cApplication.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebPromptList</className>
-			<image>cWebList.ico</image>
-			<package>cWebPromptList.pkg</package>
-			<groupName>Web Lists &amp;&amp; Grids</groupName>
+			<className>cCharTranslate</className>
+			<image>ControlCharTranslate.ico</image>
+			<package>cCharTranslate.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebRadio</className>
-			<image>cWebRadio.ico</image>
-			<package>cWebRadio.pkg</package>
-			<groupName>Web Data Entry</groupName>
+			<className>cCJSkinFramework</className>
+			<image>ControlCJSkinFramework.ico</image>
+			<package>cCJSkinFramework.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebSlider</className>
-			<image>cWebSlider.ico</image>
-			<package>cWebSlider.pkg</package>
-			<groupName>Web Data Entry</groupName>
+			<className>cConnection</className>
+			<image>ControlConnection.ico</image>
+			<package>cConnection.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebSpacer</className>
-			<image>cWebSpacer.ico</image>
-			<package>cWebSpacer.pkg</package>
-			<groupName>Web Controls</groupName>
+			<className>cHtmlHelp</className>
+			<image>ControlHtmlHelp.ico</image>
+			<package>cHtmlHelp.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebSuggestionForm</className>
-			<image>cWebSuggestionForm.ico</image>
-			<package>cWebSuggestionForm.pkg</package>
-			<groupName>Web Data Entry</groupName>
+			<className>cIdleHandler</className>
+			<image>ControlIdleHandler.ico</image>
+			<package>Windows.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebTagsForm</className>
-			<image>cWebTagsForm.ico</image>
-			<package>cWebTagsForm.pkg</package>
-			<groupName>Web Data Entry</groupName>
+			<className>cImageList32</className>
+			<image>ControlImageList.ico</image>
+			<package>cImageList32.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cIniFile</className>
+			<image>ControlIniFile.ico</image>
+			<package>cIniFile.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cObject</className>
+			<image>ControlObject.ico</image>
+			<package>VdfBase.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cSeqFileHelper</className>
+			<image>ControlSeqFileHelper.ico</image>
+			<package>cSeqFileHelper.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cTimer</className>
+			<image>ControlDfTimer.ico</image>
+			<package>cTimer.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cToolTipController</className>
+			<image>ControlToolTip.ico</image>
+			<package>cToolTipController.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebDragDropFileHelper</className>
+			<image>cWebDragDropFileHelper.ico</image>
+			<package>cWebDragDropFileHelper.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebDragDropHelper</className>
+			<image>cWebDragDropHelper.ico</image>
+			<package>cWebDragDropHelper.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebGeoLocation</className>
+			<image>cWebGeoLocation.ico</image>
+			<package>cWebGeoLocation.pkg</package>
+			<groupName>Others</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebObject</className>
+			<image>cWebObject.ico</image>
+			<package>cWebObject.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
@@ -319,30 +487,30 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebToolbar</className>
-			<image>cWebToolbar.ico</image>
-			<package>cWebToolbar.pkg</package>
-			<groupName>Web Menu System</groupName>
+			<className>cWinReport2</className>
+			<image>ControlWinReport.ico</image>
+			<package>cWinReport2.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebTreeView</className>
-			<image>cWebTreeView.ico</image>
-			<package>cWebTreeView.pkg</package>
-			<groupName>Web Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWebAccordionContainer</className>
-			<image>cWebAccordionContainer.ico</image>
-			<package>cWebAccordionContainer.pkg</package>
-			<groupName>Web Containers</groupName>
+			<className>Set</className>
+			<image>ControlSet.ico</image>
+			<package>Set.pkg</package>
+			<groupName>Others</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
 			<className>cWebAccordionCard</className>
 			<image>cWebAccordionCard.ico</image>
 			<package>cWebAccordionCard.pkg</package>
+			<groupName>Web Containers</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebAccordionContainer</className>
+			<image>cWebAccordionContainer.ico</image>
+			<package>cWebAccordionContainer.pkg</package>
 			<groupName>Web Containers</groupName>
 			<libraryID>0</libraryID>
 		</class>
@@ -438,20 +606,6 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cSplitButton</className>
-			<image>ControlSplitButton.ico</image>
-			<package>cSplitButton.pkg</package>
-			<groupName>Base Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cCommandLinkButton</className>
-			<image>ControlCommandLinkButton.ico</image>
-			<package>cCommandLinkButton.pkg</package>
-			<groupName>Base Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
 			<className>cAnimation</className>
 			<image>ControlAnimation.ico</image>
 			<package>cAnimation.pkg</package>
@@ -483,6 +637,13 @@
 			<className>cCJGridPromptList</className>
 			<image>ControlList.ico</image>
 			<package>cCJGridPromptList.pkg</package>
+			<groupName>Base Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cCommandLinkButton</className>
+			<image>ControlCommandLinkButton.ico</image>
+			<package>cCommandLinkButton.pkg</package>
 			<groupName>Base Controls</groupName>
 			<libraryID>0</libraryID>
 		</class>
@@ -522,9 +683,30 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
+			<className>cSplitButton</className>
+			<image>ControlSplitButton.ico</image>
+			<package>cSplitButton.pkg</package>
+			<groupName>Base Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cTagsForm</className>
+			<image>cTagsForm.ico</image>
+			<package>cTagsForm.pkg</package>
+			<groupName>Base Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
 			<className>cTextEdit</className>
 			<image>ControlTextEdit.ico</image>
 			<package>cTextEdit.pkg</package>
+			<groupName>Base Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cWebView2Browser</className>
+			<image>cWebView2Browser.ico</image>
+			<package>cWebView2Browser.pkg</package>
 			<groupName>Base Controls</groupName>
 			<libraryID>0</libraryID>
 		</class>
@@ -578,6 +760,20 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
+			<className>cLocalWebAppHost</className>
+			<image>cLocalWebAppHost.ico</image>
+			<package>cLocalWebAppHost.pkg</package>
+			<groupName>Base Containers</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cLocalWebControlHost</className>
+			<image>cLocalWebControlHost.ico</image>
+			<package>cLocalWebControlHost.pkg</package>
+			<groupName>Base Containers</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
 			<className>Container3D</className>
 			<image>ControlContainer3D.ico</image>
 			<package>Windows.pkg</package>
@@ -620,6 +816,13 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
+			<className>ReportView</className>
+			<image>ControlView.ico</image>
+			<package>DFRptVw.pkg</package>
+			<groupName>Base Containers</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
 			<className>TabDialog</className>
 			<image>ControlTabDialog.ico</image>
 			<package>Windows.pkg</package>
@@ -637,13 +840,6 @@
 			<className>View</className>
 			<image>ControlView.ico</image>
 			<package>Dfadlg.pkg</package>
-			<groupName>Base Containers</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>ReportView</className>
-			<image>ControlView.ico</image>
-			<package>DFRptVw.pkg</package>
 			<groupName>Base Containers</groupName>
 			<libraryID>0</libraryID>
 		</class>
@@ -683,6 +879,13 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
+			<className>cDBTagsForm</className>
+			<image>cDBTagsForm.ico</image>
+			<package>cDBTagsForm.pkg</package>
+			<groupName>Data Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
 			<className>cDbTextEdit</className>
 			<image>ControldbTextEdit.ico</image>
 			<package>cDbTextEdit.pkg</package>
@@ -718,13 +921,6 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>dbSuggestionForm</className>
-			<image>ControlDbSuggestionForm.ico</image>
-			<package>dbSuggestionForm.pkg</package>
-			<groupName>Data Controls</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
 			<className>dbParentCombo</className>
 			<image>ControldbComboForm.ico</image>
 			<package>dbParentCombo.pkg</package>
@@ -739,10 +935,24 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
+			<className>dbSuggestionForm</className>
+			<image>ControlDbSuggestionForm.ico</image>
+			<package>dbSuggestionForm.pkg</package>
+			<groupName>Data Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
 			<className>dbTrackbar</className>
 			<image>ControldbTrackbar.ico</image>
 			<package>dbTrckBr.pkg</package>
 			<groupName>Data Controls</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
+			<className>cDbLocalWebControlHost</className>
+			<image>cDbLocalWebControlHost.ico</image>
+			<package>cDbLocalWebControlHost.pkg</package>
+			<groupName>Data Containers</groupName>
 			<libraryID>0</libraryID>
 		</class>
 		<class>
@@ -816,6 +1026,13 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
+			<className>cSelectFolderDialog</className>
+			<image>ControlOpenDialog.ico</image>
+			<package>cSelectFolderDialog.pkg</package>
+			<groupName>Dialogs</groupName>
+			<libraryID>0</libraryID>
+		</class>
+		<class>
 			<className>FontDialog</className>
 			<image>ControlFontDialog.ico</image>
 			<package>Font_dlg.pkg</package>
@@ -826,13 +1043,6 @@
 			<className>OpenDialog</className>
 			<image>ControlOpenDialog.ico</image>
 			<package>File_dlg.pkg</package>
-			<groupName>Dialogs</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cSelectFolderDialog</className>
-			<image>ControlOpenDialog.ico</image>
-			<package>cSelectFolderDialog.pkg</package>
 			<groupName>Dialogs</groupName>
 			<libraryID>0</libraryID>
 		</class>
@@ -872,118 +1082,6 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>Array</className>
-			<image>ControlArray.ico</image>
-			<package>VdfBase.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>BusinessProcess</className>
-			<image>ControlBusinessProcess.ico</image>
-			<package>BatchDD.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cApplication</className>
-			<image>ControlApplication.ico</image>
-			<package>cApplication.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cConnection</className>
-			<image>ControlConnection.ico</image>
-			<package>cConnection.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cCharTranslate</className>
-			<image>ControlCharTranslate.ico</image>
-			<package>cCharTranslate.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cCJSkinFramework</className>
-			<image>ControlCJSkinFramework.ico</image>
-			<package>cCJSkinFramework.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cHtmlHelp</className>
-			<image>ControlHtmlHelp.ico</image>
-			<package>cHtmlHelp.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cIdleHandler</className>
-			<image>ControlIdleHandler.ico</image>
-			<package>Windows.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cImageList32</className>
-			<image>ControlImageList.ico</image>
-			<package>cImageList32.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cIniFile</className>
-			<image>ControlIniFile.ico</image>
-			<package>cIniFile.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cObject</className>
-			<image>ControlObject.ico</image>
-			<package>VdfBase.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cSeqFileHelper</className>
-			<image>ControlSeqFileHelper.ico</image>
-			<package>cSeqFileHelper.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cTimer</className>
-			<image>ControlDfTimer.ico</image>
-			<package>cTimer.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cToolTipController</className>
-			<image>ControlToolTip.ico</image>
-			<package>cToolTipController.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>cWinReport2</className>
-			<image>ControlWinReport.ico</image>
-			<package>cWinReport2.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
-			<className>Set</className>
-			<image>ControlSet.ico</image>
-			<package>Set.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
-		</class>
-		<class>
 			<className>cCJContextMenu</className>
 			<image>ControlCJContextMenu.ico</image>
 			<package>cCJCommandBarSystem.pkg</package>
@@ -1019,102 +1117,172 @@
 			<libraryID>0</libraryID>
 		</class>
 		<class>
-			<className>cWebContextMenu</className>
-			<image>cWebContextMenu.ico</image>
-			<package>cWebContextMenu.pkg</package>
-			<groupName>Web Menu System</groupName>
-			<libraryID>0</libraryID>
+			<className>cAbsoluteOrientationSensorAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cSensorAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cWebDragDropHelper</className>
-			<image>cWebDragDropHelper.ico</image>
-			<package>cWebDragDropHelper.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
+			<className>cAccelerometerSensorAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cSensorAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cWebDragDropFileHelper</className>
-			<image>cWebDragDropFileHelper.ico</image>
-			<package>cWebDragDropFileHelper.pkg</package>
-			<groupName>Others</groupName>
-			<libraryID>0</libraryID>
+			<className>cAmbientLightSensorAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cSensorAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cWebMenuItemCheckbox</className>
-			<image>cWebMenuItemCheckbox.ico</image>
-			<package>cWebMenuItemCheckbox.pkg</package>
-			<groupName>Web Menu System</groupName>
-			<libraryID>0</libraryID>
+			<className>cBatteryStatusAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cBatteryStatusAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cWebView2Browser</className>
-			<image>cWebView2Browser.ico</image>
-			<package>cWebView2Browser.pkg</package>
-			<groupName>Base Controls</groupName>
-			<libraryID>0</libraryID>
+			<className>cBroadcastChannelAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cBroadcastChannelAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cDBTagsForm</className>
-			<image>cDBTagsForm.ico</image>
-			<package>cDBTagsForm.pkg</package>
-			<groupName>Data Controls</groupName>
-			<libraryID>0</libraryID>
+			<className>cClipboardAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cClipboardAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cTagsForm</className>
-			<image>cTagsForm.ico</image>
-			<package>cTagsForm.pkg</package>
-			<groupName>Base Controls</groupName>
-			<libraryID>0</libraryID>
+			<className>cContactPickerAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cContactPickerAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cWebColumnTags</className>
-			<image>cWebColumnTags.ico</image>
-			<package>cWebColumnTags.pkg</package>
-			<groupName>Web Lists &amp;&amp; Grids</groupName>
-			<libraryID>0</libraryID>
+			<className>cCredentialManagementAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cCredentialManagementAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cWebColumnSelectionIndicator</className>
-			<image>cWebColumnSelectionIndicator.ico</image>
-			<package>cWebColumnSelectionIndicator.pkg</package>
-			<groupName>Web Lists &amp;&amp; Grids</groupName>
-			<libraryID>0</libraryID>
+			<className>cDisplayMediaStreamAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cMediaStreamAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cWebMultiSelectList</className>
-			<image>cWebMultiSelectList.ico</image>
-			<package>cWebMultiSelectList.pkg</package>
-			<groupName>Web Lists &amp;&amp; Grids</groupName>
-			<libraryID>0</libraryID>
+			<className>cEyeDropperAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cEyeDropperAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cLocalWebAppHost</className>
-			<image>cLocalWebAppHost.ico</image>
-			<package>cLocalWebAppHost.pkg</package>
-			<groupName>Base Containers</groupName>
-			<libraryID>0</libraryID>
+			<className>cFullscreenAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cFullscreenAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cLocalWebControlHost</className>
-			<image>cLocalWebControlHost.ico</image>
-			<package>cLocalWebControlHost.pkg</package>
-			<groupName>Base Containers</groupName>
-			<libraryID>0</libraryID>
+			<className>cGravitySensorAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cSensorAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cDbLocalWebControlHost</className>
-			<image>cDbLocalWebControlHost.ico</image>
-			<package>cDbLocalWebControlHost.pkg</package>
-			<groupName>Data Containers</groupName>
-			<libraryID>0</libraryID>
+			<className>cGyroscopeSensorAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cSensorAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 		<class>
-			<className>cWebDrawing</className>
-			<image>cWebDrawing.ico</image>
-			<package>cWebDrawing.pkg</package>
-			<groupName>Web Controls</groupName>
-			<libraryID>0</libraryID>
+			<className>cLinearAccelerationSensorAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cSensorAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cLocalStorageAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cWebStorageAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cMagnetometerSensorAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cSensorAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cMediaStreamImageCaptureAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cMediaStreamImageCaptureAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cMediaStreamRecordingAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cMediaStreamRecordingAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cNetworkInformationAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cNetworkInformationAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cNotificationsAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cNotificationsAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cPageVisibilityAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cPageVisibilityAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cRelativeOrientationSensorAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cSensorAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cScreenOrientationAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cScreenOrientationAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cScreenWakeLockAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cScreenWakeLockAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cSessionStorageAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cWebStorageAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cUserMediaStreamAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cMediaStreamAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cVibrationAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cVibrationAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
+		</class>
+		<class>
+			<className>cWebShareAPI</className>
+			<image>cWebObject.ico</image>
+			<package>cWebShareAPI.pkg</package>
+			<groupName>WebAPIs</groupName><libraryID></libraryID>
 		</class>
 	</classes>
 </classList>

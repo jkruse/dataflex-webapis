@@ -1,0 +1,142 @@
+﻿Use cWebView.pkg
+Use cWebPanel.pkg
+Use cWebLabel.pkg
+Use cWebHtmlBox.pkg
+Use cLogger.pkg
+
+Use cMediaStreamImageCaptureAPI.pkg
+Use cMediaStreamAPI.pkg
+Use cWebImage.pkg
+Use cWebButton.pkg
+
+Object oMediaStreamImageCaptureDemo is a cWebView
+    Set peWebViewStyle to wvsDrillDown
+    Set peViewType to vtUndefined
+    Set pbShowCaption to False
+    
+    Set psCaption to "MediaStream Image Capture Demo"
+
+    Set piMaxWidth to 1024
+    Set piColumnCount to 6
+    Set pbServerOnShow to True
+
+    Object oMediaStreamImageCaptureAPI is a cMediaStreamImageCaptureAPI
+        Set pbWithDimension to True // to include width/height in OnPhoto event
+        Set pbServerOnConnect to True
+        Set pbServerOnDisconnect to True
+        Set pbServerOnError to True
+        Set pbServerOnPhoto to True
+        
+        // This can be any cMediaStream object with a video track
+        Object oUserMediaStreamAPI is a cUserMediaStreamAPI
+            Set pbVideo to True
+            Set peFacingMode to MSAPI_FACING_MODE_ENVIRONMENT
+        End_Object
+
+        Procedure OnConnect tMediaStreamTrackInfo stInfo
+            Send Log of oLogger (SFormat("Connected to camera"))
+            WebSet pbEnabled of oBtnConnect to False
+            WebSet pbEnabled of oBtnTakePhoto to True
+            WebSet pbEnabled of oBtnDisconnect to True
+        End_Procedure
+
+        Procedure OnDisconnect
+            Send Log of oLogger "Disconnected"
+            WebSet pbEnabled of oBtnConnect to True
+            WebSet pbEnabled of oBtnTakePhoto to False
+            WebSet pbEnabled of oBtnDisconnect to False
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
+        End_Procedure
+
+        // ucData and sDataURL both contain the image, in different formats
+        Procedure OnPhoto String sMimeType UChar[] ucData String sDataURL Integer iWidth Integer iHeight
+            Send Log of oLogger (SFormat("Received %1 bytes, mime: %2, width: %3, height: %4", SizeOfArray(ucData), sMimeType, iWidth, iHeight))
+            WebSet psURL of oWebImage to sDataURL
+        End_Procedure
+    End_Object
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+        WebSetResponsive piColumnCount rmMobile to 6
+
+        Object oWebLabel is a cWebLabel
+            Set piColumnSpan to 0
+            Set psCaption to "Supported?"
+        End_Object
+
+        Object oWebHtmlBox is a cWebHtmlBox
+            Set piColumnSpan to 0
+            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Image_Capture_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+        End_Object
+
+        Object oWebLabel2 is a cWebLabel
+            Set piColumnSpan to 0
+            Set psCaption to "The MediaStream Image Capture API lets you capture images from a photographic device."
+        End_Object
+
+        Object oVideo is a cWebHtmlBox
+            Set piColumnIndex to 0
+            Set piColumnSpan to 6
+            Set psHtml to '<video style="width: 100%" id="my-video-element"></video>'
+        End_Object
+
+        Object oWebImage is a cWebImage
+            Set piColumnIndex to 6
+            Set piColumnSpan to 6
+            Set pePosition to wiFit
+        End_Object
+
+        Object oBtnConnect is a cWebButton
+            Set piColumnSpan to 2
+            Set psCaption to "Connect"
+        
+            Procedure OnClick
+                Send Connect of oMediaStreamImageCaptureAPI "my-video-element"
+            End_Procedure
+        End_Object
+
+        Object oBtnTakePhoto is a cWebButton
+            Set piColumnIndex to 2
+            Set piColumnSpan to 2
+            Set psCaption to "Take photo"
+            Set pbEnabled to False
+        
+            Procedure OnClick
+                Send TakePhoto of oMediaStreamImageCaptureAPI
+            End_Procedure
+        End_Object
+        
+        Object oBtnDisconnect is a cWebButton
+            Set piColumnSpan to 2
+            Set piColumnIndex to 4
+            Set psCaption to "Disconnect"
+            Set pbEnabled to False
+            
+            Procedure OnClick
+                Send Disconnect of oMediaStreamImageCaptureAPI
+            End_Procedure
+        End_Object
+
+        Object oLogger is a cLogger
+        End_Object
+    End_Object
+
+    Procedure OnShow
+        Boolean bIsSupported
+        
+        Forward Send OnShow
+        
+        WebGet pbIsSupported of oMediaStreamImageCaptureAPI to bIsSupported
+        If (bIsSupported) Begin
+            WebSet psCaption of oWebLabel to "MediaStream Image Capture API is supported"
+            WebSet psTextColor of oWebLabel to "green"
+        End
+        Else Begin
+            WebSet psCaption of oWebLabel to "MediaStream Image Capture API is NOT supported (try on anything but Firefox)"
+            WebSet psTextColor of oWebLabel to "red"
+        End
+    End_Procedure
+End_Object

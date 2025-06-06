@@ -11,6 +11,7 @@ Contains DataFlex implementations of:
 * [Credential Management API](https://developer.mozilla.org/en-US/docs/Web/API/Credential_Management_API)
 * [EyeDropper API](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API)
 * [Fullscreen API](https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API)
+* [MediaStream Image Capture API](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Image_Capture_API)
 * [MediaStream Recording API](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API)
 * [Network Information API](https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API)
 * [Notifications API](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API)

@@ -147,6 +147,24 @@ Object oDashboard is a cWebView
                 End_Procedure
             End_Object
             
+            Object oTileMediaStreamImageCapture is a cWebHtmlBox
+                Set pbServerOnClick to True
+                Set psCSSClass to "Tile"
+                Set psHtml to """
+                    <div class="WebCon_Sizer" data-ServerOnClick="openview">
+                        <div Class="Tile_Title">MediaStream Image Capture API</div>
+                        <div class="Tile_Subtitle">capture images from photographic device</div>
+                        <span class="material-icons-outlined">https</span>
+                    </div>
+                    """
+                                
+                WebRegisterPath ntNavigateForward oMediaStreamImageCaptureDemo
+                
+                Procedure OnClick
+                    Send NavigatePath
+                End_Procedure
+            End_Object
+        
             Object oTileMediaStreamRecording is a cWebHtmlBox
                 Set pbServerOnClick to True
                 Set psCSSClass to "Tile"

@@ -10,6 +10,36 @@ Struct tInputDeviceInfo
     String label
 End_Struct
 
+Struct tMediaTrackSettings
+    String deviceId
+    String groupId
+    
+    String autoGainControl
+    String channelCount
+    String echoCancellation
+    String latency
+    String noiseSuppression
+    String sampleRate
+    String sampleSize
+    
+    String aspectRatio
+    String facingMode
+    String frameRate
+    String height
+    String width
+    String resizeMode
+    
+    String cursor
+    String displaySurface
+    String logicalSurface
+End_Struct
+
+Struct tMediaStreamTrackInfo
+    String kind
+    String label
+    tMediaTrackSettings settings
+End_Struct
+
 Define MSAPI_DEFAULT for -1
 
 Enum_List

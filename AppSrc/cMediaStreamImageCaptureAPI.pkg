@@ -1,0 +1,134 @@
+﻿Use cWebObject.pkg
+Use cMediaStreamAPI.pkg
+
+Class cMediaStreamImageCaptureAPI is a cWebObject
+    
+    Procedure Construct_Object
+        Forward Send Construct_Object
+
+        { WebProperty=Client DesignTime=False }
+        Property Boolean pbIsSupported False
+        { WebProperty=Client Visibility=Private }
+        Property String psMediaStream
+        { WebProperty=Client Description="Set to True to include width and height in OnPhoto event" }
+        Property Boolean pbWithDimension False
+
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnConnect False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnConnect ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnDisconnect False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnDisconnect ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnError ""
+        { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnPhoto False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnPhoto ""
+        
+        Object oCharTranslate is a cCharTranslate
+        End_Object
+
+        Set psJSClass to "WebAPIs.MediaStreamImageCapture"
+    End_Procedure
+
+    Procedure End_Construct_Object
+        Forward Send End_Construct_Object
+
+        WebPublishProcedure OnConnectProxy
+        WebPublishProcedure OnDisconnect
+        WebPublishProcedure OnError
+        WebPublishProcedure OnPhotoProxy
+    End_Procedure
+    
+    { Visibility=Private }
+    Function SerializeObject Returns tWebObjectDef
+        Handle hoStream
+        String sMediaStreamName
+        tWebObjectDef tResult
+        
+        If (Child_Count(Self) = 2) Begin
+            Get ChildByIndex 1 to hoStream
+            If (IsObjectOfClass(hoStream, RefClass(cMediaStream))) Begin
+                Get WebObjectName of hoStream to sMediaStreamName
+                Set psMediaStream to sMediaStreamName
+            End
+        End
+        
+        Forward Get SerializeObject to tResult
+        
+        Function_Return tResult
+    End_Function
+
+    // Connect to the media stream to prepare for image capture
+    // If you pass the id of a <video> element, the stream will start playing on that element
+    Procedure Connect String sOptionalElementId
+        String[] aParams
+        If (num_arguments > 0) Begin
+            Move sOptionalElementId to aParams[0]
+        End
+        Send ClientAction "connect" aParams
+    End_Procedure
+    
+    // Capture an image from the media stream, triggering OnPhoto with the result
+    Procedure TakePhoto
+        Send ClientAction "takePhoto"
+    End_Procedure
+
+    // Disconnect from the media stream and release any media device resources held
+    Procedure Disconnect
+        Send ClientAction "disconnect"
+    End_Procedure
+
+    { Visibility=Private }
+    Procedure OnConnectProxy
+        Handle hoJson
+        tMediaStreamTrackInfo stInfo
+
+        Get phoActionJsonData to hoJson
+        If (hoJson <> C_WebUnresolvedObject) Begin
+            If (IsOfJsonType(hoJson, jsonTypeObject)) Begin
+                Set pbRequireAllMembers of hoJson to False
+                Get JsonToDataType of hoJson to stInfo
+                Send OnConnect stInfo
+            End
+        End
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnConnect tMediaStreamTrackInfo stInfo
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnDisconnect
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
+    End_Procedure
+    
+    { Visibility=Private }
+    Procedure OnPhotoProxy String sDataURL Integer iWidth Integer iHeight
+        Integer iPos
+        String sMimeType
+        UChar[] ucBase64 ucBinary
+        
+        Move (Pos(";base64,", sDataURL, 1, 100)) to iPos
+        Move (Mid(sDataURL, iPos - 6, 6)) to sMimeType
+        Move (StringToUCharArray(Mid(sDataURL, Length(sDataURL), iPos + 8))) to ucBase64
+        Get Base64DecodeUCharArray of oCharTranslate ucBase64 to ucBinary
+        
+        Send OnPhoto sMimeType ucBinary sDataURL iWidth iHeight
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnPhoto String sMimeType UChar[] ucData String sDataURL Integer iWidth Integer iHeight
+        // Note that the client-side version of this event receives a single Blob argument instead
+        // iWidth and iHeight will be 0 unless pbWithDimension is True (will reduce performance)
+    End_Procedure
+
+End_Class

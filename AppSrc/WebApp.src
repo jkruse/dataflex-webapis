@@ -117,6 +117,15 @@ Object oWebApp is a cWebApp
                     End_Procedure
                 End_Object
 
+                Object oWebMenuItemMediaStreamImageCapture is a cWebMenuItem
+                    Set psCaption to "MediaStream Image Capture Demo"
+                    WebRegisterPath ntNavigateBegin oMediaStreamImageCaptureDemo
+                    
+                    Procedure OnClick
+                        Send NavigatePath
+                    End_Procedure
+                End_Object
+
                 Object oWebMenuItemMediaStreamRecording is a cWebMenuItem
                     Set psCaption to "MediaStream Recording Demo"
                     WebRegisterPath ntNavigateBegin oMediaStreamRecordingDemo
@@ -295,6 +304,7 @@ Object oWebApp is a cWebApp
     Use WebStorageDemo.wo
     Use MediaStreamRecordingDemo.wo
     Use BatteryStatusDemo.wo
+    Use MediaStreamImageCaptureDemo.wo
     Set phoDefaultView to oDashboard
 
 End_Object
