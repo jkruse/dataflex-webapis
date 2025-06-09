@@ -3,17 +3,71 @@
 Define MS_KIND_VIDEO for "videoinput"
 Define MS_KIND_AUDIO for "audioinput"
 
+Define MS_MODE_NONE for "none"
+Define MS_MODE_MANUAL for "manual"
+Define MS_MODE_SINGLE_SHOT for "single-shot"
+Define MS_MODE_CONTINUOUS for "continuous"
+
+Define MS_RESIZE_MODE_NONE for "none"
+Define MS_RESIZE_MODE_CROP_AND_SCALE for "crop-and-scale"
+
 Struct tInputDeviceInfo
     String deviceId
     String groupId
-    String kind // MS_KIND_VIDEO or MS_KIND_AUDIO
+    String kind // MS_KIND_*
     String label
+End_Struct
+
+Struct tMediaSettingsRange
+    Number min
+    Number max
+    Number step
+End_Struct
+
+Struct tMediaTrackCapabilities
+    String deviceId
+    String groupId
+    
+    // Audio
+    Boolean[]           autoGainControl
+    tMediaSettingsRange channelCount
+    Boolean[]           echoCancellation
+    tMediaSettingsRange latency
+    Boolean[]           noiseSuppression
+    tMediaSettingsRange sampleRate
+    tMediaSettingsRange sampleSize
+    Boolean[]           voiceIsolation
+    
+    // Video
+    tMediaSettingsRange aspectRatio
+    tMediaSettingsRange brightness
+    tMediaSettingsRange colorTemperature
+    tMediaSettingsRange contrast
+    tMediaSettingsRange exposureCompensation
+    String[]            exposureMode     // MS_MODE_*
+    tMediaSettingsRange exposureTime
+    String[]            facingMode
+    tMediaSettingsRange focusDistance
+    String[]            focusMode        // MS_MODE_*
+    tMediaSettingsRange frameRate
+    tMediaSettingsRange height
+    tMediaSettingsRange iso
+    tMediaSettingsRange pan
+    String[]            resizeMode       // MS_RESIZE_MODE_*
+    tMediaSettingsRange saturation
+    tMediaSettingsRange sharpness
+    tMediaSettingsRange tilt
+    Boolean             torch
+    String[]            whiteBalanceMode // MS_MODE_*
+    tMediaSettingsRange width
+    tMediaSettingsRange zoom
 End_Struct
 
 Struct tMediaTrackSettings
     String deviceId
     String groupId
     
+    // Audio
     String autoGainControl
     String channelCount
     String echoCancellation
@@ -21,14 +75,33 @@ Struct tMediaTrackSettings
     String noiseSuppression
     String sampleRate
     String sampleSize
+    String voiceIsolation
     
+    // Video
     String aspectRatio
+    String brightness
+    String colorTemperature
+    String contrast
+    String exposureCompensation
+    String exposureMode
+    String exposureTime
     String facingMode
+    String focusDistance
+    String focusMode
     String frameRate
     String height
-    String width
+    String iso
+    String pan
     String resizeMode
+    String saturation
+    String sharpness
+    String tilt
+    String torch
+    String whiteBalanceMode
+    String width
+    String zoom
     
+    // Display
     String cursor
     String displaySurface
     String logicalSurface
@@ -37,6 +110,7 @@ End_Struct
 Struct tMediaStreamTrackInfo
     String kind
     String label
+    tMediaTrackCapabilities capabilities
     tMediaTrackSettings settings
 End_Struct
 
@@ -97,6 +171,8 @@ Class cUserMediaStreamAPI is a cMediaStream
         Property String psMicrophonePermission ""
         { WebProperty=Client DesignTime=False }
         Property String psCameraPermission ""
+        { WebProperty=Client DesignTime=False }
+        Property String psPanTiltZoomPermission ""
         
         // Set to True to include an audio stream
         { WebProperty=Client Category=Audio }
@@ -129,6 +205,9 @@ Class cUserMediaStreamAPI is a cMediaStream
         // Set to True to include a video stream
         { WebProperty=Client Category=Video }
         Property Boolean pbVideo False
+        // Set to True to enable pan/tilt/zoom features if available (will ask for extended permissions)
+        { WebProperty=Client Category=Video }
+        Property Boolean pbWithPanTiltZoom False
         // Set to a deviceId from OnEnumerateDevices to request a specific device
         { WebProperty=Client Category=Video }
         Property String psVideoDeviceId ""
@@ -160,6 +239,10 @@ Class cUserMediaStreamAPI is a cMediaStream
         { WebProperty=Client Category="Client events" }
         Property String psClientOnCameraPermissionChange ""
         { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnPanTiltZoomPermissionChange False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnPanTiltZoomPermissionChange ""
+        { WebProperty=Client Category="Server events" }
         Property Boolean pbServerOnEnumerateDevices False
         { WebProperty=Client Category="Client events" }
         Property String psClientOnEnumerateDevices ""
@@ -172,6 +255,7 @@ Class cUserMediaStreamAPI is a cMediaStream
 
         WebPublishProcedure OnMicrophonePermissionChange
         WebPublishProcedure OnCameraPermissionChange
+        WebPublishProcedure OnPanTiltZoomPermissionChange
         WebPublishProcedure OnEnumerateDevicesProxy
     End_Procedure
 
@@ -200,6 +284,10 @@ Class cUserMediaStreamAPI is a cMediaStream
     
     { MethodType=Event }
     Procedure OnCameraPermissionChange
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnPanTiltZoomPermissionChange
     End_Procedure
     
     { MethodType=Event }

@@ -2,12 +2,17 @@
 Use cWebPanel.pkg
 Use cWebLabel.pkg
 Use cWebHtmlBox.pkg
+Use cWebImage.pkg
+Use cWebButton.pkg
+Use cWebCombo.pkg
+Use cWebSlider.pkg
+Use cWebGroup.pkg
+Use cWebFloatingPanel.pkg
+Use cWebDynamicObjectContainer.pkg
 Use cLogger.pkg
 
 Use cMediaStreamImageCaptureAPI.pkg
 Use cMediaStreamAPI.pkg
-Use cWebImage.pkg
-Use cWebButton.pkg
 
 Object oMediaStreamImageCaptureDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown
@@ -20,6 +25,11 @@ Object oMediaStreamImageCaptureDemo is a cWebView
     Set piColumnCount to 6
     Set pbServerOnShow to True
 
+    { WebProperty=Server }
+    Property tMediaStreamImageCaptureInfo pstInfo // just a place to store device info
+    { WebProperty=Server }
+    Property Integer piImageCount 0 // and the number of images already captured
+
     Object oMediaStreamImageCaptureAPI is a cMediaStreamImageCaptureAPI
         Set pbWithDimension to True // to include width/height in OnPhoto event
         Set pbServerOnConnect to True
@@ -27,24 +37,37 @@ Object oMediaStreamImageCaptureDemo is a cWebView
         Set pbServerOnError to True
         Set pbServerOnPhoto to True
         
+        
         // This can be any cMediaStream object with a video track
         Object oUserMediaStreamAPI is a cUserMediaStreamAPI
             Set pbVideo to True
+            Set pbWithPanTiltZoom to True
             Set peFacingMode to MSAPI_FACING_MODE_ENVIRONMENT
         End_Object
-
-        Procedure OnConnect tMediaStreamTrackInfo stInfo
-            Send Log of oLogger (SFormat("Connected to camera"))
-            WebSet pbEnabled of oBtnConnect to False
-            WebSet pbEnabled of oBtnTakePhoto to True
-            WebSet pbEnabled of oBtnDisconnect to True
+        
+        Procedure OnConnect tMediaStreamImageCaptureInfo stInfo
+            tMediaStreamImageCaptureInfo stOldInfo
+            
+            Send Log of oLogger (SFormat("Connected to camera '%1'", stInfo.track.label))
+            
+            // Read and store device info, unless we're connecting to the same device as last time
+            WebGet pstInfo of oMediaStreamImageCaptureDemo to stOldInfo
+            If (stOldInfo.track.settings.deviceId <> stInfo.track.settings.deviceId) Begin
+                WebSet pstInfo of oMediaStreamImageCaptureDemo to stInfo
+                Send Refill of oWebComboFillLightMode
+                Send Refill of oWebComboRedEyeReduction
+                Send ReadCapabilities of oWebSliderWidth
+                Send ReadCapabilities of oWebSliderHeight
+                Send ReadCapabilities of oWebSliderZoom
+            End
+            
+            If (stInfo.track.settings.zoom <> "") Begin
+                WebSet piSliderValue of oWebSliderZoom to stInfo.track.settings.zoom
+            End
         End_Procedure
 
         Procedure OnDisconnect
             Send Log of oLogger "Disconnected"
-            WebSet pbEnabled of oBtnConnect to True
-            WebSet pbEnabled of oBtnTakePhoto to False
-            WebSet pbEnabled of oBtnDisconnect to False
         End_Procedure
 
         Procedure OnError String sErrorName String sErrorMessage
@@ -54,75 +77,316 @@ Object oMediaStreamImageCaptureDemo is a cWebView
         // ucData and sDataURL both contain the image, in different formats
         Procedure OnPhoto String sMimeType UChar[] ucData String sDataURL Integer iWidth Integer iHeight
             Send Log of oLogger (SFormat("Received %1 bytes, mime: %2, width: %3, height: %4", SizeOfArray(ucData), sMimeType, iWidth, iHeight))
-            WebSet psURL of oWebImage to sDataURL
+            
+            // For a quick display of a single image, we could use sDataURL, but for multiple large images, that'll perform very badly,
+            // so ShowImage will save the file (from ucData) instead and create a download URL for it
+            Send CloseCamera
+            Send ShowImage sMimeType ucData
         End_Procedure
     End_Object
 
     Object oWebMainPanel is a cWebPanel
-        Set piColumnCount to 12
-        WebSetResponsive piColumnCount rmMobile to 6
+        Object oWebGroup1 is a cWebGroup
+            Set psCaption to "Initial view"
+            Set piColumnCount to 1
+            Set pbFillHeight to True
+            Set pbShowBorder to False
+            Set pbShowCaption to False
+    
+            Object oWebLabel is a cWebLabel
+                Set psCaption to "Supported?"
+            End_Object
+    
+            Object oWebHtmlBox is a cWebHtmlBox
+                Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Image_Capture_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
+            End_Object
+    
+            Object oWebLabel2 is a cWebLabel
+                Set psCaption to "The MediaStream Image Capture API lets you capture images from a photographic device. Also see the MediaStream Recording API demo for options in selecting the input stream."
 
-        Object oWebLabel is a cWebLabel
-            Set piColumnSpan to 0
-            Set psCaption to "Supported?"
-        End_Object
-
-        Object oWebHtmlBox is a cWebHtmlBox
-            Set piColumnSpan to 0
-            Set psHtml to '<div class="as-label"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Image_Capture_API#browser_compatibility" target="_blank">See browser compatibility</a></div>'
-        End_Object
-
-        Object oWebLabel2 is a cWebLabel
-            Set piColumnSpan to 0
-            Set psCaption to "The MediaStream Image Capture API lets you capture images from a photographic device."
-        End_Object
-
-        Object oVideo is a cWebHtmlBox
-            Set piColumnIndex to 0
-            Set piColumnSpan to 6
-            Set psHtml to '<video style="width: 100%" id="my-video-element"></video>'
-        End_Object
-
-        Object oWebImage is a cWebImage
-            Set piColumnIndex to 6
-            Set piColumnSpan to 6
-            Set pePosition to wiFit
-        End_Object
-
-        Object oBtnConnect is a cWebButton
-            Set piColumnSpan to 2
-            Set psCaption to "Connect"
-        
-            Procedure OnClick
-                Send Connect of oMediaStreamImageCaptureAPI "my-video-element"
-            End_Procedure
-        End_Object
-
-        Object oBtnTakePhoto is a cWebButton
-            Set piColumnIndex to 2
-            Set piColumnSpan to 2
-            Set psCaption to "Take photo"
-            Set pbEnabled to False
-        
-            Procedure OnClick
-                Send TakePhoto of oMediaStreamImageCaptureAPI
-            End_Procedure
-        End_Object
-        
-        Object oBtnDisconnect is a cWebButton
-            Set piColumnSpan to 2
-            Set piColumnIndex to 4
-            Set psCaption to "Disconnect"
-            Set pbEnabled to False
+                // Add a warning on the default demo site
+                Procedure OnLoad
+                    String sHost sCaption
+                    Get ServerVariable of ghoWebApp "HTTP_HOST" to sHost
+                    If (sHost = "www.kruse-net.dk") Begin
+                        Get psCaption to sCaption
+                        Move (sCaption + " NOTE: Captured images are stored on the server, in a folder that is emptied every night. Do not capture images of sensitive information!") to sCaption
+                        Set psCaption to sCaption
+                    End
+                End_Procedure
+            End_Object
+    
+            Object oBtnCapture is a cWebButton
+                Set psCaption to "Capture image"
             
-            Procedure OnClick
-                Send Disconnect of oMediaStreamImageCaptureAPI
-            End_Procedure
+                Procedure OnClick
+                    Send OpenCamera
+                End_Procedure
+            End_Object
+
+            Object oWebDynamicObjectContainer1 is a cWebDynamicObjectContainer
+                Set peLayoutType to ltGrid
+                Set piColumnCount to 6
+                WebSetResponsive piColumnCount rmMobile to 3
+            End_Object
+    
+            Object oLogger is a cLogger
+            End_Object
         End_Object
 
-        Object oLogger is a cLogger
+        Object oWebGroup2 is a cWebGroup
+            Set psCaption to "Camera view"
+            Set piColumnCount to 12   
+            Set pbFillHeight to True
+            Set pbRender to False
+            Set pbShowBorder to False
+            Set pbShowCaption to False
+    
+            Object oVideo is a cWebHtmlBox
+                Set psHtml to '<video style="width: 100%" id="my-video-element"></video>'
+                Set pbFillHeight to True
+                Set piColumnSpan to 0
+            End_Object
+            
+            Object oWebSliderZoom is a cWebSlider
+                Set pbRender to False
+                Set pbShowMarkers to True
+                Set pbServerOnChange to True
+                Set psLabel to "Zoom"
+                Set peLabelPosition to lpTop
+
+                Procedure OnChange String sNewValue String sOldValue
+                    Send ApplyConstraint of oMediaStreamImageCaptureAPI "zoom" sNewValue
+                End_Procedure
+                
+                Procedure ReadCapabilities
+                    tMediaStreamImageCaptureInfo stInfo
+                    
+                    WebGet pstInfo of oMediaStreamImageCaptureDemo to stInfo
+                    If (stInfo.track.settings.zoom <> "") Begin
+                        WebSet pbRender to True
+                        WebSet piMinValue to stInfo.track.capabilities.zoom.min
+                        WebSet piMaxValue to stInfo.track.capabilities.zoom.max
+                        WebSet piInterval to (stInfo.track.capabilities.zoom.step max 1) // because the reported value may be 0.1 for instance, and the slider only supports integers
+                    End
+                    Else Begin
+                        WebSet pbRender to False
+                    End
+                End_Procedure
+            End_Object
+            
+            Object oBtnSettings is a cWebButton
+                Set piColumnSpan to 4
+                Set psCaption to "Settings"
+                
+                Procedure OnClick
+                    Send Show of oWebSettingsPanel
+                End_Procedure
+            End_Object
+    
+            Object oBtnTakePhoto is a cWebButton
+                Set piColumnIndex to 4
+                Set piColumnSpan to 4
+                Set psCaption to "Take photo"
+            
+                Procedure OnClick
+                    Integer eFillLightMode iImageHeight iImageWidth
+                    Boolean bRedEyeReduction
+                    
+                    WebGet psValue of oWebComboFillLightMode to eFillLightMode
+                    WebGet piSliderValue of oWebSliderHeight to iImageHeight
+                    WebGet piSliderValue of oWebSliderWidth to iImageWidth
+                    WebGet psValue of oWebComboRedEyeReduction to bRedEyeReduction
+                    
+                    Send TakePhoto of oMediaStreamImageCaptureAPI eFillLightMode iImageHeight iImageWidth bRedEyeReduction
+                End_Procedure
+            End_Object
+            
+            Object oBtnDisconnect is a cWebButton
+                Set piColumnIndex to 8
+                Set piColumnSpan to 4
+                Set psCaption to "Close"
+                
+                Procedure OnClick
+                    Send CloseCamera
+                End_Procedure
+            End_Object
+            
+            Object oWebSettingsPanel is a cWebFloatingPanel
+                Set piColumnCount to 12
+                WebSetResponsive piColumnCount rmMobile to 6
+                Set piWidth to 400
+                Set psCssClass to "Shadow WithArrow"
+                Set phoFloatByControl to oBtnSettings
+                Set pbHideOnBlur to True
+        
+                Object oWebComboFillLightMode is a cWebCombo
+                    Set piColumnSpan to 6
+                    Set psLabel to "Fill light mode"
+                    Set pbAddEmptyItem to False
+                    Set pbEnabled to False
+                    Set peLabelPosition to lpTop
+        
+                    Procedure OnFill
+                        tMediaStreamImageCaptureInfo stInfo
+        
+                        WebGet pstInfo of oMediaStreamImageCaptureDemo to stInfo
+                        If (SizeOfArray(stInfo.capabilities.fillLightMode) > 0) Begin
+                            WebSet pbEnabled of oWebComboFillLightMode to True
+                            If (SearchArray("auto", stInfo.capabilities.fillLightMode) > -1) Begin
+                                Send AddComboItem of oWebComboFillLightMode MSIC_FILL_LIGHT_MODE_AUTO "Auto"
+                            End
+                            If (SearchArray("off", stInfo.capabilities.fillLightMode) > -1) Begin
+                                Send AddComboItem of oWebComboFillLightMode MSIC_FILL_LIGHT_MODE_OFF "Off"
+                            End
+                            If (SearchArray("flash", stInfo.capabilities.fillLightMode) > -1) Begin
+                                Send AddComboItem of oWebComboFillLightMode MSIC_FILL_LIGHT_MODE_FLASH "Flash"
+                            End
+                        End
+                        Else Begin
+                            WebSet pbEnabled of oWebComboFillLightMode to False
+                        End
+                    End_Procedure
+                End_Object
+        
+                Object oWebComboRedEyeReduction is a cWebCombo
+                    Set piColumnIndex to 6
+                    Set piColumnSpan to 6
+                    Set psLabel to "Red eye reduction"
+                    Set pbAddEmptyItem to False
+                    Set pbEnabled to False
+                    Set peLabelPosition to lpTop
+        
+                    Procedure OnFill
+                        tMediaStreamImageCaptureInfo stInfo
+        
+                        WebGet pstInfo of oMediaStreamImageCaptureDemo to stInfo
+                        If (stInfo.capabilities.redEyeReduction = "never") Begin
+                            WebSet pbEnabled of oWebComboFillLightMode to False
+                            Send AddComboItem False "Off"
+                        End
+                        Else If (stInfo.capabilities.redEyeReduction = "always") Begin
+                            WebSet pbEnabled of oWebComboFillLightMode to False
+                            Send AddComboItem True "On"
+                        End
+                        Else If (stInfo.capabilities.redEyeReduction = "controllable") Begin
+                            WebSet pbEnabled of oWebComboFillLightMode to True
+                            Send AddComboItem False "Off"
+                            Send AddComboItem True "On"
+                        End
+                    End_Procedure
+                End_Object
+                
+                // If the range is evenly divisible into between 12 and 7 parts, return the size of the smallest such part, else return stRange.step
+                Function CalcStep tMediaSettingsRange stRange Returns Integer
+                    Integer iSpan i iStep
+                    Move (stRange.max - stRange.min) to iSpan
+                    For i from 0 to 5
+                        If (Mod(iSpan, 12-i) = 0) Move (iSpan / (12-i)) to iStep
+                        If (iStep > 0) Break
+                    Loop
+                    Function_Return (stRange.step max iStep)
+                End_Function
+        
+                Object oWebSliderWidth is a cWebSlider
+                    Set piColumnSpan to 6
+                    Set pbEnabled to False
+                    Set pbShowValue to True
+                    Set peLabelPosition to lpTop
+                    Set psLabel to "Image width"
+                    Set pbShowMarkers to True
+        
+                    Procedure ReadCapabilities
+                        tMediaStreamImageCaptureInfo stInfo
+                        
+                        WebGet pstInfo of oMediaStreamImageCaptureDemo to stInfo
+                        If (stInfo.capabilities.imageWidth.min > 0) Begin
+                            WebSet piMinValue to stInfo.capabilities.imageWidth.min
+                            WebSet piMaxValue to stInfo.capabilities.imageWidth.max
+                            WebSet piSliderValue to stInfo.capabilities.imageWidth.max
+                            WebSet piInterval to (CalcStep(Self, stInfo.capabilities.imageWidth))
+                            WebSet pbEnabled to True
+                        End
+                        Else Begin
+                            WebSet pbEnabled to False
+                        End
+                    End_Procedure
+                End_Object
+        
+                Object oWebSliderHeight is a cWebSlider
+                    Set piColumnIndex to 6
+                    Set piColumnSpan to 6
+                    Set pbEnabled to False
+                    Set pbShowValue to True
+                    Set peLabelPosition to lpTop
+                    Set psLabel to "Image height"
+                    Set pbShowMarkers to True
+        
+                    Procedure ReadCapabilities
+                        tMediaStreamImageCaptureInfo stInfo
+                        
+                        WebGet pstInfo of oMediaStreamImageCaptureDemo to stInfo
+                        If (stInfo.capabilities.imageHeight.min > 0) Begin
+                            WebSet piMinValue to stInfo.capabilities.imageHeight.min
+                            WebSet piMaxValue to stInfo.capabilities.imageHeight.max
+                            WebSet piSliderValue to stInfo.capabilities.imageHeight.max
+                            WebSet piInterval to (CalcStep(Self, stInfo.capabilities.imageHeight))
+                            WebSet pbEnabled to True
+                        End
+                        Else Begin
+                            WebSet pbEnabled to False
+                        End
+                    End_Procedure
+                End_Object
+            End_Object
         End_Object
+
     End_Object
+    
+    Procedure OpenCamera
+        WebSet pbRender of oWebGroup1 to False
+        WebSet pbRender of oWebGroup2 to True
+        Send Connect of oMediaStreamImageCaptureAPI "my-video-element"
+    End_Procedure
+    
+    Procedure CloseCamera
+        Send Disconnect of oMediaStreamImageCaptureAPI
+        WebSet pbRender of oWebGroup2 to False
+        WebSet pbRender of oWebGroup1 to True
+    End_Procedure
+    
+    Procedure ShowImage String sMimeType UChar[] ucData
+        Integer iCount
+        Handle hoImage
+        String sExt sTempFileName sDir
+        
+        Case Begin
+            Case (sMimeType = "image/png")
+                Move "png" to sExt
+                Case Break
+            Case (sMimeType = "image/jpg")
+            Case (sMimeType = "image/jpeg")
+                Move "jpg" to sExt
+                Case Break
+            Case Else
+                Move "tmp" to sExt
+        Case End
+        Make_Temp_File sExt sTempFileName
+        Get_Directory sDir
+        Direct_Output ("binary: " + sDir + "\" + sTempFileName)
+        Write ucData
+        Close_Output
+
+        WebGet piImageCount to iCount
+        Increment iCount
+        WebSet piImageCount to iCount
+
+        Get CreateDynamicObject of oWebDynamicObjectContainer1 (RefClass(cWebImage)) ("oImage" + String(iCount)) "" to hoImage
+        Send UpdateLocalImage of hoImage (sDir + "\" + sTempFileName)
+        Send InitDynamicProp of hoImage "pePosition" wiFit
+        Send InitDynamicProp of hoImage "piHeight" 180
+        Send AppendDynamicObject of oWebDynamicObjectContainer1 ("oImage" + String(iCount))
+    End_Procedure
 
     Procedure OnShow
         Boolean bIsSupported
@@ -137,6 +401,7 @@ Object oMediaStreamImageCaptureDemo is a cWebView
         Else Begin
             WebSet psCaption of oWebLabel to "MediaStream Image Capture API is NOT supported (try on anything but Firefox)"
             WebSet psTextColor of oWebLabel to "red"
+            WebSet pbEnabled of oBtnCapture to False
         End
     End_Procedure
 End_Object

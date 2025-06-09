@@ -1,8 +1,20 @@
 import { readBlob } from './utils/blob';
 
+const MSIC_FILL_LIGHT_MODE_AUTO = 0;
+const MSIC_FILL_LIGHT_MODE_OFF = 1;
+const MSIC_FILL_LIGHT_MODE_FLASH = 2;
+
+const fillLightModeMap = new Map([
+    [MSIC_FILL_LIGHT_MODE_AUTO, 'auto'],
+    [MSIC_FILL_LIGHT_MODE_OFF, 'off'],
+    [MSIC_FILL_LIGHT_MODE_FLASH, 'flash']
+]);
+
 export default class MediaStreamImageCapture extends df.WebObject {
     #stream;
+    #track;
     #capture;
+    #capabilities;
 
     constructor(sName, oParent) {
         super(sName, oParent);
@@ -32,6 +44,7 @@ export default class MediaStreamImageCapture extends df.WebObject {
             this.#stream = this.getWebApp().findObj(this.psMediaStream);
             const stream = await this.#stream.connect();
             const [track] = stream.getVideoTracks();
+            this.#track = track;
             track.addEventListener('ended', () => this.disconnect());
 
             // Connect stream to media element, if an id was passed
@@ -48,12 +61,22 @@ export default class MediaStreamImageCapture extends df.WebObject {
             this.#capture = new ImageCapture(track);
 
             // Let them know what we got
+            const [capabilities, settings] = await Promise.all([
+                this.#capture.getPhotoCapabilities(),
+                this.#capture.getPhotoSettings()
+            ]);
+            this.#capabilities = capabilities;
             this.fireEx({
                 sEvent: 'OnConnect',
                 tActionData: {
-                    kind: track.kind,
-                    label: track.label,
-                    settings: track.getSettings()
+                    capabilities,
+                    settings,
+                    track: {
+                        kind: track.kind,
+                        label: track.label,
+                        capabilities: track.getCapabilities(),
+                        settings: track.getSettings()
+                    }
                 }
             });
         } catch (error) {
@@ -61,10 +84,43 @@ export default class MediaStreamImageCapture extends df.WebObject {
         }
     }
 
-    async takePhoto() {
+    async applyConstraint(name, value) {
+        const constraint = {};
+        constraint[name] = value;
+        try {
+            await this.#track?.applyConstraints({ advanced: [constraint] });
+        } catch (error) {
+            this.fire('OnError', [error.name, error.message]);
+        }
+    }
+
+    async takePhoto(fillLightMode, imageHeight, imageWidth, redEyeReduction) {
         if (this.#capture) {
+            const settings = {};
+            if (fillLightMode !== undefined && this.#capabilities.fillLightMode) {
+                fillLightMode = fillLightModeMap.get(df.toInt(fillLightMode));
+                if (this.#capabilities.fillLightMode.includes(fillLightMode)) {
+                    settings.fillLightMode = fillLightMode;
+                }
+            }
+            if (imageHeight !== undefined && imageHeight !== '' && this.#capabilities.imageHeight) {
+                imageHeight = df.toInt(imageHeight);
+                if (this.#capabilities.imageHeight.min <= imageHeight <= this.#capabilities.imageHeight.max) {
+                    settings.imageHeight = imageHeight;
+                }
+            }
+            if (imageWidth !== undefined && imageWidth !== '' && this.#capabilities.imageWidth) {
+                imageWidth = df.toInt(imageWidth);
+                if (this.#capabilities.imageWidth.min <= imageWidth <= this.#capabilities.imageWidth.max) {
+                    settings.imageWidth = imageWidth;
+                }
+            }
+            if (redEyeReduction !== undefined && this.#capabilities.redEyeReduction === 'controllable') {
+                settings.redEyeReduction = df.toBool(redEyeReduction);
+            }
+
             try {
-                const blob = await this.#capture.takePhoto();
+                const blob = await this.#capture.takePhoto(settings);
                 let cancelled = false;
 
                 // Fire client-side event with the Blob
@@ -98,7 +154,9 @@ export default class MediaStreamImageCapture extends df.WebObject {
     disconnect() {
         this.#stream.disconnect();
         this.#stream = null;
+        this.#track = null;
         this.#capture = null;
+        this.#capabilities = null;
         this.fire('OnDisconnect');
     }
 }

@@ -1,6 +1,32 @@
 ﻿Use cWebObject.pkg
 Use cMediaStreamAPI.pkg
 
+Struct tMediaStreamPhotoCapabilities
+    String[] fillLightMode // Zero or more of "auto", "off", "flash"
+    tMediaSettingsRange imageHeight
+    tMediaSettingsRange imageWidth
+    String redEyeReduction // "never", "always" or "controllable"
+End_Struct
+
+Struct tMediaStreamPhotoSettings
+    String fillLightMode // numerous bugs concerning this, do not expect it to work
+    Integer imageHeight
+    Integer imageWidth
+    Boolean redEyeReduction
+End_Struct
+
+Struct tMediaStreamImageCaptureInfo
+    tMediaStreamPhotoCapabilities capabilities
+    tMediaStreamPhotoSettings settings
+    tMediaStreamTrackInfo track
+End_Struct
+
+Enum_List
+    Define MSIC_FILL_LIGHT_MODE_AUTO
+    Define MSIC_FILL_LIGHT_MODE_OFF
+    Define MSIC_FILL_LIGHT_MODE_FLASH
+End_Enum_List
+
 Class cMediaStreamImageCaptureAPI is a cWebObject
     
     Procedure Construct_Object
@@ -10,7 +36,8 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
         Property Boolean pbIsSupported False
         { WebProperty=Client Visibility=Private }
         Property String psMediaStream
-        { WebProperty=Client Description="Set to True to include width and height in OnPhoto event" }
+        // Set to True to include width and height in OnPhoto event
+        { WebProperty=Client }
         Property Boolean pbWithDimension False
 
         { WebProperty=Client Category="Server events" }
@@ -47,17 +74,22 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
     
     { Visibility=Private }
     Function SerializeObject Returns tWebObjectDef
-        Handle hoStream
+        Integer iCount i
+        Handle hoChild
         String sMediaStreamName
+        Boolean bFound
         tWebObjectDef tResult
         
-        If (Child_Count(Self) = 2) Begin
-            Get ChildByIndex 1 to hoStream
-            If (IsObjectOfClass(hoStream, RefClass(cMediaStream))) Begin
-                Get WebObjectName of hoStream to sMediaStreamName
+        Get Child_Count to iCount
+        For i from 0 to (iCount - 1)
+            Get ChildByIndex i to hoChild
+            If (IsObjectOfClass(hoChild, RefClass(cMediaStream))) Begin
+                Get WebObjectName of hoChild to sMediaStreamName
                 Set psMediaStream to sMediaStreamName
+                Move True to bFound
             End
-        End
+            If (bFound) Break
+        Loop
         
         Forward Get SerializeObject to tResult
         
@@ -74,9 +106,33 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
         Send ClientAction "connect" aParams
     End_Procedure
     
+    // Change a setting on a video stream
+    // sName should be the name of a property from the Video section of tMediaTrackSettings
+    // Valid settings will be reported under stInfo.track.capabilities in OnConnect event
+    Procedure ApplyConstraint String sName String sValue
+        String[] aParams
+        Move sName to aParams[0]
+        Move sValue to aParams[1]
+        Send ClientAction "applyConstraint" aParams
+    End_Procedure
+    
     // Capture an image from the media stream, triggering OnPhoto with the result
-    Procedure TakePhoto
-        Send ClientAction "takePhoto"
+    // All arguments are optional
+    Procedure TakePhoto Integer eFillLightMode Integer iImageHeight Integer iImageWidth Boolean bRedEyeReduction
+        String[] aParams
+        If (num_arguments > 0) Begin
+            Move eFillLightMode to aParams[0]
+        End
+        If (num_arguments > 1) Begin
+            Move iImageHeight to aParams[1]
+        End
+        If (num_arguments > 2) Begin
+            Move iImageWidth to aParams[2]
+        End
+        If (num_arguments > 3) Begin
+            Move bRedEyeReduction to aParams[3]
+        End
+        Send ClientAction "takePhoto" aParams
     End_Procedure
 
     // Disconnect from the media stream and release any media device resources held
@@ -87,7 +143,7 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
     { Visibility=Private }
     Procedure OnConnectProxy
         Handle hoJson
-        tMediaStreamTrackInfo stInfo
+        tMediaStreamImageCaptureInfo stInfo
 
         Get phoActionJsonData to hoJson
         If (hoJson <> C_WebUnresolvedObject) Begin
@@ -100,7 +156,7 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
     End_Procedure
     
     { MethodType=Event }
-    Procedure OnConnect tMediaStreamTrackInfo stInfo
+    Procedure OnConnect tMediaStreamImageCaptureInfo stInfo
     End_Procedure
     
     { MethodType=Event }

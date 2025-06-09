@@ -1021,7 +1021,7 @@ Object oMediaStreamRecordingDemo is a cWebView
     
     Procedure OnShow
         Boolean bIsSupported
-        String sPermMic sPermCam
+        String sPermMic sPermCam sPermPanTiltZoom
         
         Forward Send OnShow
 
@@ -1034,6 +1034,8 @@ Object oMediaStreamRecordingDemo is a cWebView
             Send Log of oLogger (SFormat("Microphone permission is '%1'", sPermMic))
             WebGet psCameraPermission of oUserMediaStream to sPermCam
             Send Log of oLogger (SFormat("Camera permission is '%1'", sPermCam))
+            WebGet psPanTiltZoomPermission of oUserMediaStream to sPermPanTiltZoom
+            Send Log of oLogger (SFormat("Camera pan/tilt/zoom permission is '%1'", sPermPanTiltZoom))
             
             If ((sPermMic = "granted") and (sPermCam = "granted")) Begin
                 WebSet pbEnabled of oBtnRequestPermission to False

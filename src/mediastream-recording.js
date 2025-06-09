@@ -98,6 +98,7 @@ export default class MediaStreamRecording extends df.WebObject {
                 tracks.push({
                     kind: track.kind,
                     label: track.label,
+                    capabilities: track.getCapabilities(),
                     settings: track.getSettings()
                 });
                 track.addEventListener('ended', () => this.disconnect());

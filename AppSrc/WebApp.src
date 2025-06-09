@@ -306,6 +306,22 @@ Object oWebApp is a cWebApp
     Use BatteryStatusDemo.wo
     Use MediaStreamImageCaptureDemo.wo
     Set phoDefaultView to oDashboard
+    
+    Procedure End_Construct_Object
+        String sPath sLine
+        Boolean bTempExists
+        
+        Forward Send End_Construct_Object
+        
+        Get GetApplicationPath of ghoApplication to sPath
+        Move (sPath + "\temp") to sPath
+        File_Exist sPath bTempExists
+        If (not(bTempExists)) Begin
+            Make_Directory sPath
+        End
+        Send RegisterDownloadFolder of ghoWebResourceManager sPath
+        Set_Directory sPath
+    End_Procedure
 
 End_Object
 

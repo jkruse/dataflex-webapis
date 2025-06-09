@@ -56,6 +56,7 @@ export class UserMediaStream extends BaseMediaStream {
 
         this.prop(df.tString, 'psMicrophonePermission', '');
         this.prop(df.tString, 'psCameraPermission', '');
+        this.prop(df.tString, 'psPanTiltZoomPermission', '');
 
         // Audio track properties
         this.prop(df.tBool, 'pbAudio', false);
@@ -70,6 +71,7 @@ export class UserMediaStream extends BaseMediaStream {
 
         // Video track properties
         this.prop(df.tBool, 'pbVideo', false);
+        this.prop(df.tBool, 'pbWithPanTiltZoom', false);
         this.prop(df.tString, 'psVideoDeviceId', '');
         this.prop(df.tNumber, 'pnAspectRatio', MSAPI_DEFAULT);
         this.prop(df.tInt, 'peFacingMode', MSAPI_DEFAULT);
@@ -80,6 +82,7 @@ export class UserMediaStream extends BaseMediaStream {
 
         this.event('OnMicrophonePermissionChange');
         this.event('OnCameraPermissionChange');
+        this.event('OnPanTiltZoomPermissionChange');
         this.event('OnEnumerateDevices', df.cCallModeDefault, 'OnEnumerateDevicesProxy');
     }
 
@@ -89,12 +92,15 @@ export class UserMediaStream extends BaseMediaStream {
         if (this.pbIsSupported && 'permissions' in navigator) {
             queryPermission(this, 'microphone', 'psMicrophonePermission', 'OnMicrophonePermissionChange');
             queryPermission(this, 'camera', 'psCameraPermission', 'OnCameraPermissionChange');
+            queryPermission(this, 'camera', 'psPanTiltZoomPermission', 'OnPanTiltZoomPermissionChange', { panTiltZoom: true });
         }
     }
 
     async requestPermission() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: this.pbAudio, video: this.pbVideo });
+            const audio = this.pbAudio;
+            const video = this.pbVideo && this.pbWithPanTiltZoom ? { pan: true, tilt: true, zoom: true } : this.pbVideo;
+            const stream = await navigator.mediaDevices.getUserMedia({ audio, video });
             stream.getTracks().forEach(track => track.stop());
         } catch (error) {
             this.fire('OnError', [error.name, error.message]);
@@ -150,6 +156,11 @@ export class UserMediaStream extends BaseMediaStream {
         }
         if (this.pbVideo) {
             constraints.video = {};
+            if (this.pbWithPanTiltZoom) {
+                constraints.video.pan = true;
+                constraints.video.tilt = true;
+                constraints.video.zoom = true;
+            }
             if (this.psVideoDeviceId) {
                 constraints.video.deviceId = this.psVideoDeviceId;
             }

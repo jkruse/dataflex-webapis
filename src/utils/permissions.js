@@ -1,6 +1,6 @@
-export async function queryPermission(instance, name, property, event) {
+export async function queryPermission(instance, name, property, event, options = {}) {
     try {
-        const result = await navigator.permissions.query({ name });
+        const result = await navigator.permissions.query(Object.assign({ name }, options));
         instance.set(property, result.state || result.status);
         if (event) {
             result.onchange = () => {
