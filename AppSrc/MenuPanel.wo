@@ -1,0 +1,217 @@
+﻿Use cWebPanel.pkg
+Use cWebMenuButton.pkg
+Use cWebMenuItem.pkg
+Use cWebButton.pkg
+
+Object oMenuPanel is a cWebPanel
+    Set peRegion to prLeft
+    Set piWidth to 50
+    
+    Object oMenuButton is a cWebMenuButton
+        Set piMenuHeight to 500
+
+        Object oDashboard_itm is a cWebMenuItem
+            Set psCaption to C_$Dashboard
+            
+            WebRegisterPath ntNavigateBegin oDashboard
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemBatteryStatus is a cWebMenuItem
+            Set psCaption to "Battery Status Demo"
+            WebRegisterPath ntNavigateBegin oBatteryStatusDemo
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+        
+        Object oWebMenuItemBroadcastChannel is a cWebMenuItem
+            Set psCaption to "Broadcast Channel Demo"
+            WebRegisterPath ntNavigateBegin oBroadcastChannelDemo
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+        
+        Object oWebMenuItemClipboard is a cWebMenuItem
+            Set psCaption to "Clipboard Demo"
+            WebRegisterPath ntNavigateBegin oClipboardDemo
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+        
+        Object oWebMenuItemContactPicker is a cWebMenuItem
+            Set psCaption to "Contact Picker Demo"
+            WebRegisterPath ntNavigateBegin oContactPickerDemo
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+        
+        Object oWebMenuItemCredentialManagement is a cWebMenuItem
+            Set psCaption to "Credential Management Demo"
+            WebRegisterPath ntNavigateBegin oCredentialManagementDemo
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+        
+        Object oWebMenuItemEyeDropper is a cWebMenuItem
+            Set psCaption to "EyeDropper Demo"
+            WebRegisterPath ntNavigateBegin oEyeDropperDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemFullscreen is a cWebMenuItem
+            Set psCaption to "Fullscreen Demo"
+            WebRegisterPath ntNavigateBegin oFullscreenDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemMediaStreamImageCapture is a cWebMenuItem
+            Set psCaption to "MediaStream Image Capture Demo"
+            WebRegisterPath ntNavigateBegin oMediaStreamImageCaptureDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemMediaStreamRecording is a cWebMenuItem
+            Set psCaption to "MediaStream Recording Demo"
+            WebRegisterPath ntNavigateBegin oMediaStreamRecordingDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemNetworkInformation is a cWebMenuItem
+            Set psCaption to "Network Information Demo"
+            WebRegisterPath ntNavigateBegin oNetworkInformationDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemNotifications is a cWebMenuItem
+            Set psCaption to "Notifications Demo"
+            WebRegisterPath ntNavigateBegin oNotificationsDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemPageVisibility is a cWebMenuItem
+            Set psCaption to "Page Visibility Demo"
+            WebRegisterPath ntNavigateBegin oPageVisibilityDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemScreenOrientation is a cWebMenuItem
+            Set psCaption to "Screen Orientation Demo"
+            WebRegisterPath ntNavigateBegin oScreenOrientationDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemScreenWakeLock is a cWebMenuItem
+            Set psCaption to "Screen Wake Lock Demo"
+            WebRegisterPath ntNavigateBegin oScreenWakeLockDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemSensor is a cWebMenuItem
+            Set psCaption to "Sensor Demo"
+            WebRegisterPath ntNavigateBegin oSensorDemo
+            
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemVibration is a cWebMenuItem
+            Set psCaption to "Vibration Demo"
+            WebRegisterPath ntNavigateBegin oVibrationDemo
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemWebShare is a cWebMenuItem
+            Set psCaption to "Web Share Demo"
+            WebRegisterPath ntNavigateBegin oWebShareDemo
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+
+        Object oWebMenuItemWebStorage is a cWebMenuItem
+            Set psCaption to "Web Storage Demo"
+            WebRegisterPath ntNavigateBegin oWebStorageDemo
+
+            Procedure OnClick
+                Send NavigatePath
+            End_Procedure
+        End_Object
+    End_Object  
+
+    Object oBackButton is a cWebButton
+        Set psCSSClass to "WebBack_Icon"
+        Set pbRender to False
+        
+        Procedure OnClick
+            Handle hoTop
+            
+            Get TopViewHandle of ghoWebViewStack to hoTop
+            If (hoTop > 0) Begin
+                Send NavigateCancel of hoTop 
+            End
+        End_Procedure
+    End_Object
+    
+    Send AddClient of ghoWebViewStack Self
+        
+    Procedure OnUpdateViewStack
+        Handle hoTop hoDflt
+        Integer eMode
+        Boolean bTop
+        
+        WebGet peMode of (Owner(Self)) to eMode
+        
+        Get TopViewHandle of ghoWebViewStack to hoTop
+        Get GetDefaultView to hoDflt
+        Move (hoTop=0 or hoTop=hoDflt) to bTop
+        
+        WebSet pbRender of oBackButton to (not(bTop) and eMode >= rmMobile)
+        WebSet pbRender of oMenuButton to (bTop or eMode < rmMobile)
+    End_Procedure
+
+End_Object

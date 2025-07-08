@@ -1,0 +1,163 @@
+﻿Use DFAllEnt.pkg
+Use cFlexTronPanel.pkg
+Use cLocalWebAppHost.pkg
+Use cWebPanel.pkg
+Use cWebMenuButton.pkg
+Use cWebBreadcrumb.pkg
+Use cWebActionBar.pkg
+Use cWebButton.pkg
+
+Object oApplication is a cApplication
+    Set psCompany to "Kruse-Net"
+    Set psProduct to "DataFlex Custom Components for Web APIs"
+
+    Object oConnection is a cConnection
+        Use LoginEncryption.pkg
+    End_Object
+End_Object
+
+Object oMain is a cFlexTronPanel
+    Set Location to 4 3
+    Set Size to 300 500
+
+    Object oLocalWebAppHost is a cLocalWebAppHost
+        // Windows View Properties
+        Set Size to 300 500
+        Set Location to 0 0
+        Set peAnchors to anAll
+        
+        // Enable DevTools if you want, a normal production application should not have this.
+        Set pbAreDevToolsEnabled to True
+        Set pbAreDefaultContextMenusEnabled to False
+        
+        // From here on web
+        Set psTheme to "Df_Material"
+        Set peAlignView to alignCenter
+        Set psApplicationTitle to "DataFlex Custom Components for Web APIs"
+    
+        // It is important to set this so that all views will default
+        // to drill down style views.
+        Set peApplicationStyle to wvsDrillDown
+        Set peApplicationStateMode to asmHistoryAndUrls
+        Set pbAreBrowserAcceleratorKeysEnabled to True
+    
+        Object oViewStack is a cWebViewStack
+            // use ghoWebViewStack to reference this object
+        End_Object
+    
+        Procedure HideHeader
+            WebSet pbRender of oHeaderPanel to False
+        End_Procedure
+    
+        Procedure ShowHeader
+            WebSet pbRender of oHeaderPanel to True
+        End_Procedure
+    
+        Object oHeaderPanel is a cWebPanel
+            Set peRegion to prTop
+            Set psCSSClass to "HeaderPanel"
+            
+            Use MenuPanel.wo
+    
+            Object oCaptionPanel is a cWebPanel
+                Set piColumnCount to 12
+    
+                Object oCaptionBreadcrumb is a cWebBreadcrumb
+                    Set peBreadcrumbStyle to crumbCaption
+                    Set piColumnSpan to 12
+                    WebSetResponsive peBreadcrumbStyle rmMobile to crumbDropDown
+                End_Object
+            End_Object
+    
+            Object oActionPanel is a cWebPanel
+                Set peRegion to prRight
+                Set piColumnCount to 1
+                Set piWidth to 120
+    
+                Object oMainActions is a cWebActionBar
+                    Set piColumnSpan to 0
+                    Set peAlign to alignRight
+                End_Object
+            End_Object
+    
+            Object oBreadcrumbPanel is a cWebPanel
+                Set peRegion to prBottom
+                WebSetResponsive pbRender rmMobile to False
+    
+                Object oHorizontalBreadcrumb is a cWebBreadcrumb
+                    // Do not render this breadcrumb if there is only the Dashboard view in
+                    // the stack
+                    Procedure OnUpdateViewStack
+                        Integer iCount
+                        Get ViewStackSize of ghoWebViewStack to iCount
+                        WebSet pbRender to (iCount > 1)
+    
+                        Forward Send OnUpdateViewStack
+                    End_Procedure
+                End_Object
+            End_Object
+        End_Object
+    
+        //Use SessionManager.wo
+        Use LocalResourceManager.wo
+
+        Use VibrationDemo.wo
+        Use ContactPickerDemo.wo
+        Use EyeDropperDemo.wo
+        Use PageVisibilityDemo.wo
+        Use BroadcastChannelDemo.wo
+        Use FullscreenDemo.wo
+        Use ScreenWakeLockDemo.wo
+        Use NotificationsDemo.wo
+        Use NetworkInformationDemo.wo
+        Use WebShareDemo.wo
+        Use ClipboardDemo.wo
+        Use CredentialManagementDemo.wo
+        Use SensorDemo.wo
+        Use ScreenOrientationDemo.wo
+        Use WebStorageDemo.wo
+        Use MediaStreamRecordingDemo.wo
+        Use BatteryStatusDemo.wo
+        Use MediaStreamImageCaptureDemo.wo
+
+        Use Dashboard.wo
+
+        Set phoDefaultView to oDashboard
+        
+        //  Update caption of the window with new title
+        Procedure OnGeneratePageTitle String  ByRef sTitle Handle hoView String sViewTitle
+            Forward Send OnGeneratePageTitle (&sTitle) hoView sViewTitle
+            
+            Set Label of oMain to sTitle
+        End_Procedure
+
+        Procedure OnDefineScriptIncludes String[]  ByRef aScriptHtml
+            Forward Send OnDefineScriptIncludes (&aScriptHtml)
+            Move """
+                <script src="https://unpkg.com/core-js-bundle/minified.js"></script>
+                <script src="Custom/index.js"></script>
+                """ to aScriptHtml[SizeOfArray(aScriptHtml)]
+        End_Procedure
+        
+        Procedure End_Construct_Object
+            String sPath sLine
+            Boolean bTempExists
+            
+            Forward Send End_Construct_Object
+            
+            Get GetApplicationPath of ghoApplication to sPath
+            Move (sPath + "\temp") to sPath
+            File_Exist sPath bTempExists
+            If (not(bTempExists)) Begin
+                Make_Directory sPath
+            End
+            Send RegisterDownloadFolder of ghoWebResourceManager sPath
+            Set_Directory sPath
+            
+            Move Self to ghoWebApp
+        End_Procedure
+    End_Object
+End_Object
+
+Send Activate of oMain
+Start_UI

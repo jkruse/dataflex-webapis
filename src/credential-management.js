@@ -31,7 +31,6 @@ export default class CredentialManagement extends df.WebObject {
     async #store(options) {
         try {
             const credential = await navigator.credentials.create(options);
-            console.log({ credential });
             if (credential) {
                 await navigator.credentials.store(credential);
                 this.fire('OnSuccess');

@@ -1,0 +1,4 @@
+﻿Use cLocalWebResourceManager.pkg
+
+Object oResourceManager is a cLocalWebResourceManager
+End_Object

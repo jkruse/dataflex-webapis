@@ -9,3 +9,4 @@ Is$WebApp=True
 Is$Win64=True
 [Projects]
 Project0=WebApp.src
+Project1=FlexTronDemo.src

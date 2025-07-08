@@ -31,7 +31,7 @@ Object oFullscreenDemo is a cWebView
             
             If (sWebObjectName = "") Begin
                 // Exiting full-screen
-                Send ShowHeader of oWebApp
+                Send ShowHeader of ghoWebApp
 
                 WebSet pbEnabled of oWebButton1 to True
                 WebSet pbEnabled of oWebButton2 to True
@@ -74,7 +74,7 @@ Object oFullscreenDemo is a cWebView
         
             Procedure OnClick
                 // Even though not shown, DataFlex will leave room for the header when sizing the view, so we hide it while in full-screen
-                Send HideHeader of oWebApp
+                Send HideHeader of ghoWebApp
                 Send RequestFullscreen of oFullscreenAPI (oFullscreenDemo(Self))
             End_Procedure
         End_Object
@@ -86,7 +86,7 @@ Object oFullscreenDemo is a cWebView
         
             Procedure OnClick
                 // Even though not shown, DataFlex will leave room for the header when sizing the image, so we hide it while in full-screen
-                Send HideHeader of oWebApp
+                Send HideHeader of ghoWebApp
                 Send RequestFullscreen of oFullscreenAPI (oWebImage(Self))
             End_Procedure
         End_Object

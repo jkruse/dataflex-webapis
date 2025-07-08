@@ -107,12 +107,14 @@ Object oMediaStreamImageCaptureDemo is a cWebView
                 // Add a warning on the default demo site
                 Procedure OnLoad
                     String sHost sCaption
+                    #IFDEF Is$WebApp
                     Get ServerVariable of ghoWebApp "HTTP_HOST" to sHost
                     If (sHost = "www.kruse-net.dk") Begin
                         Get psCaption to sCaption
                         Move (sCaption + " NOTE: Captured images are stored on the server, in a folder that is emptied every night. Do not capture images of sensitive information!") to sCaption
                         Set psCaption to sCaption
                     End
+                    #ENDIF
                 End_Procedure
             End_Object
     

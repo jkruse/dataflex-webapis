@@ -42,3 +42,4 @@ AppHtml/Custom/
 dist/
 /.idea/
 /Programs/temp/
+*.exe
