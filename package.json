@@ -21,7 +21,7 @@
     "predist": "npm run clean && npm run copy-server-props",
     "dist": "npm run build",
     "postdist": "npm run zip-demo && npm run zip-component",
-    "zip-demo": "7z a dist/WebAPIsDemo.zip * -r -x!.git -x!.github -x!.vscode -x!CssThemes -x!DfEngine -x!*.dep -x!*.prn -x!IdeSrc/* -x!node_modules -x!temp -x!*.dbg -x!*.exe -x!*.log",
+    "zip-demo": "7z a dist/WebAPIsDemo.zip * -r -x!.git -x!.github -x!.idea -x!.vscode -x!CssThemes -x!DfEngine -x!*.dep -x!*.prn -x!IdeSrc/* -x!node_modules -x!temp -x!*.dbg -x!*.exe -x!*.log",
     "zip-component": "7z a dist/WebAPIsComponents.zip AppHtml/Custom/* AppSrc/*API.pkg LICENSE.txt"
   },
   "devDependencies": {
