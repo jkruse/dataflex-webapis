@@ -53,6 +53,10 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
         { WebProperty=Client Category="Client events" }
         Property String psClientOnError ""
         { WebProperty=Client Category="Server events" }
+        Property Boolean pbServerOnFrame False
+        { WebProperty=Client Category="Client events" }
+        Property String psClientOnFrame ""
+        { WebProperty=Client Category="Server events" }
         Property Boolean pbServerOnPhoto False
         { WebProperty=Client Category="Client events" }
         Property String psClientOnPhoto ""
@@ -69,6 +73,7 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
         WebPublishProcedure OnConnectProxy
         WebPublishProcedure OnDisconnect
         WebPublishProcedure OnError
+        WebPublishProcedure OnFrameProxy
         WebPublishProcedure OnPhotoProxy
     End_Procedure
     
@@ -116,6 +121,20 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
         Send ClientAction "applyConstraint" aParams
     End_Procedure
     
+    // Capture a single video frame from the media stream, triggering OnFrame with the result
+    // sImageType (optional): MIME type of the output image, e.g. "image/png" (default) or "image/jpeg"
+    // nImageQuality (optional): Quality for lossy formats, 0.0–1.0 (e.g. 0.9 for JPEG)
+    Procedure GrabFrame String sImageType Number nImageQuality
+        String[] aParams
+        If (num_arguments > 0) Begin
+            Move sImageType to aParams[0]
+        End
+        If (num_arguments > 1) Begin
+            Move nImageQuality to aParams[1]
+        End
+        Send ClientAction "grabFrame" aParams
+    End_Procedure
+
     // Capture an image from the media stream, triggering OnPhoto with the result
     // All arguments are optional
     Procedure TakePhoto Integer eFillLightMode Integer iImageHeight Integer iImageWidth Boolean bRedEyeReduction
@@ -167,6 +186,25 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
     Procedure OnError String sErrorName String sErrorMessage
     End_Procedure
     
+    { Visibility=Private }
+    Procedure OnFrameProxy String sDataURL Integer iWidth Integer iHeight
+        Integer iPos
+        String sMimeType
+        UChar[] ucBase64 ucBinary
+        
+        Move (Pos(";base64,", sDataURL, 1, 100)) to iPos
+        Move (Mid(sDataURL, iPos - 6, 6)) to sMimeType
+        Move (StringToUCharArray(Mid(sDataURL, Length(sDataURL), iPos + 8))) to ucBase64
+        Get Base64DecodeUCharArray of oCharTranslate ucBase64 to ucBinary
+        
+        Send OnFrame sMimeType ucBinary sDataURL iWidth iHeight
+    End_Procedure
+    
+    { MethodType=Event }
+    Procedure OnFrame String sMimeType UChar[] ucData String sDataURL Integer iWidth Integer iHeight
+        // Note that the client-side version of this event receives a single ImageBitmap argument instead
+    End_Procedure
+
     { Visibility=Private }
     Procedure OnPhotoProxy String sDataURL Integer iWidth Integer iHeight
         Integer iPos
