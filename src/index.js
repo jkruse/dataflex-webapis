@@ -27,7 +27,7 @@ import Vibration from './vibration';
 import WebShare from './web-share';
 import { LocalStorage, SessionStorage } from './web-storage';
 
-global.WebAPIs = {
+export {
     AbsoluteOrientationSensor,
     AccelerometerSensor,
     AmbientLightSensor,
