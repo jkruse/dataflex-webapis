@@ -36,7 +36,7 @@ Object oMediaStreamImageCaptureDemo is a cWebView
         Set pbServerOnDisconnect to True
         Set pbServerOnError to True
         Set pbServerOnPhoto to True
-        
+        Set pbServerOnFrame to True
         
         // This can be any cMediaStream object with a video track
         Object oUserMediaStreamAPI is a cUserMediaStreamAPI
@@ -81,6 +81,13 @@ Object oMediaStreamImageCaptureDemo is a cWebView
             // For a quick display of a single image, we could use sDataURL, but for multiple large images, that'll perform very badly,
             // so ShowImage will save the file (from ucData) instead and create a download URL for it
             Send CloseCamera
+            Send ShowImage sMimeType ucData
+        End_Procedure
+        
+        Procedure OnFrame String sMimeType UChar[] ucData String sDataURL Integer iWidth Integer iHeight
+            Send Log of oLogger (SFormat("Received %1 bytes, mime: %2, width: %3, height: %4", SizeOfArray(ucData), sMimeType, iWidth, iHeight))
+            
+            // When grabbing a frame, we don't close the camera
             Send ShowImage sMimeType ucData
         End_Procedure
     End_Object
@@ -140,9 +147,9 @@ Object oMediaStreamImageCaptureDemo is a cWebView
             Set psCaption to "Camera view"
             Set piColumnCount to 12   
             Set pbFillHeight to True
-            Set pbRender to False
             Set pbShowBorder to False
             Set pbShowCaption to False
+            Set pbRender to False
     
             Object oVideo is a cWebHtmlBox
                 Set psHtml to '<video style="width: 100%" id="my-video-element"></video>'
@@ -178,17 +185,33 @@ Object oMediaStreamImageCaptureDemo is a cWebView
             End_Object
             
             Object oBtnSettings is a cWebButton
-                Set piColumnSpan to 4
+                Set piColumnSpan to 3
                 Set psCaption to "Settings"
                 
                 Procedure OnClick
                     Send Show of oWebSettingsPanel
                 End_Procedure
             End_Object
+            
+            Object oBtnGrabFrame is a cWebButton
+                Set piColumnIndex to 3
+                Set piColumnSpan to 3
+                Set psCaption to "Grab frame"
+                
+                Procedure OnClick
+                    String sImageType
+                    Integer iImageQuality
+                    
+                    WebGet psValue of oWebComboImageType to sImageType
+                    WebGet piSliderValue of oWebSliderImageQuality to iImageQuality
+                    
+                    Send GrabFrame of oMediaStreamImageCaptureAPI sImageType (iImageQuality / 100.0)
+                End_Procedure
+            End_Object
     
             Object oBtnTakePhoto is a cWebButton
-                Set piColumnIndex to 4
-                Set piColumnSpan to 4
+                Set piColumnIndex to 6
+                Set piColumnSpan to 3
                 Set psCaption to "Take photo"
             
                 Procedure OnClick
@@ -205,8 +228,8 @@ Object oMediaStreamImageCaptureDemo is a cWebView
             End_Object
             
             Object oBtnDisconnect is a cWebButton
-                Set piColumnIndex to 8
-                Set piColumnSpan to 4
+                Set piColumnIndex to 9
+                Set piColumnSpan to 3
                 Set psCaption to "Close"
                 
                 Procedure OnClick
@@ -222,6 +245,42 @@ Object oMediaStreamImageCaptureDemo is a cWebView
                 Set phoFloatByControl to oBtnSettings
                 Set pbHideOnBlur to True
         
+                Object oGrabFrameLabel is a cWebLabel
+                    Set piColumnSpan to 0
+                    Set psCaption to "For 'Grab Frame':"
+                End_Object
+                
+                Object oWebComboImageType is a cWebCombo
+                    Set piColumnSpan to 6
+                    Set psLabel to "Image type"
+                    Set peLabelPosition to lpTop
+                    
+                    Procedure OnFill
+                        Send AddComboItem "" "Default"
+                        Send AddComboItem "image/png" "PNG"
+                        Send AddComboItem "image/jpeg" "JPEG"
+                        Send AddComboItem "image/webp" "WEBP"
+                    End_Procedure
+                End_Object
+                
+                Object oWebSliderImageQuality is a cWebSlider
+                    Set piColumnIndex to 6
+                    Set piColumnSpan to 6
+                    Set pbShowValue to True
+                    Set peLabelPosition to lpTop
+                    Set psLabel to "Image quality in %"
+                    Set pbShowMarkers to True
+                    Set piMinValue to 50
+                    Set piMaxValue to 100
+                    Set piInterval to 5
+                    Set piSliderValue to 85
+                End_Object
+                
+                Object oTakePhotoLabel is a cWebLabel
+                    Set piColumnSpan to 0
+                    Set psCaption to "For 'Take Photo':"
+                End_Object
+                
                 Object oWebComboFillLightMode is a cWebCombo
                     Set piColumnSpan to 6
                     Set psLabel to "Fill light mode"
@@ -340,6 +399,7 @@ Object oMediaStreamImageCaptureDemo is a cWebView
                         End
                     End_Procedure
                 End_Object
+                
             End_Object
         End_Object
 

@@ -26,6 +26,7 @@ export default class MediaStreamImageCapture extends df.WebObject {
         this.event('OnConnect', df.cCallModeDefault, 'OnConnectProxy');
         this.event('OnDisconnect');
         this.event('OnError');
+        this.event('OnFrame', df.cCallModeDefault, 'OnFrameProxy');
         this.event('OnPhoto', df.cCallModeDefault, 'OnPhotoProxy');
     }
 
@@ -94,6 +95,38 @@ export default class MediaStreamImageCapture extends df.WebObject {
         }
     }
 
+    async grabFrame(imageType, imageQuality) {
+        if (this.#capture) {
+            try {
+                const bitmap = await this.#capture.grabFrame();
+                let cancelled = false;
+
+                // Fire client-side event with the ImageBitmap
+                this.fireEx({
+                    sEvent: 'OnFrame',
+                    aParams: [bitmap],
+                    bSkipServer: true,
+                    fHandler: oEvent => cancelled = oEvent.bCanceled
+                });
+
+                if (!cancelled && this.pbServerOnFrame) {
+                    // Convert to blob via OffscreenCanvas (width/height are always available from ImageBitmap)
+                    const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+                    canvas.getContext('2d').drawImage(bitmap, 0, 0);
+                    const type = (imageType !== undefined && imageType !== '') ? imageType : undefined;
+                    const quality = (imageQuality !== undefined && imageQuality !== '') ? this.#parseNumber(imageQuality) : undefined;
+                    const blob = await canvas.convertToBlob({ type, quality });
+                    const dataUrl = await readBlob(blob);
+                    this.fireEx({ sEvent: 'OnFrame', aParams: [dataUrl, bitmap.width, bitmap.height], bSkipClient: true });
+                }
+
+                bitmap.close();
+            } catch (error) {
+                this.fire('OnError', [error.name, error.message]);
+            }
+        }
+    }
+
     async takePhoto(fillLightMode, imageHeight, imageWidth, redEyeReduction) {
         if (this.#capture) {
             const settings = {};
@@ -158,5 +191,9 @@ export default class MediaStreamImageCapture extends df.WebObject {
         this.#capture = null;
         this.#capabilities = null;
         this.fire('OnDisconnect');
+    }
+
+    #parseNumber(value) {
+        return df.sys.data.stringToNum(value, this.getWebApp().psDecimalSeparator);
     }
 }
