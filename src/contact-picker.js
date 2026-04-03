@@ -23,9 +23,11 @@ export default class ContactPicker extends df.WebObject {
             params.aProperties,
             { multiple: params.bMultiple }
         );
-        for (const contact of result?.filter(item => item.icon)) {
-            contact.icon = await Promise.all(contact.icon.map(item => readBlob(item)))
+        if (result) {
+            for (const contact of result.filter(item => item.icon)) {
+                contact.icon = await Promise.all(contact.icon.map(item => readBlob(item)))
+            }
+            this.fireEx({ sEvent: 'OnSelect', tActionData: result });
         }
-        this.fireEx({ sEvent: 'OnSelect', tActionData: result });
     }
 }
