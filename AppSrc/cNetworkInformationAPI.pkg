@@ -36,9 +36,9 @@ Class cNetworkInformationAPI is a cWebObject
         Property String psType "" // NI_CONNECTION_TYPE_*
 
         { WebProperty=Client }
-        Property Boolean pbServerOnNetworkChange True
+        Property Boolean pbServerOnChange True
         { WebProperty=Client }
-        Property String psClientOnNetworkChange ""
+        Property String psClientOnChange ""
         
         Set psJSClass to "WebAPIs.NetworkInformation"
     End_Procedure
@@ -46,11 +46,11 @@ Class cNetworkInformationAPI is a cWebObject
     Procedure End_Construct_Object
         Forward Send End_Construct_Object
 
-        WebPublishProcedure OnNetworkChange
+        WebPublishProcedure OnChange
     End_Procedure
 
     { MethodType=Event }
-    Procedure OnNetworkChange
+    Procedure OnChange
     End_Procedure
 
 End_Class

@@ -6,10 +6,11 @@ export default class Notifications extends df.WebObject {
         this.prop(df.tBool, 'pbIsSupported', false);
         this.prop(df.tString, 'psPermission', '');
         this.event('OnPermissionChange', df.cCallModeDefault);
-        this.event('OnClick', df.cCallModeDefault);
-        this.event('OnClose', df.cCallModeDefault);
-        this.event('OnError', df.cCallModeDefault);
-        this.event('OnShow', df.cCallModeDefault);
+        this.event('OnNotificationClick', df.cCallModeDefault);
+        this.event('OnNotificationClose', df.cCallModeDefault);
+        this.event('OnNotificationError', df.cCallModeDefault);
+        this.event('OnNotificationShow', df.cCallModeDefault);
+        this.event('OnError');
     }
 
     create(tDef) {
@@ -43,14 +44,14 @@ export default class Notifications extends df.WebObject {
                 requireInteraction: data.bRequireInteraction,
                 silent: data.bSilent
             });
-            notification.addEventListener('click', () => this.fire('OnClick', [data.id]));
-            notification.addEventListener('close', () => this.fire('OnClose', [data.id]));
-            notification.addEventListener('error', error => this.fire('OnError', [data.id, error.message]));
-            notification.addEventListener('show', () => this.fire('OnShow', [data.id]));
+            notification.addEventListener('click', () => this.fire('OnNotificationClick', [data.id]));
+            notification.addEventListener('close', () => this.fire('OnNotificationClose', [data.id]));
+            notification.addEventListener('error', () => this.fire('OnNotificationError', [data.id]));
+            notification.addEventListener('show', () => this.fire('OnNotificationShow', [data.id]));
             notifications.push({ id: data.id, notification });
         }
         catch (error) {
-            this.fire('OnError', [data.id, error.message]);
+            this.fire('OnError', [error.name, error.message]);
         }
     }
 

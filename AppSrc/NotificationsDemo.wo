@@ -3,7 +3,7 @@ Use cWebPanel.pkg
 Use cWebLabel.pkg
 Use cWebButton.pkg
 Use cWebGroup.pkg
-Use cWebEdit.pkg
+Use cLogger.pkg
 Use cWebHtmlBox.pkg
 
 Use cNotificationsAPI.pkg
@@ -22,10 +22,11 @@ Object oNotificationsDemo is a cWebView
     
     Object oNotificationsAPI is a cNotificationsAPI
         Set pbServerOnPermissionChange to True
-        Set pbServerOnClick to True
-        Set pbServerOnClose to True
+        Set pbServerOnNotificationClick to True
+        Set pbServerOnNotificationClose to True
+        Set pbServerOnNotificationError to True
+        Set pbServerOnNotificationShow to True
         Set pbServerOnError to True
-        Set pbServerOnShow to True
 
         Procedure OnPermissionChange
             String sPermission
@@ -42,20 +43,24 @@ Object oNotificationsDemo is a cWebView
             End
         End_Procedure
 
-        Procedure OnClick Integer iID
-            Send Log of oWebEdit (SFormat("User clicked notification %1", iID))
+        Procedure OnNotificationClick Integer iID
+            Send Log of oLogger (SFormat("Notification %1 was clicked", iID))
         End_Procedure
 
-        Procedure OnClose Integer iID
-            Send Log of oWebEdit (SFormat("Notification %1 was closed", iID))
+        Procedure OnNotificationClose Integer iID
+            Send Log of oLogger (SFormat("Notification %1 was closed", iID))
         End_Procedure
 
-        Procedure OnError Integer iID String sMessage
-            Send Log of oWebEdit (SFormat("Notification %1 failed: %2", iID, sMessage))
+        Procedure OnNotificationError Integer iID
+            Send Log of oLogger (SFormat("Notification %1 failed to display", iID))
         End_Procedure
 
-        Procedure OnShow Integer iID
-            Send Log of oWebEdit (SFormat("Notification %1 was opened", iID))
+        Procedure OnNotificationShow Integer iID
+            Send Log of oLogger (SFormat("Notification %1 was opened", iID))
+        End_Procedure
+
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("Error %1: %2", sErrorName, sErrorMessage))
         End_Procedure
     End_Object
 
@@ -103,7 +108,7 @@ Object oNotificationsDemo is a cWebView
                     
                     Get CreateNotification of oNotificationsAPI stNoti to iNotificationID
                     WebSet piLastNotification of oWebGroup to iNotificationID
-                    Send Log of oWebEdit (SFormat("Created notification %1", iNotificationID))
+                    Send Log of oLogger (SFormat("Created notification %1", iNotificationID))
                 End_Procedure
             End_Object
 
@@ -126,7 +131,7 @@ Object oNotificationsDemo is a cWebView
                     
                     Get CreateNotification of oNotificationsAPI stNoti to iNotificationID
                     WebSet piLastNotification of oWebGroup to iNotificationID
-                    Send Log of oWebEdit (SFormat("Created notification %1", iNotificationID))
+                    Send Log of oLogger (SFormat("Created notification %1", iNotificationID))
                 End_Procedure
             End_Object
 
@@ -146,7 +151,7 @@ Object oNotificationsDemo is a cWebView
                     
                     Get CreateNotification of oNotificationsAPI stNoti to iNotificationID
                     WebSet piLastNotification of oWebGroup to iNotificationID
-                    Send Log of oWebEdit (SFormat("Created notification %1", iNotificationID))
+                    Send Log of oLogger (SFormat("Created notification %1", iNotificationID))
                 End_Procedure
             End_Object
 
@@ -164,22 +169,7 @@ Object oNotificationsDemo is a cWebView
             End_Object
         End_Object
         
-        Object oWebEdit is a cWebEdit
-            Set piColumnSpan to 0
-            Set psLabel to "Edit"
-            Set pbShowLabel to False
-            Set pbReadOnly to True
-            Set pbFillHeight to True
-            
-            Procedure Log String sText
-                String sValue
-                WebGet psValue to sValue
-                If (sValue <> "") Begin
-                    Move (sValue + Character(13) + Character(10)) to sValue
-                End
-                Move (SFormat("%1%2: %3", sValue, CurrentDateTime(), sText)) to sValue
-                WebSet psValue to sValue
-            End_Procedure
+        Object oLogger is a cLogger
         End_Object
     End_Object
 

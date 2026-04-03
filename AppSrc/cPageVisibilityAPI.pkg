@@ -9,9 +9,9 @@ Class cPageVisibilityAPI is a cWebObject
         Property Boolean pbIsSupported False
 
         { WebProperty=Client }
-        Property Boolean pbServerOnVisibilityChange True
+        Property Boolean pbServerOnChange True
         { WebProperty=Client }
-        Property String psClientOnVisibilityChange ""
+        Property String psClientOnChange ""
         
         Set psJSClass to "WebAPIs.PageVisibility"
     End_Procedure
@@ -19,11 +19,11 @@ Class cPageVisibilityAPI is a cWebObject
     Procedure End_Construct_Object
         Forward Send End_Construct_Object
 
-        WebPublishProcedure OnVisibilityChange
+        WebPublishProcedure OnChange
     End_Procedure
     
     { MethodType=Event }
-    Procedure OnVisibilityChange String sState
+    Procedure OnChange String sState
     End_Procedure
 
 End_Class

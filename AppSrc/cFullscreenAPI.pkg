@@ -9,13 +9,13 @@ Class cFullscreenAPI is a cWebObject
         Property Boolean pbIsSupported False
 
         { WebProperty=Client }
-        Property Boolean pbServerOnFullscreenChange False
+        Property Boolean pbServerOnChange False
         { WebProperty=Client }
-        Property String psClientOnFullscreenChange ""
+        Property String psClientOnChange ""
         { WebProperty=Client }
-        Property Boolean pbServerOnFullscreenError False
+        Property Boolean pbServerOnError False
         { WebProperty=Client }
-        Property String psClientOnFullscreenError ""
+        Property String psClientOnError ""
         
         Set psJSClass to "WebAPIs.Fullscreen"
     End_Procedure
@@ -23,8 +23,8 @@ Class cFullscreenAPI is a cWebObject
     Procedure End_Construct_Object
         Forward Send End_Construct_Object
 
-        WebPublishProcedure OnFullscreenChange
-        WebPublishProcedure OnFullscreenError
+        WebPublishProcedure OnChange
+        WebPublishProcedure OnError
     End_Procedure
     
     Procedure ExitFullscreen
@@ -38,11 +38,11 @@ Class cFullscreenAPI is a cWebObject
     End_Procedure
     
     { MethodType=Event }
-    Procedure OnFullscreenChange String sWebObjectName
+    Procedure OnChange String sWebObjectName
     End_Procedure
     
     { MethodType=Event }
-    Procedure OnFullscreenError
+    Procedure OnError String sErrorName String sErrorMessage
     End_Procedure
 
 End_Class

@@ -24,9 +24,9 @@ Object oFullscreenDemo is a cWebView
     Set pbServerOnShow to True
     
     Object oFullscreenAPI is a cFullscreenAPI
-        Set pbServerOnFullscreenChange to True
+        Set pbServerOnChange to True
 
-        Procedure OnFullscreenChange String sWebObjectName
+        Procedure OnChange String sWebObjectName
             Handle hObj
             
             If (sWebObjectName = "") Begin
