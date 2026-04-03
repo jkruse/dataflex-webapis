@@ -42,22 +42,26 @@ Class cNotificationsAPI is a cWebObject
         { WebProperty=Client }
         Property String psClientOnPermissionChange ""
         { WebProperty=Client }
-        Property Boolean pbServerOnClick False
+        Property Boolean pbServerOnNotificationClick False
         { WebProperty=Client }
-        Property String psClientOnClick ""
+        Property String psClientOnNotificationClick ""
         { WebProperty=Client }
-        Property Boolean pbServerOnClose False
+        Property Boolean pbServerOnNotificationClose False
         { WebProperty=Client }
-        Property String psClientOnClose ""
+        Property String psClientOnNotificationClose ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnNotificationError False
+        { WebProperty=Client }
+        Property String psClientOnNotificationError ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnNotificationShow False
+        { WebProperty=Client }
+        Property String psClientOnNotificationShow ""
         { WebProperty=Client }
         Property Boolean pbServerOnError False
         { WebProperty=Client }
         Property String psClientOnError ""
-        { WebProperty=Client }
-        Property Boolean pbServerOnShow False
-        { WebProperty=Client }
-        Property String psClientOnShow ""
-        
+
         Set psJSClass to "WebAPIs.Notifications"
     End_Procedure
 
@@ -65,10 +69,11 @@ Class cNotificationsAPI is a cWebObject
         Forward Send End_Construct_Object
 
         WebPublishProcedure OnPermissionChange
-        WebPublishProcedure OnClick
-        WebPublishProcedure OnClose
+        WebPublishProcedure OnNotificationClick
+        WebPublishProcedure OnNotificationClose
+        WebPublishProcedure OnNotificationError
+        WebPublishProcedure OnNotificationShow
         WebPublishProcedure OnError
-        WebPublishProcedure OnShow
     End_Procedure
     
     Procedure RequestPermission
@@ -106,19 +111,23 @@ Class cNotificationsAPI is a cWebObject
     End_Procedure
 
     { MethodType=Event }
-    Procedure OnClick Integer iID
+    Procedure OnNotificationClick Integer iID
     End_Procedure
 
     { MethodType=Event }
-    Procedure OnClose Integer iID
+    Procedure OnNotificationClose Integer iID
     End_Procedure
 
     { MethodType=Event }
-    Procedure OnError Integer iID String sMessage
+    Procedure OnNotificationError Integer iID
     End_Procedure
 
     { MethodType=Event }
-    Procedure OnShow Integer iID
+    Procedure OnNotificationShow Integer iID
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
     End_Procedure
 
 End_Class

@@ -2,8 +2,8 @@ export default class Fullscreen extends df.WebObject {
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
-        this.event('OnFullscreenChange', df.cCallModeDefault);
-        this.event('OnFullscreenError', df.cCallModeDefault);
+        this.event('OnChange', df.cCallModeDefault);
+        this.event('OnError', df.cCallModeDefault);
     }
 
     static getDfObjName(obj) {
@@ -19,14 +19,14 @@ export default class Fullscreen extends df.WebObject {
         super.create(tDef);
         this.set('pbIsSupported', document.fullscreenEnabled);
         if (this.pbIsSupported) {
-            df.dom.on('fullscreenchange', document, this.onFullscreenChange, this);
-            df.dom.on('fullscreenerror', document, this.onFullscreenError, this);
+            df.dom.on('fullscreenchange', document, this.onChange, this);
+            df.dom.on('fullscreenerror', document, this.onError, this);
         }
     }
 
     destroy() {
-        df.dom.off('fullscreenchange', document, this.onFullscreenChange, this);
-        df.dom.off('fullscreenerror', document, this.onFullscreenError, this);
+        df.dom.off('fullscreenchange', document, this.onChange, this);
+        df.dom.off('fullscreenerror', document, this.onError, this);
         super.destroy();
     }
 
@@ -43,11 +43,11 @@ export default class Fullscreen extends df.WebObject {
         }
     }
 
-    onFullscreenChange() {
-        this.fire('OnFullscreenChange', [document.fullscreenElement ? Fullscreen.getDfObjName(document.fullscreenElement) : ''])
+    onChange() {
+        this.fire('OnChange', [document.fullscreenElement ? Fullscreen.getDfObjName(document.fullscreenElement) : ''])
     }
 
-    onFullscreenError() {
-        this.fire('OnFullscreenError');
+    onError() {
+        this.fire('OnError', ['FullscreenError', 'Fullscreen request failed']);
     }
 }

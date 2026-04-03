@@ -14,7 +14,7 @@ export default class NetworkInformation extends df.WebObject {
         this.prop(df.tBool, 'pbSaveData', false);
         this.prop(df.tString, 'psType', '');
 
-        this.event('OnNetworkChange', df.cCallModeDefault);
+        this.event('OnChange', df.cCallModeDefault);
     }
 
     create(tDef) {
@@ -24,7 +24,7 @@ export default class NetworkInformation extends df.WebObject {
             this.update();
             navigator.connection.addEventListener('change', () => {
                 this.update();
-                this.fire('OnNetworkChange');
+                this.fire('OnChange');
             });
         }
     }

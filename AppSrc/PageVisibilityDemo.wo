@@ -5,7 +5,7 @@ Use cWebGroup.pkg
 Use cWebMenuGroup.pkg 
 Use cWebMenuItem.pkg
 Use cWebLabel.pkg
-Use cWebEdit.pkg
+Use cLogger.pkg
 Use cWebHtmlBox.pkg
 
 Use cPageVisibilityAPI.pkg
@@ -23,14 +23,8 @@ Object oPageVisibilityDemo is a cWebView
     Set pbServerOnShow to True
     
     Object oPageVisibilityAPI is a cPageVisibilityAPI
-        Procedure OnVisibilityChange String sState
-            String sValue
-            WebGet psValue of oWebEdit to sValue
-            If (sValue <> "") Begin
-                Move (sValue + Character(13) + Character(10)) to sValue
-            End
-            Move (SFormat("%1%2: Page visibility state changed to '%3'", sValue, CurrentDateTime(), sState)) to sValue
-            WebSet psValue of oWebEdit to sValue
+        Procedure OnChange String sState
+            Send Log of oLogger (SFormat("Page visibility state changed to '%1'", sState))
         End_Procedure
     End_Object
 
@@ -53,12 +47,7 @@ Object oPageVisibilityDemo is a cWebView
             Set piColumnSpan to 12
         End_Object
 
-        Object oWebEdit is a cWebEdit
-            Set piColumnSpan to 0
-            Set psLabel to "Edit"
-            Set pbShowLabel to False
-            Set pbFillHeight to True
-            Set pbReadOnly to True
+        Object oLogger is a cLogger
         End_Object
     End_Object 
 
