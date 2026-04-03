@@ -14,26 +14,28 @@ Define NI_CONNECTION_TYPE_WIMAX for "wimax"
 Define NI_CONNECTION_TYPE_OTHER for "other"
 Define NI_CONNECTION_TYPE_UNKNOWN for "unknown"
 
+Struct tNetworkInfo
+    // Bandwidth estimate, Mbit/s
+    Number downlink
+    // Maximum downlink speed, Mbit/s
+    Number downlinkMax
+    // Effective connection type, NI_EFFECTIVE_CONNECTION_TYPE_*
+    String effectiveType
+    // Round trip time, ms
+    Integer rtt
+    // Reduced data usage active
+    Boolean saveData
+    // Connection type, NI_CONNECTION_TYPE_*
+    String type
+End_Struct
+
 Class cNetworkInformationAPI is a cWebObject
     
     Procedure Construct_Object
         Forward Send Construct_Object
 
-        // These are all read-only
         { WebProperty=Client DesignTime=False }
         Property Boolean pbIsSupported False
-        { WebProperty=Client DesignTime=False }
-        Property Number pnDownlink 0
-        { WebProperty=Client DesignTime=False }
-        Property Number pnDownlinkMax 0
-        { WebProperty=Client DesignTime=False }
-        Property String psEffectiveType "" // NI_EFFECTIVE_CONNECTION_TYPE_*
-        { WebProperty=Client DesignTime=False }
-        Property Integer piRTT 0
-        { WebProperty=Client DesignTime=False }
-        Property Boolean pbSaveData False
-        { WebProperty=Client DesignTime=False }
-        Property String psType "" // NI_CONNECTION_TYPE_*
 
         { WebProperty=Client }
         Property Boolean pbServerOnChange True
@@ -46,11 +48,27 @@ Class cNetworkInformationAPI is a cWebObject
     Procedure End_Construct_Object
         Forward Send End_Construct_Object
 
-        WebPublishProcedure OnChange
+        WebPublishProcedure OnChangeProxy
+    End_Procedure
+    
+    Procedure Update
+        Send ClientAction "update"
+    End_Procedure
+    
+    { Visibility=Private }
+    Procedure OnChangeProxy
+        Handle hoJson
+        tNetworkInfo stInfo
+        
+        Get phoActionJsonData to hoJson
+        Set pbRequireAllMembers of hoJson to False
+        Get JsonToDataType of hoJson to stInfo
+        Send OnChange stInfo
     End_Procedure
 
     { MethodType=Event }
-    Procedure OnChange
+    // Called whenever connection changes, or on "Update"
+    Procedure OnChange tNetworkInfo stInfo
     End_Procedure
 
 End_Class

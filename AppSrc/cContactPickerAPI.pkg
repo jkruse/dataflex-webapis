@@ -5,6 +5,28 @@ Struct tContactPickerSelectData
     Boolean bMultiple
 End_Struct
 
+Struct tContactPickerContactAddress
+    String[] addressLine
+    String country
+    String city
+    String dependentLocality
+    String organization
+    String phone
+    String postalCode
+    String recipient
+    String region
+    String sortingCode
+End_Struct
+
+Struct tContactPickerContact
+    { Name = "address" }
+    tContactPickerContactAddress[] Address
+    String[] email
+    String[] icon
+    String[] name
+    String[] tel
+End_Struct
+
 Class cContactPickerAPI is a cWebObject
     
     Procedure Construct_Object
@@ -26,7 +48,7 @@ Class cContactPickerAPI is a cWebObject
     Procedure End_Construct_Object
         Forward Send End_Construct_Object
 
-        WebPublishProcedure OnSelect
+        WebPublishProcedure OnSelectProxy
     End_Procedure
     
     Procedure Select tContactPickerSelectData stData
@@ -41,8 +63,18 @@ Class cContactPickerAPI is a cWebObject
         Send Destroy of hoJson
     End_Procedure
     
+    { Visibility=Private }
+    Procedure OnSelectProxy
+        Handle hoJson
+        tContactPickerContact[] aContacts
+        Get phoActionJsonData to hoJson
+        Set pbRequireAllMembers of hoJson to False
+        Get JsonToDataType of hoJson to aContacts
+        Send OnSelect aContacts
+    End_Procedure
+    
     { MethodType=Event }
-    Procedure OnSelect String sJsonData
+    Procedure OnSelect tContactPickerContact[] aContacts
     End_Procedure
 
 End_Class

@@ -1,9 +1,11 @@
+import { readBlob } from './utils/blob.js';
+
 export default class ContactPicker extends df.WebObject {
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
         this.prop(df.tString, 'psSupportedProperties', '');
-        this.event('OnSelect', df.cCallModeDefault);
+        this.event('OnSelect', df.cCallModeDefault, 'OnSelectProxy');
     }
 
     async create(tDef) {
@@ -21,6 +23,9 @@ export default class ContactPicker extends df.WebObject {
             params.aProperties,
             { multiple: params.bMultiple }
         );
-        this.fire('OnSelect', [JSON.stringify(result)]);
+        for (const contact of result?.filter(item => item.icon)) {
+            contact.icon = await Promise.all(contact.icon.map(item => readBlob(item)))
+        }
+        this.fireEx({ sEvent: 'OnSelect', tActionData: result });
     }
 }

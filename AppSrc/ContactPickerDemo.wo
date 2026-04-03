@@ -8,6 +8,7 @@ Use cWebCheckBox.pkg
 Use cWebButton.pkg
 Use cWebHtmlBox.pkg
 Use cWebLabel.pkg
+Use cLogger.pkg
 
 Use cContactPickerAPI.pkg
 
@@ -24,8 +25,16 @@ Object oContactPickerDemo is a cWebView
     Set pbServerOnShow to True
     
     Object oContactPickerAPI is a cContactPickerAPI
-        Procedure OnSelect String sJsonData
-            Send ShowInfoBox sJsonData
+        Procedure OnSelect tContactPickerContact[] aContacts
+            Handle hoJson
+            String sJson
+            
+            Get Create (RefClass(cJsonObject)) to hoJson
+            Set peWhiteSpace of hoJson to jpWhitespace_Pretty
+            Send DataTypeToJson of hoJson aContacts
+            Get Stringify of hoJson to sJson
+            Send Log of oLogger (SFormat("Selected: %1", sJson))
+            Send Destroy of hoJson
         End_Procedure
     End_Object
 
@@ -110,6 +119,9 @@ Object oContactPickerDemo is a cWebView
                 
                 Send Select of oContactPickerAPI stData
             End_Procedure
+        End_Object
+        
+        Object oLogger is a cLogger
         End_Object
         
     End_Object 
