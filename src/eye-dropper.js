@@ -2,7 +2,7 @@ export default class EyeDropperComponent extends df.WebObject {
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
-        this.event('OnSelect', df.cCallModeDefault);
+        this.event('OnSelect');
         this._abortController = new AbortController();
     }
 

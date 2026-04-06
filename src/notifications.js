@@ -5,11 +5,11 @@ export default class Notifications extends df.WebObject {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
         this.prop(df.tString, 'psPermission', '');
-        this.event('OnPermissionChange', df.cCallModeDefault);
-        this.event('OnNotificationClick', df.cCallModeDefault);
-        this.event('OnNotificationClose', df.cCallModeDefault);
-        this.event('OnNotificationError', df.cCallModeDefault);
-        this.event('OnNotificationShow', df.cCallModeDefault);
+        this.event('OnPermissionChange');
+        this.event('OnNotificationClick');
+        this.event('OnNotificationClose');
+        this.event('OnNotificationError');
+        this.event('OnNotificationShow');
         this.event('OnError');
     }
 

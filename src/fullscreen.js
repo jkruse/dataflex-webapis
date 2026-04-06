@@ -2,8 +2,8 @@ export default class Fullscreen extends df.WebObject {
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
-        this.event('OnChange', df.cCallModeDefault);
-        this.event('OnError', df.cCallModeDefault);
+        this.event('OnChange');
+        this.event('OnError');
     }
 
     static getDfObjName(obj) {

@@ -2,9 +2,9 @@ export default class ScreenWakeLock extends df.WebObject {
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
-        this.event('OnSuccess', df.cCallModeDefault);
-        this.event('OnError', df.cCallModeDefault);
-        this.event('OnRelease', df.cCallModeDefault);
+        this.event('OnSuccess');
+        this.event('OnError');
+        this.event('OnRelease');
     }
 
     create(tDef) {
