@@ -3,7 +3,7 @@ export default class BroadcastChannelComponent extends df.WebObject {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
         this.prop(df.tString, 'psName', '');
-        this.event('OnMessage', df.cCallModeDefault);
+        this.event('OnMessage');
     }
 
     create(tDef) {
