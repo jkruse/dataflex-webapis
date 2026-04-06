@@ -1,4 +1,6 @@
 export default class ScreenWakeLock extends df.WebObject {
+    #wakeLock;
+
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
@@ -14,8 +16,8 @@ export default class ScreenWakeLock extends df.WebObject {
 
     async request() {
         try {
-            this._wakeLock = await navigator.wakeLock.request('screen');
-            this._wakeLock.addEventListener('release', () => this.fire('OnRelease'));
+            this.#wakeLock = await navigator.wakeLock.request('screen');
+            this.#wakeLock.addEventListener('release', () => this.fire('OnRelease'));
             this.fire('OnSuccess');
         } catch (error) {
             this.fire('OnError', [error.name, error.message]);
@@ -23,9 +25,9 @@ export default class ScreenWakeLock extends df.WebObject {
     }
 
     async release() {
-        if (this._wakeLock) {
-            await this._wakeLock.release();
-            this._wakeLock = null;
+        if (this.#wakeLock) {
+            await this.#wakeLock.release();
+            this.#wakeLock = null;
         }
     }
 }

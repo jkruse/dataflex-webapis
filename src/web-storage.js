@@ -99,7 +99,6 @@ export class LocalStorage extends WebStorage {
         super.create(tDef);
         if (this.pbIsSupported) {
             window.addEventListener('storage', event => {
-                console.log(event);
                 this.fire('OnStorage', [event.key || '', event.newValue || '', event.oldValue || '', event.url]);
             });
         }

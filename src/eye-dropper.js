@@ -1,9 +1,11 @@
 export default class EyeDropperComponent extends df.WebObject {
+    #abortController;
+
     constructor(sName, oParent) {
         super(sName, oParent);
         this.prop(df.tBool, 'pbIsSupported', false);
         this.event('OnSelect');
-        this._abortController = new AbortController();
+        this.#abortController = new AbortController();
     }
 
     create(tDef) {
@@ -12,11 +14,11 @@ export default class EyeDropperComponent extends df.WebObject {
     }
 
     async open() {
-        const result = await new EyeDropper().open({ signal: this._abortController.signal });
+        const result = await new window.EyeDropper().open({ signal: this.#abortController.signal });
         this.fire('OnSelect', [result.sRGBHex]);
     }
 
     abort() {
-        this._abortController.abort();
+        this.#abortController.abort();
     }
 }
