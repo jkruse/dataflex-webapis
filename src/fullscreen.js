@@ -6,15 +6,6 @@ export default class Fullscreen extends df.WebObject {
         this.event('OnError');
     }
 
-    static getDfObjName(obj) {
-        if (obj.dataset.dfobj) {
-            return obj.dataset.dfobj;
-        }
-        if (obj.parentElement) {
-            return Fullscreen.getDfObjName(obj.parentElement);
-        }
-    }
-
     create(tDef) {
         super.create(tDef);
         this.set('pbIsSupported', document.fullscreenEnabled);
@@ -44,10 +35,17 @@ export default class Fullscreen extends df.WebObject {
     }
 
     onChange() {
-        this.fire('OnChange', [document.fullscreenElement ? Fullscreen.getDfObjName(document.fullscreenElement) : ''])
+        this.fire('OnChange', [this.#dfObjectName(document.fullscreenElement)]);
     }
 
     onError() {
         this.fire('OnError', ['FullscreenError', 'Fullscreen request failed']);
+    }
+
+    #dfObjectName(element) {
+        if (element) {
+            return element.closest('[data-dfobj]').dataset.dfobj;
+        }
+        return '';
     }
 }

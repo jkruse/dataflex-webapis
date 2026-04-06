@@ -6,8 +6,8 @@ Use cWebMenuGroup.pkg
 Use cWebMenuItem.pkg
 Use cWebLabel.pkg
 Use cWebButton.pkg
-Use cWebEdit.pkg
 Use cWebHtmlBox.pkg
+Use cLogger.pkg
 
 Use cBroadcastChannelAPI.pkg
 
@@ -26,9 +26,14 @@ Object oBroadcastChannelDemo is a cWebView
     Object oBroadcastChannelAPI is a cBroadcastChannelAPI
         // You must set psName on construction - this is the name of the broadcast channel
         Set psName to "demo"
+        Set pbServerOnError to True
 
         Procedure OnMessage String sData
-            Send Log of oWebEdit (SFormat("Received message '%1'", sData))
+            Send Log of oLogger (SFormat("Received message '%1'", sData))
+        End_Procedure
+        
+        Procedure OnError String sErrorName String sErrorMessage
+            Send Log of oLogger (SFormat("%1: %2", sErrorName, sErrorMessage))
         End_Procedure
     End_Object
 
@@ -72,26 +77,11 @@ Object oBroadcastChannelDemo is a cWebView
                 WebGet psValue of oWebForm to sData
                 Send PostMessage of oBroadcastChannelAPI sData
                 WebSet psValue of oWebForm to ""
-                Send Log of oWebEdit (SFormat("Sent message '%1'", sData))
+                Send Log of oLogger (SFormat("Sent message '%1'", sData))
             End_Procedure
         End_Object
 
-        Object oWebEdit is a cWebEdit
-            Set piColumnSpan to 0
-            Set psLabel to "Edit"
-            Set pbShowLabel to False
-            Set pbReadOnly to True
-            Set pbFillHeight to True
-            
-            Procedure Log String sText
-                String sValue
-                WebGet psValue to sValue
-                If (sValue <> "") Begin
-                    Move (sValue + Character(13) + Character(10)) to sValue
-                End
-                Move (SFormat("%1%2: %3", sValue, CurrentDateTime(), sText)) to sValue
-                WebSet psValue to sValue
-            End_Procedure
+        Object oLogger is a cLogger
         End_Object
         
     End_Object

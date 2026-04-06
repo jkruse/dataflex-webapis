@@ -83,7 +83,8 @@ Object oDashboard is a cWebView
                     <div class="WebCon_Sizer" data-ServerOnClick="openview">
                         <div Class="Tile_Title">Contact Picker API</div>
                         <div class="Tile_Subtitle">access to contacts</div>
-                        <span class="material-icons-outlined">https</span>
+                        <span class="material-icons-outlined" style="right: 40px">https</span>
+                        <span class="material-icons-outlined">warning_amber</span>
                     </div>
                     """
                                 
@@ -119,6 +120,7 @@ Object oDashboard is a cWebView
                     <div class="WebCon_Sizer" data-ServerOnClick="openview">
                         <div Class="Tile_Title">EyeDropper API</div>
                         <div class="Tile_Subtitle">pick a color using an eyedropper tool</div>
+                        <span class="material-icons-outlined" style="right: 40px">https</span>
                         <span class="material-icons-outlined">warning_amber</span>
                     </div>
                     """

@@ -14,6 +14,10 @@ Class cBroadcastChannelAPI is a cWebObject
         Property Boolean pbServerOnMessage True
         { WebProperty=Client }
         Property String psClientOnMessage ""
+        { WebProperty=Client }
+        Property Boolean pbServerOnError False
+        { WebProperty=Client }
+        Property String psClientOnError ""
         
         Set psJSClass to "WebAPIs.BroadcastChannel"
     End_Procedure
@@ -22,6 +26,7 @@ Class cBroadcastChannelAPI is a cWebObject
         Forward Send End_Construct_Object
 
         WebPublishProcedure OnMessage
+        WebPublishProcedure OnError
     End_Procedure
     
     Procedure PostMessage String sData
@@ -32,6 +37,10 @@ Class cBroadcastChannelAPI is a cWebObject
     
     { MethodType=Event }
     Procedure OnMessage String sData
+    End_Procedure
+
+    { MethodType=Event }
+    Procedure OnError String sErrorName String sErrorMessage
     End_Procedure
 
 End_Class

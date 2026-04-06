@@ -18,7 +18,7 @@ export default class WebShare extends df.WebObject {
             url
         };
         try {
-            const files = await Promise.all(this._tActionData?.aFiles?.map(info => this.toFile(info)) || []);
+            const files = await Promise.all(this._tActionData?.aFiles?.map(info => this.#toFile(info)) || []);
             if (files.length > 0) {
                 if (navigator.canShare?.({ files })) {
                     data.files = files;
@@ -33,7 +33,7 @@ export default class WebShare extends df.WebObject {
         }
     }
 
-    async toFile(info) {
+    async #toFile(info) {
         const response = await fetch(info.sURL, { credentials: 'same-origin' });
         const data = await response.blob();
         return new File([data], info.sName, {
