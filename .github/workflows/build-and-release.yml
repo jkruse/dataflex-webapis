@@ -1,0 +1,75 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Package version (e.g. 1.0.0)"
+        required: true
+        type: string
+      channel:
+        description: "Release channel"
+        required: false
+        default: "stable"
+        type: choice
+        options: [ "stable", "beta" ]
+      create_release:
+        description: "Create GitHub Release"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+    steps:
+    - uses: actions/checkout@v6
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build
+
+  package:
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+    runs-on: [ self-hosted, windows ]
+    steps:
+    - uses: actions/checkout@v6
+    - name: Use Node.js 24.x
+      uses: actions/setup-node@v6
+      with:
+        node-version: 24.x
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build
+    - name: Install df-cli
+      run: npm install -g df-cli
+    - name: Package components
+      run: df-cli package
+    - name: Upload package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dataflex-webapis-package
+        path: dist/
+    - name: Create GitHub Release
+      if: github.event_name == 'push' || inputs.create_release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        TAG="${GITHUB_REF_NAME}"
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then TAG="v${{ inputs.version }}"; fi
+        gh release create "$TAG" --title "dataflex-webapis ${TAG#v}" --notes "DataFlex WebAPIs custom components package." dist/*
