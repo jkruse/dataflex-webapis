@@ -77,14 +77,12 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
         WebPublishProcedure OnPhotoProxy
     End_Procedure
     
-    { Visibility=Private }
-    Function SerializeObject Returns tWebObjectDef
+    Procedure PreSerializeObject
         Integer iCount i
         Handle hoChild
         String sMediaStreamName
         Boolean bFound
-        tWebObjectDef tResult
-        
+
         Get Child_Count to iCount
         For i from 0 to (iCount - 1)
             Get ChildByIndex i to hoChild
@@ -95,11 +93,7 @@ Class cMediaStreamImageCaptureAPI is a cWebObject
             End
             If (bFound) Break
         Loop
-        
-        Forward Get SerializeObject to tResult
-        
-        Function_Return tResult
-    End_Function
+    End_Procedure
 
     // Connect to the media stream to prepare for image capture
     // If you pass the id of a <video> element, the stream will start playing on that element

@@ -1,0 +1,268 @@
+{
+   "Projects": [
+     {
+       "nZoom": 0.75,
+       "nPositionX": -1892,
+       "nPositionY": -40,
+       "nWidth": 2576,
+       "nHeight": 1189.33337402,
+       "sProject": "WebApp.src",
+       "bShowWebApp": false,
+       "bShowHidden": false,
+       "Elements": [
+         {
+           "Name": "oBatteryStatusDemo",
+           "Position": {
+             "sX": "0",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oBroadcastChannelDemo",
+           "Position": {
+             "sX": "360",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oClipboardDemo",
+           "Position": {
+             "sX": "720",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oContactPickerDemo",
+           "Position": {
+             "sX": "1080",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oCredentialManagementDemo",
+           "Position": {
+             "sX": "1440",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oDashboard",
+           "Position": {
+             "sX": "3060",
+             "sY": "0"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oEyeDropperDemo",
+           "Position": {
+             "sX": "1800",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oFullscreenDemo",
+           "Position": {
+             "sX": "2160",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oLogin",
+           "Position": {
+             "sX": "3420",
+             "sY": "225"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oMediaStreamImageCaptureDemo",
+           "Position": {
+             "sX": "2520",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oMediaStreamRecordingDemo",
+           "Position": {
+             "sX": "2880",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oNetworkInformationDemo",
+           "Position": {
+             "sX": "3240",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oNotificationsDemo",
+           "Position": {
+             "sX": "3600",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oPageVisibilityDemo",
+           "Position": {
+             "sX": "3960",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oScreenOrientationDemo",
+           "Position": {
+             "sX": "4320",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oScreenWakeLockDemo",
+           "Position": {
+             "sX": "4680",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oSensorDemo",
+           "Position": {
+             "sX": "5040",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oVibrationDemo",
+           "Position": {
+             "sX": "5400",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oWebApp",
+           "Position": {
+             "sX": "3780",
+             "sY": "225"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oWebShareDemo",
+           "Position": {
+             "sX": "5760",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         },
+         {
+           "Name": "oWebStorageDemo",
+           "Position": {
+             "sX": "6120",
+             "sY": "615"
+           },
+           "TabColor": {
+             "sColorDM": "",
+             "sColorLM": ""
+           },
+           "bHidden": false
+         }
+       ]
+     }
+   ]
+ }

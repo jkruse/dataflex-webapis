@@ -1,11 +1,11 @@
-﻿Use cWebView.pkg
-Use cWebPanel.pkg
-Use cWebLabel.pkg
+﻿Use cLogger.pkg
+Use cWebCheckBox.pkg
 Use cWebHtmlBox.pkg
-Use cLogger.pkg
+Use cWebLabel.pkg
+Use cWebPanel.pkg
+Use cWebView.pkg
 
 Use cBatteryStatusAPI.pkg
-Use cWebCheckBox.pkg
 
 Object oBatteryStatusDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown

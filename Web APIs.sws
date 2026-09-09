@@ -1,12 +1,16 @@
-[Properties]
-Version=24.0
-[WorkspacePaths]
-ConfigFile=.\Programs\Config.ws
-[Preferences]
-DefaultFormHeight=12
-[Conditionals]
-Is$WebApp=True
-Is$Win64=True
-[Projects]
-Project0=WebApp.src
-Project1=FlexTronDemo.src
+{
+    "dependencies": [
+        "DataFlex-dev/Web UI Server#1.0.52",
+        "DataFlex-dev/Web UI FlexTron#1.0.52",
+        "DataFlex-dev/Web UI Material Theme#1.0.4"
+    ],
+    "description": "DataFlex Custom Components for Web APIs",
+    "df": 26.0,
+    "projects": [
+        "WebApp.src",
+        "FlexTronDemo.src"
+    ],
+    "studio": {
+        "DefaultFormHeight": 12
+    }
+}

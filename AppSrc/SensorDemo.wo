@@ -1,14 +1,15 @@
-﻿Use cWebView.pkg
-Use cWebPanel.pkg
-Use cWebGroup.pkg
-Use cLogger.pkg
+﻿Use cLogger.pkg
 Use cWebCheckBox.pkg
 Use cWebForm.pkg
+Use cWebGroup.pkg
 Use cWebHtmlBox.pkg
+Use cWebLabel.pkg
+Use cWebPanel.pkg
+Use cWebSlider.pkg
+Use cWebView.pkg
 Use gFormatNumbers.pkg
 
 Use cSensorAPI.pkg
-Use cWebSlider.pkg
 
 Object oSensorDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown

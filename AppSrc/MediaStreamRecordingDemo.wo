@@ -1,17 +1,18 @@
-﻿Use cWebView.pkg
-Use cWebPanel.pkg
+﻿Use cLogger.pkg
+Use cWebAccordionCard.pkg
+Use cWebAccordionContainer.pkg
 Use cWebButton.pkg
-Use cLogger.pkg
+Use cWebCheckBox.pkg
+Use cWebCombo.pkg
+Use cWebFloatingPanel.pkg
+Use cWebGroup.pkg
+Use cWebHtmlBox.pkg
+Use cWebLabel.pkg
+Use cWebPanel.pkg
+Use cWebView.pkg
 
 Use cMediaStreamAPI.pkg
 Use cMediaStreamRecordingAPI.pkg
-Use cWebCheckBox.pkg
-Use cWebCombo.pkg
-Use cWebHtmlBox.pkg
-Use cWebGroup.pkg
-Use cWebAccordionContainer.pkg
-Use cWebAccordionCard.pkg
-Use cWebFloatingPanel.pkg
 
 Object oMediaStreamRecordingDemo is a cWebView
     Set peWebViewStyle to wvsDrillDown
