@@ -17,7 +17,7 @@
     "watch": "vite build --watch",
     "build": "eslint src && vite build",
     "clean": "rimraf dist",
-    "copy-server-props": "copyfiles -f \"%ProgramFiles%/DataFlex 24.0/Lib/WebAppMaster/Data/[Ww]eb[Aa]pp[Ss]erver[Pp]rops.*\" Data",
+    "copy-server-props": "copyfiles -f \"%ProgramFiles%/DataFlex 26.0/Lib/WebAppMaster/Data/[Ww]eb[Aa]pp[Ss]erver[Pp]rops.*\" Data",
     "predist": "npm run clean && npm run copy-server-props",
     "dist": "npm run build",
     "postdist": "npm run zip-demo && npm run zip-component",
