@@ -11,7 +11,8 @@
         },
         "DataFlex-dev/Web UI Server": {
             "ref": "1.0.52"
-        }
+        },
+        "local/WebAPIs": {}
     },
     "lockVersion": "1.0.0"
 }

@@ -134,8 +134,7 @@ Object oMain is a cFlexTronPanel
         Procedure OnDefineScriptIncludes String[]  ByRef aScriptHtml
             Forward Send OnDefineScriptIncludes (&aScriptHtml)
             Move """
-                <script src="https://unpkg.com/core-js-bundle/minified.js"></script>
-                <script src="Custom/index.js"></script>
+                <script src="WebAPIs/index.js"></script>
                 """ to aScriptHtml[SizeOfArray(aScriptHtml)]
         End_Procedure
         

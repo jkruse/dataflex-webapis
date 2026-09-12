@@ -1,0 +1,30 @@
+{
+    "dependencies": [
+        "../WebAPIs.sws",
+        "DataFlex-dev/Web UI Server#~1.0.52",
+        "DataFlex-dev/Web UI FlexTron#~1.0.52",
+        "DataFlex-dev/Web UI Material Theme#~1.0.4"
+    ],
+    "description": "Demo application for the WebAPIs package.",
+    "df": 26.0,
+    "paths": {
+        "appHtml": "../AppHtml",
+        "appSrc": "AppSrc",
+        "bitmap": "../Bitmaps",
+        "configFile": "../Programs/Config.ws",
+        "data": "../Data",
+        "ddSrc": "../DDSrc",
+        "fileList": "../Data/Filelist.cfg",
+        "help": "../Help",
+        "ideSrc": "../IdeSrc",
+        "programs": "../Programs"
+    },
+    "projects": [
+        "WebApp.src",
+        "FlexTronDemo.src"
+    ],
+    "studio": {
+        "DefaultFormHeight": 12
+    },
+    "workspaceName": "WebAPIs Demo"
+}

@@ -8,7 +8,7 @@ export default defineConfig({
             formats: ['iife'],
             fileName: () => 'index.js'
         },
-        outDir: 'AppHtml/Custom',
+        outDir: 'AppHtml/WebAPIs',
         emptyOutDir: true,
         sourcemap: true
     }
