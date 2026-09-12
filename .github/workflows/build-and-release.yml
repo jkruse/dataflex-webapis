@@ -48,7 +48,18 @@ jobs:
       run: |
         $VERSION = $env:GITHUB_REF_NAME -replace '^v', ''
         "VERSION=$VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-        node -e "const fs=require('fs');const f='WebAPIs.sws';const j=JSON.parse(fs.readFileSync(f,'utf8'));j.package.version=process.argv[1];fs.writeFileSync(f,JSON.stringify(j,null,4)+'\n')" "$VERSION"
+
+        $path = 'WebAPIs.sws'
+        $content = [System.IO.File]::ReadAllText($path)
+
+        $pattern = '"version"\s*:\s*"[^"]*"'
+        $matchCount = [regex]::Matches($content, $pattern).Count
+        if ($matchCount -ne 1) {
+          throw "Expected exactly one 'version' field in $path, found $matchCount - refusing to guess which one to update"
+        }
+
+        $updated = [regex]::Replace($content, $pattern, "`"version`": `"$VERSION`"")
+        [System.IO.File]::WriteAllText($path, $updated, [System.Text.UTF8Encoding]::new($false))
     - name: Validate workspace configuration
       run: df-cli config WebAPIs.sws
     - name: Build demo workspace
