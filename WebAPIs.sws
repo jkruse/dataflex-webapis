@@ -1,0 +1,30 @@
+{
+    "dependencies": [
+        "DataFlex-dev/Web UI#~1.0.52"
+    ],
+    "description": "DataFlex Custom Components for Web APIs",
+    "df": 26.0,
+    "package": {
+        "author": {
+            "email": "kruse@kruse-net.dk",
+            "name": "Jakob Kruse"
+        },
+        "df-max": 26.0,
+        "df-min": 26.0,
+        "homepage": "https://www.kruse-net.dk/WebAPIs/",
+        "htmlIncludes": [
+            "WebAPIs/index.js"
+        ],
+        "install": [
+            "${AppHtml}/WebAPIs/index.js.map"
+        ],
+        "license": "MIT",
+        "licenseFile": "LICENSE.txt",
+        "repository": "https://github.com/jkruse/dataflex-webapis",
+        "tags": "dataflex, web api, custom component",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "appSrc": "AppSrc"
+    }
+}

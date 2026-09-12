@@ -24,34 +24,34 @@ Contains DataFlex implementations of:
 
 ## How to get it
 
-### Option 1
+### Option 1: DataFlex Package Manager (recommended)
 
-Download either just the prebuilt custom components (WebAPIsComponents.zip) or the entire demo workspace with prebuilt components (WebAPIsDemo.zip) from the [Releases](https://github.com/jkruse/dataflex-webapis/releases) page.
+Requires a DataFlex 26 installation (which includes the `df-cli` package manager):
 
-### Option 2
+    > df-cli package install <your-workspace>.sws Kruse-Net/WebAPIs
 
-Download or clone the source code from GitHub, install NodeJS, and build the components with
+This adds the custom components to your workspace, copies the client-side JavaScript to your `AppHtml/WebAPIs` folder, and injects the required script includes into your `Index.html` automatically.
+
+### Option 2: GitHub Releases
+
+Download either the package (`WebAPIs-<version>.zip`) or the entire demo workspace with prebuilt components (`WebAPIsDemo.zip`) from the [Releases](https://github.com/jkruse/dataflex-webapis/releases) page.
+The demo workspace is self-contained: extract the zip and open `Demo/WebAPIs Demo.sws`.
+
+### Option 3: Build from source
+
+Clone the source code from GitHub, install NodeJS, and build the client-side JavaScript with
 
     > npm ci
     > npm run build
 
+The built bundle is created in `AppHtml/WebAPIs`. The component classes are the `AppSrc/*API.pkg` files.
+
 ## Usage
 
-Copy `AppHtml/Custom` and the `AppSrc/*API.pkg` files to your workspace. If you don't have the `AppHtml/Custom` folder, see "How to get it" above.
+If you use the package manager, the components are available in your workspace and the script includes are injected automatically.
+Otherwise, copy `AppHtml/WebAPIs` and the `AppSrc/*API.pkg` files to your workspace, and include this line in your `Index.html`:
 
-Include these two lines in your `index.html` (if your application only runs on fairly modern browsers, you can probably omit the first one):
+    <script src="WebAPIs/index.js"></script>
 
-    <script src="https://unpkg.com/core-js-bundle/minified.js"></script>
-    <script src="Custom/index.js"></script>
-
-**NOTE that some of these APIs require a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts), which basically means they only work when page is accessed using https, or from localhost!** Those APIs are marked with a padlock icon in the demo application.
-
-### About the core-js script include
-
-I use recent ECMAScript features in the JavaScript source code for these custom components. When running on a major up-to-date evergreen browser (like Google Chrome, Microsoft Edge or Mozilla Firefox) these features work "out of the box". So if you're sure your application only runs on browsers like that, you can use these components without the core-js script include.
-
-If you're not sure, or you explicitly support older browsers, including core-js will [polyfill](https://developer.mozilla.org/en-US/docs/Glossary/Polyfill) any missing features that *can* be polyfilled. YMMV but this could allow you to use components that would otherwise fail. Including it only adds a ~100 KB download to your page, and does not replace features that are natively supported.
-
-If you *do* use core-js, please [support that project](https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md)!
-
-Including core-js will **not** implement API's that are not natively supported in a given browser. Always check the API pages linked above for browser support, and always check the `pbIsSupported` web property of each component at runtime before using it.
+**NOTE that some of these APIs require a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts), which basically means they only work when page is accessed using https, or from localhost!**
+Those APIs are marked with a padlock icon in the demo application.

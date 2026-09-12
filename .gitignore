@@ -23,9 +23,10 @@ Thumbs.db
 # NPM packages folder
 node_modules/
 
-# DataFlex standard folders
+# DataFlex library folders
 AppHtml/CssThemes/
-AppHtml/DfEngine/
+AppHtml/WebUI/
+DfPkg
 
 # DataFlex ignores
 *.dep
@@ -38,10 +39,13 @@ WebApp.exe
 WebApp.log
 
 # Output folders
-AppHtml/Custom/
+AppHtml/WebAPIs/
 dist/
+
+# Other ignores
 /.idea/
 /Programs/temp/
 *.exe
-/DfPkg
-/AppHtml/WebUI
+
+# Packed package archives
+WebAPIs-*.zip
