@@ -64,9 +64,10 @@ jobs:
       run: df-cli config WebAPIs.sws
     - name: Build demo workspace
       run: df-cli build "Demo/WebAPIs Demo.sws"
-    - name: Push package
+    - name: Pack and push package
       shell: pwsh
       run: |
+        df-cli package pack WebAPIs.sws
         df-cli package push WebAPIs.sws "Kruse-Net/WebAPIs" -y 2>&1 | Tee-Object -FilePath df-push.log
         if (Select-String -Path df-push.log -Pattern "error|failed|conflict" -Quiet) {
           Write-Host "::error::Package push reported a failure - check df-push.log"
@@ -93,8 +94,10 @@ jobs:
         git diff --cached --quiet
         if ($LASTEXITCODE -ne 0) {
           git commit -m "chore(release): set package version to $env:VERSION"
+          git push origin HEAD:main
+        } else {
+          Write-Host "No changes to commit"
         }
-        git push
     - name: Create GitHub Release
       shell: pwsh
       env:
