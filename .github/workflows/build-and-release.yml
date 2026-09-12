@@ -33,7 +33,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7
       with:
-        clean: 'true'
+        clean: true
     - name: Use Node.js 24.x
       uses: actions/setup-node@v7
       with:
@@ -44,23 +44,23 @@ jobs:
     - name: Verify DataFlex toolchain
       run: df-cli system
     - name: Set package version from tag
-      shell: bash
+      shell: pwsh
       run: |
-        VERSION="${GITHUB_REF_NAME#v}"
-        echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+        $VERSION = $env:GITHUB_REF_NAME -replace '^v', ''
+        "VERSION=$VERSION" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
         node -e "const fs=require('fs');const f='WebAPIs.sws';const j=JSON.parse(fs.readFileSync(f,'utf8'));j.package.version=process.argv[1];fs.writeFileSync(f,JSON.stringify(j,null,4)+'\n')" "$VERSION"
     - name: Validate workspace configuration
       run: df-cli config WebAPIs.sws
     - name: Build demo workspace
       run: df-cli build "Demo/WebAPIs Demo.sws"
     - name: Push package
-      shell: bash
+      shell: pwsh
       run: |
-        df-cli package push WebAPIs.sws "Kruse-Net/WebAPIs" -y 2>&1 | tee df-push.log
-        if grep -qiE "error|failed|conflict" df-push.log; then
-          echo "::error::Package push reported a failure - check df-push.log"
+        df-cli package push WebAPIs.sws "Kruse-Net/WebAPIs" -y 2>&1 | Tee-Object -FilePath df-push.log
+        if (Select-String -Path df-push.log -Pattern "error|failed|conflict" -Quiet) {
+          Write-Host "::error::Package push reported a failure - check df-push.log"
           exit 1
-        fi
+        }
     - name: Build demo zip
       run: npm run zip-demo
     - name: Upload package artifact
@@ -74,19 +74,20 @@ jobs:
         path: dist/WebAPIsDemo.zip
         archive: false
     - name: Commit version bump
-      shell: bash
+      shell: pwsh
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add WebAPIs.sws
-        if ! git diff --cached --quiet; then
-          git commit -m "chore(release): set package version to $VERSION"
-        fi
+        git diff --cached --quiet
+        if ($LASTEXITCODE -ne 0) {
+          git commit -m "chore(release): set package version to $env:VERSION"
+        }
         git push
     - name: Create GitHub Release
-      shell: bash
+      shell: pwsh
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        gh release delete "v$VERSION" --force >/dev/null 2>&1 || true
-        gh release create "v$VERSION" --title "WebAPIs $VERSION" --generate-notes "WebAPIs-$VERSION.zip" "dist/WebAPIsDemo.zip"
+        gh release delete "v$env:VERSION" --force *> $null
+        gh release create "v$env:VERSION" --title "WebAPIs $env:VERSION" --generate-notes "WebAPIs-$env:VERSION.zip" "dist/WebAPIsDemo.zip"
