@@ -22,9 +22,10 @@
         "licenseFile": "LICENSE.txt",
         "repository": "https://github.com/jkruse/dataflex-webapis",
         "tags": "dataflex, web api, custom component",
-        "version": "2.0.0-test.5"
+        "version": "2.0.0"
     },
     "paths": {
         "appSrc": "AppSrc"
-    }
+    },
+    "workspaceName": "WebAPIs"
 }

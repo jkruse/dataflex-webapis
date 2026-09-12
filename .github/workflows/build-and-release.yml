@@ -95,4 +95,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete "v$env:VERSION" --force *> $null
-          gh release create "v$env:VERSION" --title "WebAPIs $env:VERSION" --generate-notes "WebAPIs-$env:VERSION.zip" "dist/WebAPIsDemo.zip"
+          gh release create "v$env:VERSION" --title "v$env:VERSION" --generate-notes "WebAPIs-$env:VERSION.zip" "dist/WebAPIsDemo.zip"
